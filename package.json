@@ -1,7 +1,7 @@
 {
   "name": "cardapio-senna",
   "version": "1.0.0",
-  "description": "Senna Doces & Salgados - Cardápio Digital",
+  "description": "Senna Doce - Cardápio Digital",
   "main": "index.html",
   "scripts": {
     "start": "node server.js",

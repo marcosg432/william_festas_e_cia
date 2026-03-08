@@ -1,5 +1,5 @@
 /**
- * Senna Doces & Salgados - Cardápio Digital
+ * Senna Doce - Cardápio Digital
  * Script principal - animações e funcionalidades
  */
 

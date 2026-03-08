@@ -1,5 +1,5 @@
 /**
- * Servidor estático - Senna Doces & Salgados
+ * Servidor estático - Senna Doce
  * Usa apenas módulos nativos do Node.js (sem dependências)
  * Porta 3003 - acessível via IP (sem domínio)
  */
@@ -45,5 +45,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Senna Doces & Salgados: http://0.0.0.0:${PORT}`);
+  console.log(`Senna Doce: http://0.0.0.0:${PORT}`);
 });

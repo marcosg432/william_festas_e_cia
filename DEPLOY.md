@@ -1,4 +1,4 @@
-# Deploy - Senna Doces & Salgados (Hostinger)
+# Deploy - Senna Doce (Hostinger)
 
 **Porta usada: 3003** (não interfere em 22, 80, 3000, 3001, 3002, 53)
 
