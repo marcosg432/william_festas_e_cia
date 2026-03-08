@@ -22,7 +22,7 @@ git clone https://github.com/marcosg432/cardapio_senna.git
 cd cardapio_senna
 ```
 
-### 4. Instalar dependências
+### 4. Instalar dependências (opcional - servidor usa apenas Node.js nativo)
 ```bash
 npm install
 ```
