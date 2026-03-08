@@ -1,0 +1,16 @@
+{
+  "name": "cardapio-senna",
+  "version": "1.0.0",
+  "description": "Senna Doces & Salgados - Cardápio Digital",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -l 3003",
+    "build": "echo 'Projeto estático - sem build'"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
