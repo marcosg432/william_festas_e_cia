@@ -63,6 +63,12 @@ function sendFile(res, filePath) {
 
 const server = http.createServer((req, res) => {
   const urlPath = new URL(req.url || '/', 'http://localhost').pathname;
+  /* /admin sem barra final quebra links relativos (orcamento.html vai para a raiz) */
+  if (urlPath === '/admin') {
+    res.writeHead(302, { Location: '/admin/' + (new URL(req.url || '/', 'http://localhost').search || '') });
+    res.end();
+    return;
+  }
   let filePath = resolveFilePath(urlPath);
 
   if (!filePath) {

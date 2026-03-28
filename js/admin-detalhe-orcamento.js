@@ -177,7 +177,7 @@
 
     function init() {
         if (!adminEstaAutenticado()) {
-            window.location.href = "index.html";
+            window.location.href = "/admin/";
             return;
         }
         var id = getQueryId();
@@ -281,7 +281,7 @@
         });
 
         document.getElementById("btn-voltar").addEventListener("click", function () {
-            window.location.href = "index.html";
+            window.location.href = "/admin/";
         });
     }
 
