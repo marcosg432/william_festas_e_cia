@@ -1,5 +1,5 @@
 /**
- * Senna Doce - Cardápio Digital
+ * Candy Li Doces Finos — Cardápio Digital
  * Script principal - animações e funcionalidades
  */
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Carrossel da Hero Section
  * Troca automática com fade a cada 3s, pausa no hover
- * Imagens pré-carregadas para evitar delay na troca de slides
+ * Imagens em assets/carrossel-home/ (somente home). Pré-carregadas para evitar delay.
  */
 function initHeroCarousel() {
     const hero = document.querySelector('.hero-carousel');
@@ -245,6 +245,7 @@ function initProdutoModal() {
         const ingredientesStr = card.dataset.produtoIngredientes || '';
         const pedido = card.dataset.produtoPedido || card.querySelector('.produto-preco')?.textContent || '';
         modalImg.style.backgroundImage = imagem ? `url('${imagem}')` : 'none';
+        modalImg.style.backgroundPosition = card.classList.contains('doces-img-foco-medio') ? '50% 38%' : '';
         modalNome.textContent = nome || 'Produto';
         modalDescricao.textContent = descricao;
         modalDescricao.style.display = descricao ? '' : 'none';
@@ -273,6 +274,7 @@ function initProdutoModal() {
         modal.classList.remove('ativo');
         document.body.style.overflow = '';
         modal.setAttribute('aria-hidden', 'true');
+        modalImg.style.backgroundPosition = '';
     }
 
     document.querySelectorAll('.btn-saiba-mais').forEach(btn => {

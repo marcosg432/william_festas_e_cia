@@ -8,10 +8,12 @@
  * @returns {string}
  */
 function getStorageKey() {
-    const nome = (typeof CONFIG !== 'undefined' && CONFIG.nomeEmpresa)
-        ? CONFIG.nomeEmpresa.replace(/\s+/g, '_').toLowerCase()
-        : 'carrinho';
-    return 'carrinho_' + nome;
+    const nome = typeof getConfigStorageSlug === "function"
+        ? getConfigStorageSlug()
+        : ((typeof CONFIG !== "undefined" && CONFIG.nomeEmpresa)
+            ? CONFIG.nomeEmpresa.replace(/\s+/g, "_").toLowerCase()
+            : "default");
+    return "carrinho_" + nome;
 }
 
 /**

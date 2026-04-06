@@ -16,18 +16,24 @@ function montarItensOrcamentoDoCarrinho() {
     });
 }
 
+function campoTrimOrcamento(id) {
+    var el = document.getElementById(id);
+    if (!el || el.value == null) return "";
+    return String(el.value).trim();
+}
+
 function montarMensagemOrcamento(orcId) {
-    var nome = (document.getElementById("nome") || {}).value?.trim();
-    var telefone = (document.getElementById("telefone") || {}).value?.trim();
-    var email = (document.getElementById("email-cliente") || {}).value?.trim();
-    var dataEvento = (document.getElementById("data-evento") || {}).value?.trim();
-    var tipoEvento = (document.getElementById("tipo-evento") || {}).value?.trim();
-    var convidados = (document.getElementById("convidados") || {}).value?.trim();
-    var localEvento = (document.getElementById("local-evento") || {}).value?.trim();
-    var tipo = (document.getElementById("tipo") || {}).value?.trim();
-    var endereco = (document.getElementById("endereco") || {}).value?.trim();
-    var pagamento = (document.getElementById("pagamento") || {}).value?.trim();
-    var observacao = (document.getElementById("observacao") || {}).value?.trim();
+    var nome = campoTrimOrcamento("nome");
+    var telefone = campoTrimOrcamento("telefone");
+    var email = campoTrimOrcamento("email-cliente");
+    var dataEvento = campoTrimOrcamento("data-evento");
+    var tipoEvento = campoTrimOrcamento("tipo-evento");
+    var convidados = campoTrimOrcamento("convidados");
+    var localEvento = campoTrimOrcamento("local-evento");
+    var tipo = campoTrimOrcamento("tipo");
+    var endereco = campoTrimOrcamento("endereco");
+    var pagamento = campoTrimOrcamento("pagamento");
+    var observacao = campoTrimOrcamento("observacao");
 
     var valorOriginal = calcularTotal();
     var msg = "NOVO ORÇAMENTO\n";
@@ -56,15 +62,15 @@ function montarMensagemOrcamento(orcId) {
 }
 
 function validarFormularioOrcamento() {
-    var nome = (document.getElementById("nome") || {}).value?.trim();
-    var telefone = (document.getElementById("telefone") || {}).value?.trim();
-    var email = (document.getElementById("email-cliente") || {}).value?.trim();
-    var dataEvento = (document.getElementById("data-evento") || {}).value?.trim();
-    var tipoEvento = (document.getElementById("tipo-evento") || {}).value?.trim();
-    var convidados = (document.getElementById("convidados") || {}).value?.trim();
-    var localEvento = (document.getElementById("local-evento") || {}).value?.trim();
-    var tipo = (document.getElementById("tipo") || {}).value?.trim();
-    var endereco = (document.getElementById("endereco") || {}).value?.trim();
+    var nome = campoTrimOrcamento("nome");
+    var telefone = campoTrimOrcamento("telefone");
+    var email = campoTrimOrcamento("email-cliente");
+    var dataEvento = campoTrimOrcamento("data-evento");
+    var tipoEvento = campoTrimOrcamento("tipo-evento");
+    var convidados = campoTrimOrcamento("convidados");
+    var localEvento = campoTrimOrcamento("local-evento");
+    var tipo = campoTrimOrcamento("tipo");
+    var endereco = campoTrimOrcamento("endereco");
 
     if (!nome) return "Preencha o nome do cliente.";
     if (!telefone) return "Preencha o telefone.";
@@ -92,17 +98,17 @@ function gerarOrcamento() {
         return;
     }
 
-    var nome = (document.getElementById("nome") || {}).value?.trim();
-    var telefone = (document.getElementById("telefone") || {}).value?.trim();
-    var email = (document.getElementById("email-cliente") || {}).value?.trim();
-    var dataEvento = (document.getElementById("data-evento") || {}).value?.trim();
-    var tipoEvento = (document.getElementById("tipo-evento") || {}).value?.trim();
-    var convidados = (document.getElementById("convidados") || {}).value?.trim();
-    var localEvento = (document.getElementById("local-evento") || {}).value?.trim();
-    var tipo = (document.getElementById("tipo") || {}).value?.trim();
-    var endereco = (document.getElementById("endereco") || {}).value?.trim();
-    var pagamento = (document.getElementById("pagamento") || {}).value?.trim();
-    var observacao = (document.getElementById("observacao") || {}).value?.trim();
+    var nome = campoTrimOrcamento("nome");
+    var telefone = campoTrimOrcamento("telefone");
+    var email = campoTrimOrcamento("email-cliente");
+    var dataEvento = campoTrimOrcamento("data-evento");
+    var tipoEvento = campoTrimOrcamento("tipo-evento");
+    var convidados = campoTrimOrcamento("convidados");
+    var localEvento = campoTrimOrcamento("local-evento");
+    var tipo = campoTrimOrcamento("tipo");
+    var endereco = campoTrimOrcamento("endereco");
+    var pagamento = campoTrimOrcamento("pagamento");
+    var observacao = campoTrimOrcamento("observacao");
 
     var entregaTexto = tipo === "Entrega" ? "Entrega — " + (endereco || "") : (tipo || "");
 
@@ -129,6 +135,9 @@ function gerarOrcamento() {
         desconto_tipo: null,
         desconto_valor: null,
         valor_desconto: 0,
+        desconto_degustacao: null,
+        desconto_cerimonialista: null,
+        taxa_entrega: null,
         valor_final: valorOriginal,
         degustacao_data: null,
         degustacao_hora: null,
@@ -165,7 +174,7 @@ function gerarOrcamento() {
         return;
     }
 
-    var telefoneWa = CONFIG?.telefoneWhatsApp || "5547999999999";
+    var telefoneWa = (typeof CONFIG !== "undefined" && CONFIG.telefoneWhatsApp) ? CONFIG.telefoneWhatsApp : "5547999999999";
     var mensagem = montarMensagemOrcamento(String(id));
     var url = "https://wa.me/" + telefoneWa + "?text=" + encodeURIComponent(mensagem);
     window.open(url, "_blank");

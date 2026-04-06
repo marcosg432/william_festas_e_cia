@@ -56,14 +56,29 @@ function gerarContratoPDF(orcamento) {
     linha("Valor original (tabela): " + formatarMoedaPdf(vOrig));
     if (orcamento.desconto_tipo && orcamento.desconto_valor) {
         linha(
-            "Desconto: " +
+            "Desconto (geral): " +
                 (orcamento.desconto_tipo === "percentual"
                     ? orcamento.desconto_valor + "%"
                     : formatarMoedaPdf(orcamento.desconto_valor))
         );
     }
+    var ddC = typeof valorMonetarioOrcamentoOpcional === "function" ? valorMonetarioOrcamentoOpcional(orcamento.desconto_degustacao) : 0;
+    var dcC = typeof valorMonetarioOrcamentoOpcional === "function" ? valorMonetarioOrcamentoOpcional(orcamento.desconto_cerimonialista) : 0;
+    var teC = typeof valorMonetarioOrcamentoOpcional === "function" ? valorMonetarioOrcamentoOpcional(orcamento.taxa_entrega) : 0;
+    if (ddC > 0) linha("Desconto degustacao: " + formatarMoedaPdf(ddC));
+    if (dcC > 0) linha("Desconto cerimonialista: " + formatarMoedaPdf(dcC));
+    if (teC > 0) linha("Taxa de entrega: " + formatarMoedaPdf(teC));
     doc.setFontSize(12);
-    var vFin = orcamento.valor_final != null ? orcamento.valor_final : vOrig;
+    var vFin = typeof calcularValorFinalOrcamento === "function"
+        ? calcularValorFinalOrcamento(
+            Number(vOrig) || 0,
+            orcamento.desconto_tipo,
+            orcamento.desconto_valor,
+            orcamento.desconto_degustacao,
+            orcamento.desconto_cerimonialista,
+            orcamento.taxa_entrega
+        )
+        : (orcamento.valor_final != null ? orcamento.valor_final : vOrig);
     linha("VALOR FINAL: " + formatarMoedaPdf(vFin));
     y += 4;
 

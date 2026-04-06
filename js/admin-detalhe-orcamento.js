@@ -32,14 +32,36 @@
         }
     }
 
+    function strCampoMoeda(id) {
+        var el = document.getElementById(id);
+        return el ? el.value : "";
+    }
+
+    function formatarCampoMoedaOpcional(v) {
+        if (v == null || v === "") return "";
+        return String(v).replace(".", ",");
+    }
+
     function atualizarPreviewFinal(orcamento) {
         var tipo = document.getElementById("desconto-tipo").value || null;
         var val = parseFloat(String(document.getElementById("desconto-valor").value).replace(",", ".")) || 0;
         var vo = valorOriginalOrcCompat(orcamento);
-        var vf = tipo ? calcularValorFinalComDesconto(vo, tipo, val) : vo;
+        var ddRaw = strCampoMoeda("desconto-degustacao");
+        var dcRaw = strCampoMoeda("desconto-cerimonialista");
+        var teRaw = strCampoMoeda("taxa-entrega");
+        var vf = calcularValorFinalOrcamento(vo, tipo, val, ddRaw, dcRaw, teRaw);
         document.getElementById("preview-valor-final").textContent = formatarMoeda(vf);
         var dr = tipo ? descontoEquivalenteEmReais(vo, tipo, val) : 0;
         document.getElementById("preview-desconto-reais").textContent = formatarMoeda(dr);
+        var ddN = valorMonetarioOrcamentoOpcional(ddRaw);
+        var dcN = valorMonetarioOrcamentoOpcional(dcRaw);
+        var teN = valorMonetarioOrcamentoOpcional(teRaw);
+        document.getElementById("preview-desconto-deg").textContent = formatarMoeda(ddN);
+        document.getElementById("preview-desconto-cer").textContent = formatarMoeda(dcN);
+        document.getElementById("preview-taxa-entrega").textContent = formatarMoeda(teN);
+        var entIn = numeroInput("entrada");
+        var rest = calcularValorRestanteOrcamento(vf, entIn == null ? null : entIn);
+        document.getElementById("restante").value = String(rest).replace(".", ",");
     }
 
     function numeroInput(id) {
@@ -74,6 +96,12 @@
         });
         msg += "\nValor original: R$ " + Number(vo).toFixed(2).replace(".", ",");
         msg += "\nDesconto: R$ " + Number(vd || 0).toFixed(2).replace(".", ",");
+        var dd = valorMonetarioOrcamentoOpcional(o.desconto_degustacao);
+        var dc = valorMonetarioOrcamentoOpcional(o.desconto_cerimonialista);
+        var te = valorMonetarioOrcamentoOpcional(o.taxa_entrega);
+        if (dd > 0) msg += "\nDesconto degustação: R$ " + dd.toFixed(2).replace(".", ",");
+        if (dc > 0) msg += "\nDesconto cerimonialista: R$ " + dc.toFixed(2).replace(".", ",");
+        if (te > 0) msg += "\nTaxa de entrega: R$ " + te.toFixed(2).replace(".", ",");
         msg += "\nValor final: R$ " + Number(vf).toFixed(2).replace(".", ",");
         msg += "\n\nForma de pagamento: " + (formaPagamentoOrc(o) || "-");
         var ent = o.entrada;
@@ -116,6 +144,10 @@
         document.getElementById("desconto-valor").value =
             o.desconto_valor != null && o.desconto_valor !== "" ? String(o.desconto_valor).replace(".", ",") : "";
 
+        document.getElementById("desconto-degustacao").value = formatarCampoMoedaOpcional(o.desconto_degustacao);
+        document.getElementById("desconto-cerimonialista").value = formatarCampoMoedaOpcional(o.desconto_cerimonialista);
+        document.getElementById("taxa-entrega").value = formatarCampoMoedaOpcional(o.taxa_entrega);
+
         document.getElementById("degustacao-data").value = o.degustacao_data || "";
         document.getElementById("degustacao-hora").value = o.degustacao_hora || "";
         document.getElementById("degustacao-obs").value = o.degustacao_obs || "";
@@ -132,8 +164,6 @@
 
         document.getElementById("entrada").value =
             o.entrada != null && o.entrada !== "" ? String(o.entrada).replace(".", ",") : "";
-        document.getElementById("restante").value =
-            o.restante != null && o.restante !== "" ? String(o.restante).replace(".", ",") : "";
         document.getElementById("data-pag-entrada").value = o.data_pagamento_entrada || "";
         document.getElementById("data-pag-final").value = o.data_pagamento_final || "";
 
@@ -145,16 +175,26 @@
 
     var orcamentoAtual = null;
 
+    function opcionalMoedaPatch(id) {
+        var el = document.getElementById(id);
+        if (!el || String(el.value).trim() === "") return null;
+        var n = parseFloat(String(el.value).replace(",", "."));
+        return isNaN(n) ? null : Math.round(n * 100) / 100;
+    }
+
     function patchComumExtra() {
         var tipo = document.getElementById("desconto-tipo").value || null;
         var valRaw = document.getElementById("desconto-valor").value;
         var val = parseFloat(String(valRaw).replace(",", ".")) || 0;
         var vo = valorOriginalOrcCompat(orcamentoAtual);
-        var vf = tipo ? calcularValorFinalComDesconto(vo, tipo, val) : vo;
+        var ddRaw = strCampoMoeda("desconto-degustacao");
+        var dcRaw = strCampoMoeda("desconto-cerimonialista");
+        var teRaw = strCampoMoeda("taxa-entrega");
+        var vf = calcularValorFinalOrcamento(vo, tipo, val, ddRaw, dcRaw, teRaw);
         var vDesc = tipo ? descontoEquivalenteEmReais(vo, tipo, val) : 0;
 
         var entrada = numeroInput("entrada");
-        var restante = numeroInput("restante");
+        var restante = calcularValorRestanteOrcamento(vf, entrada == null ? null : entrada);
 
         return {
             desconto_tipo: tipo || null,
@@ -163,6 +203,9 @@
             valor_final: vf,
             valor_original: vo,
             total: vo,
+            desconto_degustacao: opcionalMoedaPatch("desconto-degustacao"),
+            desconto_cerimonialista: opcionalMoedaPatch("desconto-cerimonialista"),
+            taxa_entrega: opcionalMoedaPatch("taxa-entrega"),
             degustacao_data: strInput("degustacao-data") || null,
             degustacao_hora: strInput("degustacao-hora") || null,
             degustacao_obs: strInput("degustacao-obs") || null,
@@ -177,7 +220,7 @@
 
     function init() {
         if (!adminEstaAutenticado()) {
-            window.location.href = "/admin/";
+            window.location.href = "index.html";
             return;
         }
         var id = getQueryId();
@@ -205,6 +248,18 @@
             atualizarPreviewFinal(orcamentoAtual);
         });
         document.getElementById("desconto-valor").addEventListener("input", function () {
+            atualizarPreviewFinal(orcamentoAtual);
+        });
+        document.getElementById("desconto-degustacao").addEventListener("input", function () {
+            atualizarPreviewFinal(orcamentoAtual);
+        });
+        document.getElementById("desconto-cerimonialista").addEventListener("input", function () {
+            atualizarPreviewFinal(orcamentoAtual);
+        });
+        document.getElementById("taxa-entrega").addEventListener("input", function () {
+            atualizarPreviewFinal(orcamentoAtual);
+        });
+        document.getElementById("entrada").addEventListener("input", function () {
             atualizarPreviewFinal(orcamentoAtual);
         });
 
@@ -251,7 +306,10 @@
                 return;
             }
             var vo = valorOriginalOrcCompat(orcamentoAtual);
-            var vf = tipoC ? calcularValorFinalComDesconto(vo, tipoC, valC) : vo;
+            var ddR = strCampoMoeda("desconto-degustacao");
+            var dcR = strCampoMoeda("desconto-cerimonialista");
+            var teR = strCampoMoeda("taxa-entrega");
+            var vf = calcularValorFinalOrcamento(vo, tipoC, valC, ddR, dcR, teR);
             var stContrato = CONFIG.STATUS_ORCAMENTO && CONFIG.STATUS_ORCAMENTO.CONTRATO_GERADO;
             var extra = patchComumExtra();
 
@@ -281,7 +339,7 @@
         });
 
         document.getElementById("btn-voltar").addEventListener("click", function () {
-            window.location.href = "/admin/";
+            window.location.href = "index.html";
         });
     }
 

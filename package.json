@@ -1,14 +1,15 @@
 {
   "name": "cardapio-senna",
   "version": "1.0.0",
-  "description": "Senna Doce - Cardápio Digital",
+  "description": "Candy Li Doces Finos - Cardápio Digital",
   "main": "index.html",
   "scripts": {
     "start": "node server.js",
-    "open": "node -e \"require('child_process').execSync(process.platform==='win32'?'start http://localhost:3003/':'open http://localhost:3003/',{stdio:'inherit'})\"",
+    "open": "node -e \"var p=String(Number(process.env.PORT)||3003);require('child_process').execSync(process.platform==='win32'?'cmd /c start \\\"\\\" \\\"http://localhost:'+p+'/\\\"':'open http://localhost:'+p+'/',{stdio:'inherit'})\"",
+    "open:all": "node open-both.js",
     "build": "echo 'Projeto estático - sem build'"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.13.0"
   }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orçamentos | Admin</title>
+    <title>Orçamentos | Candy Li Doces Finos · Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,24 +17,25 @@
         <input type="password" id="admin-senha" placeholder="Senha" autocomplete="current-password">
         <button type="button" class="admin-btn" id="btn-entrar" style="width:100%">Entrar</button>
         <p id="login-erro" style="color:#c0392b;display:none;margin-top:0.75rem">Senha incorreta.</p>
-        <p style="margin-top:1rem"><a href="/index.html">← Voltar ao site</a></p>
+        <p style="margin-top:1rem"><a href="../index.html">← Voltar ao site</a></p>
     </div>
 
     <div id="admin-main" hidden>
         <header class="admin-bar">
             <span id="admin-titulo-empresa"><strong>Orçamentos</strong></span>
             <span>
-                <a href="/admin/dashboard/">Dashboard</a>
+                <a href="dashboard/index.html">Dashboard</a>
                 <span style="opacity:0.6"> · </span>
-                <a href="/index.html">Site</a>
+                <a href="../index.html">Site</a>
                 <span style="opacity:0.6"> · </span>
                 <button type="button" class="admin-btn admin-btn-sec" id="btn-sair">Sair</button>
             </span>
         </header>
         <div class="admin-wrap">
+            <div id="admin-storage-aviso" class="admin-card" style="display:none;background:#fff8e6;border:1px solid #e6c200;font-size:0.88rem;line-height:1.5;margin-bottom:1rem"></div>
             <div class="admin-card">
                 <h1>Lista de orçamentos</h1>
-                <p style="font-size:0.9rem;opacity:0.85">Os dados ficam neste navegador (localStorage). Para produção com equipe, use PostgreSQL + API ou Supabase.</p>
+                <p style="font-size:0.9rem;opacity:0.85">Os dados ficam neste navegador (localStorage), na mesma “origem” do cardápio. Para produção com equipe, use PostgreSQL + API ou Supabase.</p>
                 <p id="sem-orcamentos" hidden>Nenhum orçamento salvo ainda. Gere um pelo carrinho do site.</p>
                 <div class="admin-table-wrap">
                     <table class="admin-table" id="tabela-orcamentos">
@@ -67,15 +68,39 @@
             var main = document.getElementById('admin-main');
             var err = document.getElementById('login-erro');
 
+            function exibirAvisoStorage() {
+                var box = document.getElementById('admin-storage-aviso');
+                if (!box) return;
+                if (location.protocol === 'file:') {
+                    box.style.display = 'block';
+                    box.textContent = 'Abra o cardápio e este painel pelo mesmo servidor local (ex.: na pasta do projeto rode "npx serve ." e use só http://localhost:PORTA). Abrir o HTML direto pelo disco (file://) isola os dados: os orçamentos gerados no site não aparecerão aqui.';
+                    return;
+                }
+                if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                    box.style.display = 'block';
+                    box.style.background = '#eef6ff';
+                    box.style.borderColor = '#90caf9';
+                    box.textContent = 'Use o mesmo host para tudo: se o cardápio está em http://localhost:..., abra o admin também em http://localhost:... (não misture com http://127.0.0.1:...). Cada combinação guarda um localStorage separado.';
+                }
+            }
+
             function mostrarPainel() {
                 loginBox.hidden = true;
                 main.hidden = false;
+                exibirAvisoStorage();
                 var t = document.getElementById('admin-titulo-empresa');
                 if (t && typeof CONFIG !== 'undefined') {
                     t.innerHTML = '<strong>Orçamentos</strong> — ' + (CONFIG.nomeEmpresa || '');
                 }
                 renderTabela();
             }
+
+            window.addEventListener('storage', function (ev) {
+                if (!ev.key) return;
+                if (ev.key !== 'orcamentos' && ev.key.indexOf('orcamentos_') !== 0) return;
+                var mainEl = document.getElementById('admin-main');
+                if (mainEl && !mainEl.hidden) renderTabela();
+            });
 
             function renderTabela() {
                 var lista = listarOrcamentos();
@@ -108,7 +133,7 @@
                         '<td>' + formatarMoeda(dr) + '</td>' +
                         '<td><strong>' + formatarMoeda(vFin) + '</strong></td>' +
                         '<td><span class="' + badgeClass + '">' + escapeCell(label) + '</span></td>' +
-                        '<td><a class="admin-btn" href="/admin/orcamento.html?id=' + encodeURIComponent(o.id) + '">Ver detalhes</a></td>';
+                        '<td><a class="admin-btn" href="orcamento.html?id=' + encodeURIComponent(o.id) + '">Ver detalhes</a></td>';
                     tbody.appendChild(tr);
                 });
             }

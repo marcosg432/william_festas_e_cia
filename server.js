@@ -1,18 +1,28 @@
 /**
- * Servidor estático - Senna Doce
- * Node nativo (sem dependências)
+ * Servidor estático + API SQLite local - Candy Li Doces Finos
+ * Requer Node.js ≥ 22.13 (módulo nativo node:sqlite; sem MySQL e sem dependência npm do BD).
  *
  * Use sempre esta origem para site + /admin (mesmo localStorage):
  *   http://localhost:3003/
  *   http://localhost:3003/admin/
  *
- * Inicie com: npm start
+ * Inicie com: npm start  (porta: PORT=8080 npm start se quiser outra)
+ * Abrir site + admin no navegador: npm run open:all
  */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { handleApi } = require('./server/api');
 
-const PORT = 3003;
+let apiDbReady = false;
+try {
+  require('./database/db').getDb();
+  apiDbReady = true;
+} catch (e) {
+  console.warn('SQLite indisponível — /api/* retornará 503; site estático continua:', e.message);
+}
+
+const PORT = Number(process.env.PORT) || 3003;
 const MIME_TYPES = {
   '.html': 'text/html',
   '.js': 'text/javascript',
@@ -69,6 +79,10 @@ const server = http.createServer((req, res) => {
     res.end();
     return;
   }
+  if (urlPath.startsWith('/api/')) {
+    handleApi(req, res, urlPath, apiDbReady);
+    return;
+  }
   let filePath = resolveFilePath(urlPath);
 
   if (!filePath) {
@@ -102,7 +116,10 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Senna Doce — use esta origem para site e admin (mesmo localStorage):`);
+  console.log(`Candy Li Doces Finos — use esta origem para site e admin (mesmo localStorage):`);
   console.log(`  http://localhost:${PORT}/`);
   console.log(`  http://localhost:${PORT}/admin/`);
+  if (apiDbReady) {
+    console.log(`  API + SQLite: http://localhost:${PORT}/api/orcamentos`);
+  }
 });

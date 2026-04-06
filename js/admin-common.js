@@ -1,9 +1,11 @@
 /**
  * Autenticação simples da área administrativa (troque CONFIG.senhaAdmin)
  */
-var ADMIN_SESSION_KEY = "admin_confeitaria_" + (typeof CONFIG !== "undefined" && CONFIG.nomeEmpresa
-    ? CONFIG.nomeEmpresa.replace(/\s+/g, "_").toLowerCase()
-    : "default");
+var ADMIN_SESSION_KEY = "admin_confeitaria_" + (typeof getConfigStorageSlug === "function"
+    ? getConfigStorageSlug()
+    : (typeof CONFIG !== "undefined" && CONFIG.nomeEmpresa
+        ? CONFIG.nomeEmpresa.replace(/\s+/g, "_").toLowerCase()
+        : "default"));
 
 function adminEstaAutenticado() {
     return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";

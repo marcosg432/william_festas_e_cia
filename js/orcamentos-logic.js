@@ -23,3 +23,35 @@ function descontoEquivalenteEmReais(valorOriginal, descontoTipo, descontoValor) 
     const vf = calcularValorFinalComDesconto(vo, descontoTipo, descontoValor);
     return Math.round((vo - vf) * 100) / 100;
 }
+
+/**
+ * Valor numérico opcional (vazio → 0), nunca negativo.
+ */
+function valorMonetarioOrcamentoOpcional(v) {
+    if (v == null || v === "") return 0;
+    var n = Number(String(v).replace(",", "."));
+    if (isNaN(n) || n < 0) return 0;
+    return Math.round(n * 100) / 100;
+}
+
+/**
+ * valorFinal = subtotal − descontoGeral − descontoDegustação − descontoCerimonialista + taxaEntrega
+ * (descontoGeral = efeito em R$ do desconto principal % ou fixo sobre o subtotal; taxa soma ao final)
+ */
+function calcularValorFinalOrcamento(vo, descontoTipo, descontoValor, descontoDegustacao, descontoCerimonialista, taxaEntrega) {
+    var subtotal = Math.max(0, Number(vo) || 0);
+    var dg = descontoTipo ? descontoEquivalenteEmReais(subtotal, descontoTipo, descontoValor) : 0;
+    var dd = valorMonetarioOrcamentoOpcional(descontoDegustacao);
+    var dc = valorMonetarioOrcamentoOpcional(descontoCerimonialista);
+    var te = valorMonetarioOrcamentoOpcional(taxaEntrega);
+    var vf = subtotal - dg - dd - dc + te;
+    return Math.round(Math.max(0, vf) * 100) / 100;
+}
+
+/** valorRestante = max(0, valorFinal − entrada); entrada vazia trata como 0 */
+function calcularValorRestanteOrcamento(valorFinal, entrada) {
+    var vf = Math.max(0, Number(valorFinal) || 0);
+    var ent = entrada == null || entrada === "" ? 0 : valorMonetarioOrcamentoOpcional(entrada);
+    var rest = vf - ent;
+    return Math.round(Math.max(0, rest) * 100) / 100;
+}

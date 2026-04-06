@@ -85,14 +85,23 @@ function gerarOrcamentoPropostaPDF(orcamento) {
     if ((vDesc == null || vDesc === "") && typeof descontoEquivalenteEmReais === "function") {
         vDesc = descontoEquivalenteEmReais(vo, tipoD, valD);
     }
-    var vf = valorFinalOrc(orcamento);
+    var vf = typeof calcularValorFinalOrcamento === "function"
+        ? calcularValorFinalOrcamento(vo, tipoD, valD, orcamento.desconto_degustacao, orcamento.desconto_cerimonialista, orcamento.taxa_entrega)
+        : valorFinalOrc(orcamento);
+
+    var ddPdf = typeof valorMonetarioOrcamentoOpcional === "function" ? valorMonetarioOrcamentoOpcional(orcamento.desconto_degustacao) : 0;
+    var dcPdf = typeof valorMonetarioOrcamentoOpcional === "function" ? valorMonetarioOrcamentoOpcional(orcamento.desconto_cerimonialista) : 0;
+    var tePdf = typeof valorMonetarioOrcamentoOpcional === "function" ? valorMonetarioOrcamentoOpcional(orcamento.taxa_entrega) : 0;
 
     y += 2;
     doc.setFontSize(12);
     linha("Valores", 7);
     doc.setFontSize(10);
     linha("Valor original: " + formatarMoedaOrcPdf(vo), 6);
-    linha("Desconto: " + formatarMoedaOrcPdf(Number(vDesc) || 0), 6);
+    linha("Desconto (geral): " + formatarMoedaOrcPdf(Number(vDesc) || 0), 6);
+    if (ddPdf > 0) linha("Desconto degustacao: " + formatarMoedaOrcPdf(ddPdf), 6);
+    if (dcPdf > 0) linha("Desconto cerimonialista: " + formatarMoedaOrcPdf(dcPdf), 6);
+    if (tePdf > 0) linha("Taxa de entrega: " + formatarMoedaOrcPdf(tePdf), 6);
     doc.setFontSize(11);
     linha("VALOR FINAL: " + formatarMoedaOrcPdf(vf), 7);
 
@@ -101,6 +110,9 @@ function gerarOrcamentoPropostaPDF(orcamento) {
     linha("Forma de pagamento: " + (formaPagamentoOrc(orcamento) || "-"), 6);
     var ent = orcamento.entrada;
     var rest = orcamento.restante;
+    if (typeof calcularValorRestanteOrcamento === "function" && (ent != null && ent !== "")) {
+        rest = calcularValorRestanteOrcamento(vf, ent);
+    }
     if (ent != null && ent !== "" || rest != null && rest !== "") {
         linha("Entrada: " + formatarMoedaOrcPdf(ent) + "  |  Restante: " + formatarMoedaOrcPdf(rest), 6);
     }

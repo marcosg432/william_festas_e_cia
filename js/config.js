@@ -5,8 +5,13 @@
 const CONFIG = {
     /** Número do WhatsApp com DDD (ex: 5547999999999) */
     telefoneWhatsApp: "5547999999999",
-    /** Nome da empresa para identificação e chave do localStorage */
-    nomeEmpresa: "Senna Doce",
+    /**
+     * Slug estável para chaves de localStorage/sessão (carrinho, orçamentos legado, admin).
+     * Não altere após deploy se quiser manter dados já gravados no navegador.
+     */
+    storageId: "senna_doce",
+    /** Nome da confeitaria exibido no site, PDFs, WhatsApp e admin */
+    nomeEmpresa: "Candy Li Doces Finos",
     /** Senha da área administrativa (troque em produção) */
     senhaAdmin: "senna2025",
     /** Chaves de status (espelho do banco / fluxo) */
@@ -37,3 +42,15 @@ const CONFIG = {
      */
     logoOrcamentoRelPath: ""
 };
+
+/**
+ * Slug usado nas chaves de armazenamento; usa storageId quando definido, senão deriva de nomeEmpresa.
+ */
+function getConfigStorageSlug() {
+    if (typeof CONFIG === "undefined") return "default";
+    var sid = CONFIG.storageId;
+    if (sid != null && String(sid).trim() !== "") {
+        return String(sid).trim().replace(/\s+/g, "_").toLowerCase();
+    }
+    return String(CONFIG.nomeEmpresa || "default").replace(/\s+/g, "_").toLowerCase();
+}

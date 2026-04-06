@@ -38,6 +38,17 @@ function formaPagamentoOrc(o) {
 
 function valorFinalOrc(o) {
     if (!o) return 0;
+    if (typeof calcularValorFinalOrcamento === "function") {
+        var vo = valorOriginalOrcCompat(o);
+        return calcularValorFinalOrcamento(
+            vo,
+            o.desconto_tipo,
+            o.desconto_valor,
+            o.desconto_degustacao,
+            o.desconto_cerimonialista,
+            o.taxa_entrega
+        );
+    }
     var v = o.valor_final;
     if (v == null) v = o.total;
     return Number(v) || 0;

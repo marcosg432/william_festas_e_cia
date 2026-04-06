@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhe do orçamento | Admin</title>
+    <title>Detalhe do orçamento | Candy Li Doces Finos · Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,11 +13,11 @@
     <header class="admin-bar">
         <span><strong>Detalhe do orçamento</strong></span>
         <span>
-            <a href="/admin/dashboard/">Dashboard</a>
+            <a href="dashboard/index.html">Dashboard</a>
             <span style="opacity:0.6"> · </span>
-            <a href="/admin/">Lista</a>
+            <a href="index.html">Lista</a>
             <span style="opacity:0.6"> · </span>
-            <a href="/index.html">Site</a>
+            <a href="../index.html">Site</a>
         </span>
     </header>
 
@@ -57,6 +57,15 @@
                 <input type="text" id="desconto-valor" placeholder="Ex: 50 ou 10" inputmode="decimal">
 
                 <p><strong>Desconto em reais (efeito):</strong> <span id="preview-desconto-reais"></span></p>
+                <label for="desconto-degustacao">Desconto degustação (R$)</label>
+                <input type="text" id="desconto-degustacao" placeholder="0,00" inputmode="decimal" autocomplete="off">
+                <label for="desconto-cerimonialista">Desconto cerimonialista (R$)</label>
+                <input type="text" id="desconto-cerimonialista" placeholder="0,00" inputmode="decimal" autocomplete="off">
+                <label for="taxa-entrega">Taxa de entrega (R$) <span style="font-weight:normal;opacity:0.85">— somada ao total após os descontos</span></label>
+                <input type="text" id="taxa-entrega" placeholder="0,00" inputmode="decimal" autocomplete="off">
+                <p style="font-size:0.9rem;opacity:0.88;margin-top:0.75rem"><strong>Desconto degustação (efeito):</strong> <span id="preview-desconto-deg"></span></p>
+                <p><strong>Desconto cerimonialista (efeito):</strong> <span id="preview-desconto-cer"></span></p>
+                <p><strong>Taxa de entrega (soma ao total):</strong> <span id="preview-taxa-entrega"></span></p>
                 <p><strong>Valor final:</strong> <span id="preview-valor-final"></span></p>
 
                 <h3 class="admin-secao-titulo">Degustação</h3>
@@ -78,8 +87,8 @@
                 </select>
                 <label for="entrada">Valor de entrada (R$)</label>
                 <input type="text" id="entrada" placeholder="0,00" inputmode="decimal">
-                <label for="restante">Valor restante (R$)</label>
-                <input type="text" id="restante" placeholder="0,00" inputmode="decimal">
+                <label for="restante">Valor restante (R$) <span style="font-weight:normal;opacity:0.85">— calculado automaticamente</span></label>
+                <input type="text" id="restante" placeholder="0,00" inputmode="decimal" readonly aria-readonly="true">
                 <label for="data-pag-entrada">Data do pagamento da entrada</label>
                 <input type="date" id="data-pag-entrada">
                 <label for="data-pag-final">Data do pagamento final</label>

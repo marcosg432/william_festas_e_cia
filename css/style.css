@@ -1,5 +1,5 @@
 /* ============================================
-   Senna Doce — Cardápio digital
+   Candy Li Doces Finos — Cardápio digital
    Identidade visual premium · confeitaria & eventos
    ============================================ */
 
@@ -1847,20 +1847,48 @@ ul {
     }
 }
 
+/* Doces finos: cover + centro = preenche a faixa do card (sem barras laterais), proporção preservada, foco no meio (catálogo / apps). */
 .doces-grid .produto-card .produto-img {
-    height: 180px;
+    height: 230px;
+    min-height: 230px;
+    max-height: 230px;
+    flex-shrink: 0;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: var(--rosa-claro);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* Fotos em que o doce está na região central com bastante “mesa”: 50% puro recorta feio; desloca o eixo vertical para o assunto ficar no miolo do card. */
+.doces-grid .produto-card.doces-img-foco-medio .produto-img {
+    background-position: 50% 38%;
+}
+
+.doces-grid .produto-card:hover .produto-img {
+    transform: scale(1.04);
 }
 
 @media (max-width: 768px) {
     .doces-grid .produto-card .produto-img {
-        height: 160px;
+        height: 210px;
+        min-height: 210px;
+        max-height: 210px;
     }
 }
 
 @media (max-width: 480px) {
     .doces-grid .produto-card .produto-img {
-        height: 150px;
+        height: 200px;
+        min-height: 200px;
+        max-height: 200px;
     }
+}
+
+body.pagina-doces-finos .modal-produto-img {
+    background-size: cover;
+    background-position: center center;
+    background-color: var(--rosa-claro);
 }
 
 /* Sobremesas - fotos grandes - responsivo */
