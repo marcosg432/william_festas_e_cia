@@ -10,12 +10,15 @@ module.exports = {
       script: 'server.js',
       cwd: __dirname,
       instances: 1,
+      /* fork evita modo cluster no PM2 (um só processo; menos surpresa com SQLite / listen) */
+      exec_mode: 'fork',
       autorestart: true,
       watch: false,
       /* 150M era agressivo demais com Node 22 + SQLite; sobe o teto para evitar loop errored no PM2 */
       max_memory_restart: '400M',
       env: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        PORT: '3003'
       }
     }
   ]
