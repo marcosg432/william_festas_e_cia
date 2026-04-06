@@ -12,7 +12,8 @@ module.exports = {
       instances: 1,
       autorestart: true,
       watch: false,
-      max_memory_restart: '150M',
+      /* 150M era agressivo demais com Node 22 + SQLite; sobe o teto para evitar loop errored no PM2 */
+      max_memory_restart: '400M',
       env: {
         NODE_ENV: 'production'
       }
