@@ -65,7 +65,7 @@ function alterarQuantidade(index, acao) {
 function atualizarCarrinho() {
     const listaEl = document.getElementById('lista-carrinho');
     const totalEl = document.getElementById('total');
-    const btnFinalizar = document.querySelector('.btn-finalizar-pedido');
+    const btnFinalizar = document.querySelector('.carrinho-sidebar .btn-finalizar-pedido');
 
     if (!listaEl) return;
 

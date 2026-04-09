@@ -208,7 +208,7 @@ function toggleCampoEndereco() {
 }
 
 function initPedido() {
-    var btnFinalizar = document.querySelector(".btn-finalizar-pedido");
+    var btnFinalizar = document.querySelector(".carrinho-sidebar .btn-finalizar-pedido");
     var tipoSelect = document.getElementById("tipo");
 
     if (btnFinalizar) {
