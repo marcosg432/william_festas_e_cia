@@ -3106,7 +3106,7 @@ article.bolos-pick-corte[aria-pressed='true'] {
     box-shadow: inset 0 0 0 1px rgba(196, 165, 175, 0.12);
 }
 
-/* Card ainda sem foto: placeholder (p.ex. aguardando foto da cliente) */
+/* Card ainda sem foto: placeholder (p.ex. aguardando foto — linha clássica ou exclusiva) */
 .doces-grid .produto-card.produto-card--foto-pendente .produto-img.produto-img--pendente {
     display: flex;
     flex-direction: column;
