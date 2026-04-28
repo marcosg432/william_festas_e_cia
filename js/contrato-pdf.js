@@ -135,9 +135,12 @@ function desenharAnexoContratualModeloPlanilha(ctx) {
         linhaCampoPlanilha("CEP:", orcCampo(orcamento, ["cliente_cep", "cep"], ""));
         linhaCampoPlanilha("E-mail:", orcCampo(orcamento, ["email"], ""));
         linhaCampoPlanilha("Telefone fixo:", orcCampo(orcamento, ["telefone_fixo"], ""));
-        linhaCampoPlanilha("Celular:", orcCampo(orcamento, ["telefone"], ""));
+        /*
+         * Celular principal (campo pedido): se só “Celular (contato)” estiver preenchido, aparece também na linha “Celular”.
+         */
+        linhaCampoPlanilha("Celular:", orcCampo(orcamento, ["telefone", "contato_celular"], ""));
         linhaCampoPlanilha("Nome de contato:", orcCampo(orcamento, ["contato_nome"], ""));
-        linhaCampoPlanilha("Celular (contato):", orcCampo(orcamento, ["contato_celular"], ""));
+        linhaCampoPlanilha("Celular (contato):", orcCampo(orcamento, ["contato_celular", "telefone"], ""));
     });
 
     molduraSecao("DADOS DO EVENTO", function () {
@@ -275,10 +278,16 @@ function gerarContratoPDF(orcamento) {
     }
 
     function valorFinalOrcPdf(o) {
-        var vo = o.valor_original != null ? o.valor_original : o.total;
+        var vo;
+        if (typeof valorOriginalOrcamentoComItens === "function") {
+            vo = valorOriginalOrcamentoComItens(o);
+        } else {
+            vo = o.valor_original != null ? o.valor_original : o.total;
+        }
+        vo = Number(vo) || 0;
         if (typeof calcularValorFinalOrcamento === "function") {
             return calcularValorFinalOrcamento(
-                Number(vo) || 0,
+                vo,
                 o.desconto_tipo,
                 o.desconto_valor,
                 o.desconto_degustacao,
@@ -286,7 +295,7 @@ function gerarContratoPDF(orcamento) {
                 o.taxa_entrega
             );
         }
-        return o.valor_final != null ? Number(o.valor_final) : Number(vo) || 0;
+        return o.valor_final != null ? Number(o.valor_final) : vo;
     }
 
     var nomeCliente = orcCampo(orcamento, ["nome_cliente", "cliente"], "");

@@ -47,7 +47,7 @@
                                 <th>Desconto</th>
                                 <th>Valor final</th>
                                 <th>Status</th>
-                                <th></th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-orcamentos"></tbody>
@@ -133,7 +133,10 @@
                         '<td>' + formatarMoeda(dr) + '</td>' +
                         '<td><strong>' + formatarMoeda(vFin) + '</strong></td>' +
                         '<td><span class="' + badgeClass + '">' + escapeCell(label) + '</span></td>' +
-                        '<td><a class="admin-btn" href="orcamento.html?id=' + encodeURIComponent(o.id) + '">Ver detalhes</a></td>';
+                        '<td class="admin-td-acoes">' +
+                        '<a class="admin-btn" href="orcamento.html?id=' + encodeURIComponent(o.id) + '">Ver detalhes</a> ' +
+                        '<button type="button" class="admin-btn admin-btn-sec admin-btn-item-acao admin-btn-item-acao--perigo" data-acao-excluir-orc data-orcamento-id="' + String(o.id) + '">Remover</button>' +
+                        '</td>';
                     tbody.appendChild(tr);
                 });
             }
@@ -144,6 +147,20 @@
                 d.textContent = String(s);
                 return d.innerHTML;
             }
+
+            document.getElementById('tbody-orcamentos').addEventListener('click', function (ev) {
+                var btn = ev.target.closest('button[data-acao-excluir-orc]');
+                if (!btn) return;
+                ev.preventDefault();
+                var id = btn.getAttribute('data-orcamento-id');
+                if (!id) return;
+                if (!confirm('Remover este orçamento permanentemente? Esta ação não pode ser desfeita.')) return;
+                if (typeof excluirOrcamento === 'function' && excluirOrcamento(id)) {
+                    renderTabela();
+                } else {
+                    alert('Não foi possível remover. Se o servidor estiver em erro, tente de novo em instantes.');
+                }
+            });
 
             document.getElementById('btn-entrar').addEventListener('click', function () {
                 var input = document.getElementById('admin-senha');

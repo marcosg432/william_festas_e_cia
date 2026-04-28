@@ -2,6 +2,24 @@
  * Detalhe do orçamento (admin): desconto, degustação, pagamento, WhatsApp, PDF proposta
  */
 (function () {
+    /** Soma valor original a partir dos itens (mantém coerência com PDF/WhatsApp). */
+    function somaSubtotalItens(itens) {
+        var t = 0;
+        (itens || []).forEach(function (it) {
+            var pu = it.preco_unitario != null ? it.preco_unitario : it.preco;
+            var sub = it.subtotal != null ? it.subtotal : (Number(pu) || 0) * (Number(it.quantidade) || 0);
+            t += Number(sub) || 0;
+        });
+        return Math.round(t * 100) / 100;
+    }
+
+    function parsePrecoExtra(raw) {
+        if (raw == null || String(raw).trim() === "") return null;
+        var n = parseFloat(String(raw).trim().replace(",", "."));
+        if (isNaN(n) || n < 0) return null;
+        return Math.round(n * 100) / 100;
+    }
+
     function getQueryId() {
         var params = new URLSearchParams(window.location.search);
         return params.get("id");
@@ -45,7 +63,10 @@
     function atualizarPreviewFinal(orcamento) {
         var tipo = document.getElementById("desconto-tipo").value || null;
         var val = parseFloat(String(document.getElementById("desconto-valor").value).replace(",", ".")) || 0;
-        var vo = valorOriginalOrcCompat(orcamento);
+        var vo =
+            typeof valorOriginalOrcamentoComItens === "function"
+                ? valorOriginalOrcamentoComItens(orcamento)
+                : valorOriginalOrcCompat(orcamento);
         var ddRaw = strCampoMoeda("desconto-degustacao");
         var dcRaw = strCampoMoeda("desconto-cerimonialista");
         var teRaw = strCampoMoeda("taxa-entrega");
@@ -71,13 +92,20 @@
         return isNaN(n) ? null : n;
     }
 
+    /** Nunca use `if (el.value)` — valores vazios ou caracteres válidos ficam perdidos antes do trim */
     function strInput(id) {
         var el = document.getElementById(id);
-        return el && el.value ? el.value.trim() : "";
+        if (!el) return "";
+        var v = el.value;
+        if (v == null || v === "") return "";
+        return String(v).trim();
     }
 
     function montarWhatsAppDetalhe(o) {
-        var vo = valorOriginalOrcCompat(o);
+        var vo =
+            typeof valorOriginalOrcamentoComItens === "function"
+                ? valorOriginalOrcamentoComItens(o)
+                : valorOriginalOrcCompat(o);
         var vf = valorFinalOrc(o);
         var vd = o.valor_desconto;
         if ((vd == null || vd === "") && typeof descontoEquivalenteEmReais === "function") {
@@ -131,6 +159,11 @@
             var el = document.getElementById(id);
             if (el) el.value = valor != null && valor !== "" ? String(valor) : "";
         }
+        setCampoContrato("contrato-pdf-nome-cliente", o.nome_cliente || o.cliente);
+        setCampoContrato("contrato-pdf-email", o.email);
+        setCampoContrato("contrato-pdf-telefone", o.telefone);
+        setCampoContrato("contrato-pdf-data-evento", eventoDataOrc(o));
+        setCampoContrato("contrato-pdf-tipo-evento", eventoTipoOrc(o));
         setCampoContrato("contrato-numero-exibicao", o.contrato_numero_exibicao);
         setCampoContrato("contrato-cliente-rg", o.cliente_rg);
         setCampoContrato("contrato-cliente-cpf", o.cliente_cpf);
@@ -150,18 +183,80 @@
         setCampoContrato("contrato-fotografo-tel", o.evento_fotografo_tel);
         setCampoContrato("contrato-quitado-em", o.pagamento_valor_quitado_em);
 
+        if (extraItemEdicaoIndex != null) {
+            var itEdit = (o.itens || [])[extraItemEdicaoIndex];
+            if (!itEdit || itEdit.extra_pedido_admin !== true) extraItemEdicaoIndex = null;
+        }
+
+        var ajudaItens = document.getElementById("itens-editar-ajuda");
+        if (ajudaItens) {
+            var algumExtra = (o.itens || []).some(function (it) {
+                return it && it.extra_pedido_admin === true;
+            });
+            ajudaItens.textContent = algumExtra
+                ? "Onde está o Editar: à direita do texto, nas linhas que terminam em (complemento manual). Os itens vindos só do cardápio pelo cliente não têm esses botões."
+                : "Onde está o Editar: ele só aparece depois que um complemento manual for salvo — use a caixa “Incluir doce complementar” abaixo, clique em Adicionar à lista, e aparecerá uma nova linha com (complemento manual) e os botões Editar e Remover à direita.";
+        }
+
         var ul = document.getElementById("lista-itens");
         ul.innerHTML = "";
-        (o.itens || []).forEach(function (it) {
+        (o.itens || []).forEach(function (it, idx) {
             var li = document.createElement("li");
+            li.className = "admin-lista-item-linha" + (it.extra_pedido_admin === true ? " admin-lista-item-linha--extra" : "");
             var pu = it.preco_unitario != null ? it.preco_unitario : it.preco;
             var sub = it.subtotal != null ? it.subtotal : (Number(pu) || 0) * (Number(it.quantidade) || 0);
-            li.textContent =
+            var linha =
                 it.quantidade + " × " + (it.nome || "") + " @ " + formatarMoeda(pu) + " = " + formatarMoeda(sub);
+            if (it.extra_pedido_admin === true) linha += " (complemento manual)";
+            var spanTxt = document.createElement("span");
+            spanTxt.className = "admin-lista-item-texto";
+            spanTxt.textContent = linha;
+            li.appendChild(spanTxt);
+            if (it.extra_pedido_admin === true) {
+                var acoes = document.createElement("span");
+                acoes.className = "admin-lista-item-acoes";
+                var btnEd = document.createElement("button");
+                btnEd.type = "button";
+                btnEd.className = "admin-btn-item-acao";
+                btnEd.textContent = "Editar";
+                btnEd.setAttribute("data-acao-extra", "editar");
+                btnEd.setAttribute("data-item-index", String(idx));
+                var btnRm = document.createElement("button");
+                btnRm.type = "button";
+                btnRm.className = "admin-btn-item-acao admin-btn-item-acao--perigo";
+                btnRm.textContent = "Remover";
+                btnRm.setAttribute("data-acao-extra", "remover");
+                btnRm.setAttribute("data-item-index", String(idx));
+                acoes.appendChild(btnEd);
+                acoes.appendChild(btnRm);
+                li.appendChild(acoes);
+            }
             ul.appendChild(li);
         });
 
-        document.getElementById("valor-original").textContent = formatarMoeda(valorOriginalOrcCompat(o));
+        atualizarUiModoExtra();
+
+        var somaLinhas = somaSubtotalItens(o.itens);
+        var voReg =
+            typeof valorOriginalOrcamentoComItens === "function"
+                ? valorOriginalOrcamentoComItens(o)
+                : valorOriginalOrcCompat(o);
+        document.getElementById("valor-original").textContent = formatarMoeda(voReg);
+        var divDiv = document.getElementById("valor-original-divergencia");
+        if (divDiv) {
+            if (Math.abs(somaLinhas - voReg) > 0.02) {
+                divDiv.hidden = false;
+                divDiv.textContent =
+                    "Atenção: a soma das linhas acima é " +
+                    formatarMoeda(somaLinhas) +
+                    ", diferente do valor registrado (" +
+                    formatarMoeda(voReg) +
+                    "). Use “Salvar alterações” após ajustar itens ou confira se o orçamento foi editado fora do painel.";
+            } else {
+                divDiv.hidden = true;
+                divDiv.textContent = "";
+            }
+        }
 
         document.getElementById("desconto-tipo").value = o.desconto_tipo || "";
         document.getElementById("desconto-valor").value =
@@ -197,6 +292,80 @@
     }
 
     var orcamentoAtual = null;
+    /** Índice em `orcamentoAtual.itens` ao editar um complemento manual; null = modo inclusão. */
+    var extraItemEdicaoIndex = null;
+
+    function atualizarUiModoExtra() {
+        var edicao = extraItemEdicaoIndex != null;
+        var tit = document.getElementById("extra-doce-titulo");
+        var btnOk = document.getElementById("btn-extra-adicionar-item");
+        var btnCanc = document.getElementById("btn-extra-cancelar-edicao");
+        if (!tit || !btnOk || !btnCanc) return;
+        tit.textContent = edicao ? "Editar doce complementar" : "Incluir doce complementar";
+        btnOk.textContent = edicao ? "Salvar alterações" : "Adicionar à lista";
+        btnCanc.hidden = !edicao;
+    }
+
+    function sairModoEdicaoExtra() {
+        extraItemEdicaoIndex = null;
+        var n = document.getElementById("extra-doce-nome");
+        var q = document.getElementById("extra-doce-qtd");
+        var p = document.getElementById("extra-doce-preco");
+        if (n) n.value = "";
+        if (q) q.value = "1";
+        if (p) p.value = "";
+        atualizarUiModoExtra();
+    }
+
+    function validarCamposTipoDesconto() {
+        var tipoDes = document.getElementById("desconto-tipo").value || null;
+        var valRaw = document.getElementById("desconto-valor").value;
+        var valDes = parseFloat(String(valRaw).replace(",", ".")) || 0;
+        if (tipoDes && valDes <= 0) {
+            alert("Informe um valor de desconto válido ou deixe o tipo de desconto em branco.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Grava novo array de itens e recalcula totais (mesma regra do botão incluir complemento).
+     * @returns {boolean} false se falhou salvar.
+     */
+    function persistirItensOrcamento(lista) {
+        var vo = somaSubtotalItens(lista);
+        orcamentoAtual.itens = lista;
+        orcamentoAtual.valor_original = vo;
+        orcamentoAtual.total = vo;
+        var patch = patchComumExtra();
+        var atualizado = atualizarOrcamentoParcial(orcamentoAtual.id, patch);
+        if (!atualizado) {
+            orcamentoAtual = getOrcamentoPorId(orcamentoAtual.id);
+            alert("Não foi possível salvar os itens. Tente novamente.");
+            renderOrcamento(orcamentoAtual);
+            atualizarPreviewFinal(orcamentoAtual);
+            return false;
+        }
+        orcamentoAtual = atualizado;
+        renderOrcamento(orcamentoAtual);
+        atualizarPreviewFinal(orcamentoAtual);
+        return true;
+    }
+
+    function preencherFormExtraDeItem(it) {
+        var nomeEl = document.getElementById("extra-doce-nome");
+        var qtdEl = document.getElementById("extra-doce-qtd");
+        var precoEl = document.getElementById("extra-doce-preco");
+        if (!nomeEl || !qtdEl || !precoEl) return;
+        nomeEl.value = it.nome || "";
+        qtdEl.value = String(it.quantidade != null ? it.quantidade : 1);
+        var pu = it.preco_unitario != null ? it.preco_unitario : it.preco;
+        if (pu != null && pu !== "") {
+            precoEl.value = String(pu).replace(".", ",");
+        } else {
+            precoEl.value = "";
+        }
+    }
 
     function opcionalMoedaPatch(id) {
         var el = document.getElementById(id);
@@ -205,11 +374,41 @@
         return isNaN(n) ? null : Math.round(n * 100) / 100;
     }
 
+    /**
+     * Nome, e-mail, celular principal e data/tipo do evento usados no PDF e no texto introdutório do contrato.
+     * Estes campos não existiam como inputs (só leitura no topo); sem isto o PDF ignora correções.
+     */
+    function patchCamposClienteEventoPdfDom() {
+        var nome = strInput("contrato-pdf-nome-cliente");
+        var em = strInput("contrato-pdf-email");
+        var tel = strInput("contrato-pdf-telefone");
+        var dEvt = strInput("contrato-pdf-data-evento");
+        var tipoEvt = strInput("contrato-pdf-tipo-evento");
+        var nomeOrNull = nome ? nome : null;
+        var emOrNull = em ? em : null;
+        var telOrNull = tel ? tel : null;
+        var dOrNull = dEvt ? dEvt : null;
+        var tOrNull = tipoEvt ? tipoEvt : null;
+        return {
+            nome_cliente: nomeOrNull,
+            cliente: nomeOrNull,
+            email: emOrNull,
+            telefone: telOrNull,
+            evento_data: dOrNull,
+            data_evento: dOrNull,
+            evento_tipo: tOrNull,
+            tipo_evento: tOrNull
+        };
+    }
+
     function patchComumExtra() {
         var tipo = document.getElementById("desconto-tipo").value || null;
         var valRaw = document.getElementById("desconto-valor").value;
         var val = parseFloat(String(valRaw).replace(",", ".")) || 0;
-        var vo = valorOriginalOrcCompat(orcamentoAtual);
+        var vo =
+            typeof valorOriginalOrcamentoComItens === "function"
+                ? valorOriginalOrcamentoComItens(orcamentoAtual)
+                : valorOriginalOrcCompat(orcamentoAtual);
         var ddRaw = strCampoMoeda("desconto-degustacao");
         var dcRaw = strCampoMoeda("desconto-cerimonialista");
         var teRaw = strCampoMoeda("taxa-entrega");
@@ -219,7 +418,8 @@
         var entrada = numeroInput("entrada");
         var restante = calcularValorRestanteOrcamento(vf, entrada == null ? null : entrada);
 
-        return {
+        return Object.assign(
+            {
             desconto_tipo: tipo || null,
             desconto_valor: tipo ? val : null,
             valor_desconto: vDesc,
@@ -255,8 +455,42 @@
             evento_cerimonialista_tel: strInput("contrato-cerimonialista-tel") || null,
             evento_fotografo: strInput("contrato-fotografo") || null,
             evento_fotografo_tel: strInput("contrato-fotografo-tel") || null,
+            pagamento_valor_quitado_em: strInput("contrato-quitado-em") || null,
+            /* Obrigatório para PATCH: sem isto o servidor mantinha itens antigos ao incluir complementos manuais */
+            itens: JSON.parse(JSON.stringify(orcamentoAtual.itens || []))
+            },
+            patchCamposClienteEventoPdfDom()
+        );
+    }
+
+    /**
+     * Somente campos do anexo (inputs #contrato-*): lê do DOM e não sobrescreve itens nem totais.
+     * Mesclado no objeto enviado a gerarContratoPDF porque a resposta do PATCH pode omitir/atrasar campos opcionais.
+     */
+    function patchCamposAnexoPdf() {
+        return Object.assign(
+            {
+            contrato_numero_exibicao: strInput("contrato-numero-exibicao") || null,
+            cliente_rg: strInput("contrato-cliente-rg") || null,
+            cliente_cpf: strInput("contrato-cliente-cpf") || null,
+            cliente_data_nascimento: strInput("contrato-cliente-nasc") || null,
+            cliente_endereco_linha: strInput("contrato-cliente-endereco") || null,
+            cliente_cep: strInput("contrato-cliente-cep") || null,
+            telefone_fixo: strInput("contrato-telefone-fixo") || null,
+            contato_nome: strInput("contrato-contato-nome") || null,
+            contato_celular: strInput("contrato-contato-celular") || null,
+            evento_local_festa: strInput("contrato-local-festa") || null,
+            evento_horario_entrega: strInput("contrato-horario-entrega") || null,
+            evento_horario_festa: strInput("contrato-horario-festa") || null,
+            evento_local_cerimonia: strInput("contrato-local-cerimonia") || null,
+            evento_cerimonialista: strInput("contrato-cerimonialista") || null,
+            evento_cerimonialista_tel: strInput("contrato-cerimonialista-tel") || null,
+            evento_fotografo: strInput("contrato-fotografo") || null,
+            evento_fotografo_tel: strInput("contrato-fotografo-tel") || null,
             pagamento_valor_quitado_em: strInput("contrato-quitado-em") || null
-        };
+            },
+            patchCamposClienteEventoPdfDom()
+        );
     }
 
     function init() {
@@ -332,10 +566,16 @@
         });
 
         document.getElementById("btn-pdf-orcamento").addEventListener("click", function () {
-            var fresh = getOrcamentoPorId(orcamentoAtual.id);
-            if (!fresh) return;
-            Object.assign(fresh, patchComumExtra());
-            gerarOrcamentoPropostaPDF(fresh);
+            if (document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur();
+            }
+            var patch = patchComumExtra();
+            var base = getOrcamentoPorId(orcamentoAtual.id);
+            /* Mesma lógica do contrato: patch traz sempre itens atuais e totais corretos */
+            var dadosProposta =
+                Object.assign({}, base || orcamentoAtual, patch);
+            dadosProposta.itens = patch.itens ? patch.itens : dadosProposta.itens || [];
+            gerarOrcamentoPropostaPDF(dadosProposta);
         });
 
         document.getElementById("btn-contrato").addEventListener("click", function () {
@@ -346,21 +586,38 @@
                 alert("Ajuste o desconto ou deixe sem desconto antes de gerar o contrato.");
                 return;
             }
-            var vo = valorOriginalOrcCompat(orcamentoAtual);
             var ddR = strCampoMoeda("desconto-degustacao");
             var dcR = strCampoMoeda("desconto-cerimonialista");
             var teR = strCampoMoeda("taxa-entrega");
-            var vf = calcularValorFinalOrcamento(vo, tipoC, valC, ddR, dcR, teR);
-            var stContrato = CONFIG.STATUS_ORCAMENTO && CONFIG.STATUS_ORCAMENTO.CONTRATO_GERADO;
-            var extra = patchComumExtra();
 
-            atualizarOrcamentoParcial(oid, Object.assign(extra, {
+            /*
+             * Snapshot imutável dos itens antes de gravar/contrato: o PDF deve refletir exatamente
+             * as linhas visíveis neste momento; totais ficam sempre alinhados a essa lista.
+             */
+            var itensContrato = JSON.parse(JSON.stringify(orcamentoAtual.itens || []));
+            var voSnap = somaSubtotalItens(itensContrato);
+            var vfSnap = calcularValorFinalOrcamento(voSnap, tipoC, valC, ddR, dcR, teR);
+            var vDescSnap = tipoC ? descontoEquivalenteEmReais(voSnap, tipoC, valC) : 0;
+
+            var stContrato = CONFIG.STATUS_ORCAMENTO && CONFIG.STATUS_ORCAMENTO.CONTRATO_GERADO;
+
+            var extra = patchComumExtra();
+            extra.itens = itensContrato;
+            extra.valor_original = voSnap;
+            extra.total = voSnap;
+            extra.valor_final = vfSnap;
+            extra.valor_desconto = vDescSnap;
+
+            var patchContrato = Object.assign(extra, {
                 desconto_tipo: tipoC || null,
                 desconto_valor: tipoC ? valC : null,
-                valor_final: vf,
-                valor_desconto: tipoC ? descontoEquivalenteEmReais(vo, tipoC, valC) : 0,
+                valor_final: vfSnap,
+                valor_desconto: vDescSnap,
+                valor_original: voSnap,
+                total: voSnap,
+                itens: itensContrato,
                 contrato: {
-                    valor_final: vf,
+                    valor_final: vfSnap,
                     data_contrato: new Date().toISOString(),
                     status: "emitido"
                 },
@@ -369,14 +626,141 @@
                     gerado_em: new Date().toISOString()
                 },
                 status: stContrato || "contrato_gerado"
-            }));
+            });
 
-            var fresh = getOrcamentoPorId(oid);
-            if (!fresh) return;
-            gerarContratoPDF(fresh);
-            orcamentoAtual = fresh;
+            var salvo = atualizarOrcamentoParcial(oid, patchContrato);
+            /* Alguns navegadores só atualizam o .value ao perder foco (tel/e-mail): consolida antes do PDF */
+            if (document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur();
+            }
+            var dadosPdf = salvo &&
+                Array.isArray(salvo.itens) &&
+                salvo.itens.length === itensContrato.length
+                ? salvo
+                : Object.assign({}, orcamentoAtual, patchContrato);
+            /* Tudo que está nos campos #contrato-* / #contrato-pdf-* do anexo sobrepõe o objeto do servidor antes do PDF */
+            var anexoDoForm = patchCamposAnexoPdf();
+            dadosPdf = Object.assign({}, dadosPdf, anexoDoForm);
+            /* Se não bater com o servidor, o PDF mesmo assim sai certo pelo merge local */
+
+            gerarContratoPDF(dadosPdf);
+            /* Evita regressão: não substituir memória só por uma leitura que possa estar desatualizada */
+            if (salvo &&
+                salvo.itens &&
+                salvo.itens.length === itensContrato.length) {
+                /* PATCH pode devolver objeto sem campos opcionais do anexo; manter o que foi lido do formulário (#contrato-*) */
+                orcamentoAtual = Object.assign({}, salvo, anexoDoForm);
+            } else {
+                if (salvo && salvo.itens && salvo.itens.length !== itensContrato.length) {
+                    console.warn(
+                        "[admin] Lista de itens devolvida após PATCH diverge do ecrã. A manter dados mesclados com o último PATCH."
+                    );
+                }
+                orcamentoAtual = dadosPdf;
+                atualizarOrcamentoParcial(oid, patchContrato);
+            }
             renderOrcamento(orcamentoAtual);
             alert("Contrato PDF gerado.");
+        });
+
+        document.getElementById("btn-salvar-anexo-contrato").addEventListener("click", function () {
+            var tipo = document.getElementById("desconto-tipo").value || null;
+            var valRaw = document.getElementById("desconto-valor").value;
+            var val = parseFloat(String(valRaw).replace(",", ".")) || 0;
+            if (tipo && val <= 0) {
+                alert("Informe um valor de desconto válido ou deixe o tipo em branco.");
+                return;
+            }
+            var status = document.getElementById("status-orcamento").value;
+            var patch = Object.assign(patchComumExtra(), { status: status });
+            var atualizado = atualizarOrcamentoParcial(orcamentoAtual.id, patch);
+            if (atualizado) {
+                orcamentoAtual = atualizado;
+                alert("Dados do anexo e do orçamento guardados.");
+                renderOrcamento(orcamentoAtual);
+            } else {
+                alert("Não foi possível guardar. Verifique a ligação ou use «Salvar alterações» no fim da página.");
+            }
+        });
+
+        document.getElementById("lista-itens").addEventListener("click", function (ev) {
+            var btn = ev.target.closest("button[data-acao-extra][data-item-index]");
+            if (!btn || !orcamentoAtual) return;
+            var acao = btn.getAttribute("data-acao-extra");
+            var idx = parseInt(btn.getAttribute("data-item-index"), 10);
+            if (!Number.isFinite(idx)) return;
+            var itensArr = orcamentoAtual.itens || [];
+            var itemRef = itensArr[idx];
+            if (!itemRef || itemRef.extra_pedido_admin !== true) return;
+
+            if (acao === "editar") {
+                extraItemEdicaoIndex = idx;
+                preencherFormExtraDeItem(itemRef);
+                atualizarUiModoExtra();
+                var wrap = document.getElementById("admin-extra-itens-wrap");
+                if (wrap && wrap.scrollIntoView) wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                return;
+            }
+            if (acao === "remover") {
+                if (!confirm("Remover este complemento manual deste orçamento?")) return;
+                if (!validarCamposTipoDesconto()) return;
+                var listaNova = itensArr.slice();
+                listaNova.splice(idx, 1);
+                if (extraItemEdicaoIndex === idx) {
+                    sairModoEdicaoExtra();
+                } else if (extraItemEdicaoIndex != null && extraItemEdicaoIndex > idx) {
+                    extraItemEdicaoIndex -= 1;
+                }
+                persistirItensOrcamento(listaNova);
+            }
+        });
+
+        document.getElementById("btn-extra-cancelar-edicao").addEventListener("click", function () {
+            sairModoEdicaoExtra();
+        });
+
+        document.getElementById("btn-extra-adicionar-item").addEventListener("click", function () {
+            var nome = (document.getElementById("extra-doce-nome").value || "").trim();
+            var q = parseInt(document.getElementById("extra-doce-qtd").value, 10);
+            var precoUnit = parsePrecoExtra(document.getElementById("extra-doce-preco").value);
+            if (!nome) {
+                alert("Informe o nome do doce.");
+                return;
+            }
+            if (!Number.isFinite(q) || q < 1) {
+                alert("Quantidade deve ser pelo menos 1 unidade.");
+                return;
+            }
+            if (precoUnit == null || precoUnit <= 0) {
+                alert("Informe um preço unitário válido (ex.: 2,50).");
+                return;
+            }
+            if (!validarCamposTipoDesconto()) return;
+
+            var subtotalItem = Math.round(q * precoUnit * 100) / 100;
+            var novoItem = {
+                nome: nome,
+                quantidade: q,
+                preco: precoUnit,
+                preco_unitario: precoUnit,
+                subtotal: subtotalItem,
+                qtd_min: 1,
+                extra_pedido_admin: true
+            };
+            var lista = (orcamentoAtual.itens || []).slice();
+            var edicao = extraItemEdicaoIndex;
+            if (edicao != null) {
+                if (!lista[edicao] || lista[edicao].extra_pedido_admin !== true) {
+                    alert("O complemento em edição não está mais disponível.");
+                    sairModoEdicaoExtra();
+                    return;
+                }
+                lista[edicao] = novoItem;
+            } else {
+                lista.push(novoItem);
+            }
+            if (!persistirItensOrcamento(lista)) return;
+            sairModoEdicaoExtra();
         });
 
         document.getElementById("btn-voltar").addEventListener("click", function () {

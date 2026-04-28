@@ -48,6 +48,116 @@
     color: #5c4033;
 }
 
+.admin-extra-itens {
+    margin-top: 1.25rem;
+    padding: 1rem 1rem 1.1rem;
+    background: #faf6f2;
+    border-radius: 10px;
+    border: 1px dashed #cbb8a8;
+}
+
+.admin-hint-text {
+    font-size: 0.92rem;
+    color: #5c4a41;
+    line-height: 1.55;
+    margin: 0 0 1rem;
+}
+
+.admin-hint-text--small {
+    font-size: 0.84rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.92;
+}
+
+.admin-lista-itens {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+}
+
+.admin-lista-item-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e8dcc8;
+    flex-wrap: wrap;
+}
+
+.admin-lista-item-linha:last-child {
+    border-bottom: none;
+}
+
+.admin-lista-item-texto {
+    flex: 1;
+    min-width: 12rem;
+    line-height: 1.45;
+}
+
+.admin-lista-item-acoes {
+    display: flex;
+    flex-shrink: 0;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.admin-btn-item-acao {
+    padding: 0.28rem 0.65rem;
+    font-size: 0.76rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: #a0806a;
+    color: #fff !important;
+}
+
+.admin-btn-item-acao:hover {
+    opacity: 0.93;
+}
+
+.admin-btn-item-acao--perigo {
+    background: #8b5344;
+}
+
+.admin-extra-itens-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.35rem;
+}
+
+.admin-itens-dica {
+    font-size: 0.92rem;
+    color: #4a3930;
+    line-height: 1.55;
+    margin: 0 0 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background: rgba(92, 64, 51, 0.06);
+    border-radius: 8px;
+    border-left: 3px solid #8b7355;
+}
+
+.admin-lista-item-linha--extra {
+    background: rgba(255, 248, 240, 0.95);
+    margin: 0 -0.35rem;
+    padding-left: 0.35rem !important;
+    padding-right: 0.35rem !important;
+    border-radius: 8px;
+}
+
+.admin-aviso-divergencia {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: #a34c2f;
+    background: rgba(163, 76, 47, 0.1);
+    padding: 0.5rem 0.65rem;
+    border-radius: 8px;
+}
+
 .admin-table-wrap {
     overflow-x: auto;
 }
@@ -73,6 +183,15 @@
 
 .admin-table tr:hover td {
     background: #fdfbf8;
+}
+
+.admin-td-acoes {
+    white-space: normal;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    vertical-align: middle;
 }
 
 .admin-btn {
@@ -241,6 +360,17 @@
     color: #6d5345;
     margin: 0.75rem 0 1rem;
     line-height: 1.45;
+}
+
+.admin-contrato-anexo-acoes {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #e8dcc8;
+}
+
+.admin-contrato-anexo-acoes .admin-hint-text {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
 }
 
 .admin-grid-2 {

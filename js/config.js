@@ -18,7 +18,7 @@ const CONFIG = {
      */
     pedidoMinimoUnidades: 50,
     /** Senha da área administrativa (troque em produção) */
-    senhaAdmin: "senna2025",
+    senhaAdmin: "Candyli280426",
     /** Chaves de status (espelho do banco / fluxo) */
     STATUS_ORCAMENTO: {
         NOVO: "novo_orcamento",

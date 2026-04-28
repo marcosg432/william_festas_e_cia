@@ -53,7 +53,8 @@ function gerarOrcamentoPropostaPDF(orcamento) {
     linha("Cliente", 7);
     doc.setFontSize(10);
     linha("Nome: " + (orcamento.cliente || orcamento.nome_cliente || "-"), 6);
-    linha("Telefone: " + (orcamento.telefone || "-") + "  |  E-mail: " + (orcamento.email || "-"), 6);
+    var telProp = orcamento.telefone || orcamento.contato_celular;
+    linha("Telefone: " + (telProp || "-") + "  |  E-mail: " + (orcamento.email || "-"), 6);
 
     y += 2;
     doc.setFontSize(12);
@@ -78,7 +79,10 @@ function gerarOrcamentoPropostaPDF(orcamento) {
         linha("(sem itens)", 6);
     }
 
-    var vo = valorOriginalOrcCompat(orcamento);
+    var vo =
+        typeof valorOriginalOrcamentoComItens === "function"
+            ? valorOriginalOrcamentoComItens(orcamento)
+            : valorOriginalOrcCompat(orcamento);
     var tipoD = orcamento.desconto_tipo;
     var valD = orcamento.desconto_valor;
     var vDesc = orcamento.valor_desconto;

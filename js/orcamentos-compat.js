@@ -36,10 +36,36 @@ function formaPagamentoOrc(o) {
     return o.forma_pagamento != null && o.forma_pagamento !== "" ? o.forma_pagamento : (o.forma_pagamento_ref || o.pagamento || "");
 }
 
+function somaSubtotalItensDoOrcamento(o) {
+    if (!o || !Array.isArray(o.itens)) return 0;
+    var t = 0;
+    for (var i = 0; i < o.itens.length; i++) {
+        var it = o.itens[i];
+        if (!it) continue;
+        var pu = it.preco_unitario != null ? it.preco_unitario : it.preco;
+        var sub =
+            it.subtotal != null ? it.subtotal : (Number(pu) || 0) * (Number(it.quantidade) || 0);
+        t += Number(sub) || 0;
+    }
+    return Math.round(t * 100) / 100;
+}
+
+/**
+ * Valor base para desconto e PDF: soma das linhas quando há itens (única fonte de verdade);
+ * senão mantém comportamento antigo só com campo total/valor_original.
+ */
+function valorOriginalOrcamentoComItens(o) {
+    if (!o) return 0;
+    if (Array.isArray(o.itens) && o.itens.length > 0) {
+        return somaSubtotalItensDoOrcamento(o);
+    }
+    return valorOriginalOrcCompat(o);
+}
+
 function valorFinalOrc(o) {
     if (!o) return 0;
     if (typeof calcularValorFinalOrcamento === "function") {
-        var vo = valorOriginalOrcCompat(o);
+        var vo = valorOriginalOrcamentoComItens(o);
         return calcularValorFinalOrcamento(
             vo,
             o.desconto_tipo,

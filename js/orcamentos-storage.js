@@ -5,6 +5,15 @@
 
 var ORCAMENTOS_LS_KEY = "orcamentos";
 
+/**
+ * Marcador interno quando o PATCH falhou mas os dados foram fundidos só no navegador.
+ * Evita que listarOrcamentos(), ao sincronizar com a API SQLite, pisote localStorage atualizado.
+ * Removido no servidor ao gravar payload (orcamentosRepository).
+ */
+var META_EDITADO_SO_LOCAL_KEY = "__editadoSomenteLocalEm";
+/** Igual ao servidor (SQLite updated_at propagado pela API só para fusão lista). */
+var META_ATUALIZADO_SERVIDOR_KEY = "_atualizadoServidorEm";
+
 function getLegacyOrcamentosKey() {
     var nome = typeof getConfigStorageSlug === "function"
         ? getConfigStorageSlug()
@@ -51,6 +60,56 @@ function mergeListasOrcamentosPorId(listas) {
     });
 }
 
+/**
+ * Se o PATCH só gravou no browser e GET devolver payload antigo da API, funde o estado local preservado na lista anterior.
+ */
+function fundirListaApiComPreferenciaLocal(listaApi, listaLocalPrev) {
+    if (!Array.isArray(listaApi)) return [];
+    var mapPrev = {};
+    (listaLocalPrev || []).forEach(function (o) {
+        if (!o || o.id == null) return;
+        mapPrev[String(o.id)] = o;
+    });
+    var idsApi = {};
+    var fundida = listaApi.map(function (rowApi) {
+        idsApi[String(rowApi.id)] = true;
+        var loc = mapPrev[String(rowApi.id)];
+        if (loc && typeof loc[META_EDITADO_SO_LOCAL_KEY] === "number" && rowApi.id != null) {
+            var srvIso = rowApi[META_ATUALIZADO_SERVIDOR_KEY];
+            var srvMs = srvIso ? Date.parse(String(srvIso)) : NaN;
+            var localTs = loc[META_EDITADO_SO_LOCAL_KEY];
+            /*
+             * PATCH gravou na API depois da cópia só-local → confiar na API (evita telefone/nome velhos a pisar dados novos).
+             */
+            if (!isNaN(srvMs) && srvMs > localTs) {
+                var limpo = Object.assign({}, rowApi);
+                delete limpo[META_EDITADO_SO_LOCAL_KEY];
+                return limpo;
+            }
+            return Object.assign({}, rowApi, loc);
+        }
+        return rowApi;
+    });
+    /* Orçamentos criados só neste browser (POST falhou) não estão no SQLite: manter no fim da lista */
+    (listaLocalPrev || []).forEach(function (o) {
+        if (!o || o.id == null) return;
+        var id = String(o.id);
+        if (!idsApi[id]) {
+            fundida.push(o);
+            idsApi[id] = true;
+        }
+    });
+    return fundida;
+}
+
+function removerMetaSomenteLocalDoObjeto(o) {
+    if (!o || typeof o !== "object") return o;
+    if (Object.prototype.hasOwnProperty.call(o, META_EDITADO_SO_LOCAL_KEY)) {
+        delete o[META_EDITADO_SO_LOCAL_KEY];
+    }
+    return o;
+}
+
 function apiRequestSync(method, pathStr, bodyObj) {
     try {
         var xhr = new XMLHttpRequest();
@@ -83,14 +142,16 @@ function listarOrcamentos() {
         if (r.ok && r.body) {
             var sync = JSON.parse(r.body);
             if (Array.isArray(sync)) {
+                /* Ler localStorage antes do setItem seguinte para fundir registos apenas gravados neste navegador (PATCH falhou antes). */
+                var combinada = fundirListaApiComPreferenciaLocal(sync, obterOrcamentosSoLocalStorage());
                 try {
-                    var json = JSON.stringify(sync);
+                    var json = JSON.stringify(combinada);
                     localStorage.setItem(ORCAMENTOS_LS_KEY, json);
                     localStorage.setItem(getLegacyOrcamentosKey(), json);
                 } catch (e) {
                     console.warn("Espelho local dos orçamentos:", e);
                 }
-                return sync;
+                return combinada;
             }
         }
     } catch (e) {
@@ -164,6 +225,7 @@ function atualizarOrcamentoParcial(id, patch) {
         var r = apiRequestSync("PATCH", "/api/orcamentos/" + encodeURIComponent(id), patch);
         if (r.ok && r.body) {
             var saved = JSON.parse(r.body);
+            removerMetaSomenteLocalDoObjeto(saved);
             var list = obterOrcamentosSoLocalStorage();
             var i = list.findIndex(function (o) {
                 return String(o.id) === String(id);
@@ -182,6 +244,43 @@ function atualizarOrcamentoParcial(id, patch) {
     });
     if (i === -1) return null;
     list[i] = Object.assign({}, list[i], patch);
+    list[i][META_EDITADO_SO_LOCAL_KEY] = Date.now();
     salvarListaOrcamentos(list);
     return list[i];
+}
+
+function removerOrcamentoDaListaLocal(idStr) {
+    var list = obterOrcamentosSoLocalStorage();
+    var filtrada = list.filter(function (o) {
+        return o && String(o.id) !== idStr;
+    });
+    if (filtrada.length === list.length) return false;
+    salvarListaOrcamentos(filtrada);
+    return true;
+}
+
+/**
+ * Apaga na API (SQLite) e remove do localStorage. Sem servidor ou 404, remove só a cópia local.
+ * @returns {boolean} true se deixou de existir na lista local
+ */
+function excluirOrcamento(id) {
+    var idStr = String(id);
+    var r;
+    try {
+        r = apiRequestSync("DELETE", "/api/orcamentos/" + encodeURIComponent(idStr), null);
+    } catch (e) {
+        r = { ok: false, status: 0 };
+    }
+    if (r.ok && (r.status === 204 || r.status === 200)) {
+        return removerOrcamentoDaListaLocal(idStr);
+    }
+    /* Não existe no servidor — alinhar lista local */
+    if (r.status === 404) {
+        return removerOrcamentoDaListaLocal(idStr);
+    }
+    /* API inacessível / só estático: apagar local */
+    if (r.status === 0) {
+        return removerOrcamentoDaListaLocal(idStr);
+    }
+    return false;
 }
