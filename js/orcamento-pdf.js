@@ -101,11 +101,14 @@ function gerarOrcamentoPropostaPDF(orcamento) {
     doc.setFontSize(12);
     linha("Valores", 7);
     doc.setFontSize(10);
-    linha("Valor original: " + formatarMoedaOrcPdf(vo), 6);
-    linha("Desconto (geral): " + formatarMoedaOrcPdf(Number(vDesc) || 0), 6);
-    if (ddPdf > 0) linha("Desconto degustacao: " + formatarMoedaOrcPdf(ddPdf), 6);
+    linha("Subtotal (produtos): " + formatarMoedaOrcPdf(vo), 6);
+    linha("Taxa de entrega: " + formatarMoedaOrcPdf(tePdf), 6);
+    linha("Total com entrega (antes dos descontos): " + formatarMoedaOrcPdf(Math.round((vo + tePdf) * 100) / 100), 6);
     if (dcPdf > 0) linha("Desconto cerimonialista: " + formatarMoedaOrcPdf(dcPdf), 6);
-    if (tePdf > 0) linha("Taxa de entrega: " + formatarMoedaOrcPdf(tePdf), 6);
+    linha("Desconto geral: " + formatarMoedaOrcPdf(Number(vDesc) || 0), 6);
+    if (ddPdf > 0) linha("Desconto degustacao: " + formatarMoedaOrcPdf(ddPdf), 6);
+    var somaDescPdf = Math.round(((Number(vDesc) || 0) + ddPdf + dcPdf) * 100) / 100;
+    linha("Total de descontos: " + formatarMoedaOrcPdf(somaDescPdf), 6);
     doc.setFontSize(11);
     linha("VALOR FINAL: " + formatarMoedaOrcPdf(vf), 7);
 

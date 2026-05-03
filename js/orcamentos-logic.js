@@ -35,16 +35,19 @@ function valorMonetarioOrcamentoOpcional(v) {
 }
 
 /**
- * valorFinal = subtotal − descontoGeral − descontoDegustação − descontoCerimonialista + taxaEntrega
- * (descontoGeral = efeito em R$ do desconto principal % ou fixo sobre o subtotal; taxa soma ao final)
+ * Fluxo perceptual: subtotal (produtos) + taxaEntrega → base com entrega;
+ * valorFinal = baseComEntrega − descontoGeral − descontoDegustação − descontoCerimonialista.
+ * O desconto geral (% ou R$) continua calculado só sobre o subtotal de produtos (não sobre a taxa).
+ * Matematicamente equivale a: subtotal − descontos + taxa.
  */
 function calcularValorFinalOrcamento(vo, descontoTipo, descontoValor, descontoDegustacao, descontoCerimonialista, taxaEntrega) {
     var subtotal = Math.max(0, Number(vo) || 0);
+    var te = valorMonetarioOrcamentoOpcional(taxaEntrega);
+    var baseComEntrega = subtotal + te;
     var dg = descontoTipo ? descontoEquivalenteEmReais(subtotal, descontoTipo, descontoValor) : 0;
     var dd = valorMonetarioOrcamentoOpcional(descontoDegustacao);
     var dc = valorMonetarioOrcamentoOpcional(descontoCerimonialista);
-    var te = valorMonetarioOrcamentoOpcional(taxaEntrega);
-    var vf = subtotal - dg - dd - dc + te;
+    var vf = baseComEntrega - dg - dd - dc;
     return Math.round(Math.max(0, vf) * 100) / 100;
 }
 

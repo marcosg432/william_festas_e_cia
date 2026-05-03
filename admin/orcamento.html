@@ -32,6 +32,8 @@
                 <p><strong>Nome:</strong> <span id="view-nome"></span></p>
                 <p><strong>Telefone:</strong> <span id="view-telefone"></span></p>
                 <p><strong>E-mail:</strong> <span id="view-email"></span></p>
+                <p><strong>CPF:</strong> <span id="view-cpf"></span></p>
+                <p><strong>RG:</strong> <span id="view-rg"></span></p>
 
                 <h2>Evento</h2>
                 <p><strong>Data:</strong> <span id="view-data-evento"></span></p>
@@ -167,31 +169,37 @@
                         <button type="button" class="admin-btn admin-btn-sec" id="btn-extra-cancelar-edicao" hidden>Cancelar edição</button>
                     </div>
                 </div>
-                <p><strong>Valor original (registrado neste orçamento):</strong> <span id="valor-original"></span></p>
+                <p><strong>Subtotal dos produtos (registrado neste orçamento):</strong> <span id="valor-original"></span></p>
                 <p id="valor-original-divergencia" class="admin-aviso-divergencia" hidden></p>
 
                 <h2>Desconto e valor final</h2>
-                <p style="font-size:0.9rem;opacity:0.9">Os preços unitários dos produtos não são alterados. O desconto aplica-se apenas neste orçamento.</p>
-                <label for="desconto-tipo">Tipo de desconto</label>
+                <p style="font-size:0.9rem;opacity:0.9">O subtotal dos produtos está logo acima. Aqui a ordem é: <strong>taxa de entrega</strong> (passo a passo vê o total com entrega) → <strong>descontos</strong> (cerimonialista, desconto geral e degustação) → <strong>valor fechado</strong>. Os preços unitários dos itens não são alterados.</p>
+
+                <label for="taxa-entrega">Taxa de entrega (R$)</label>
+                <input type="text" id="taxa-entrega" placeholder="0,00" inputmode="decimal" autocomplete="off">
+                <p><strong>Taxa de entrega:</strong> <span id="preview-taxa-entrega"></span></p>
+                <p><strong>Total com entrega (subtotal + taxa — antes dos descontos):</strong> <span id="preview-total-com-entrega"></span></p>
+
+                <p style="font-size:0.9rem;opacity:0.88;margin-top:1rem"><strong>Descontos</strong> <span style="font-weight:normal;opacity:0.85">(abaixo, na ordem: cerimonialista → geral → degustação)</span></p>
+                <label for="desconto-cerimonialista">Desconto cerimonialista (R$)</label>
+                <input type="text" id="desconto-cerimonialista" placeholder="0,00" inputmode="decimal" autocomplete="off">
+                <label for="desconto-tipo">Desconto geral — tipo</label>
                 <select id="desconto-tipo">
-                    <option value="">Sem desconto</option>
+                    <option value="">Sem desconto geral</option>
                     <option value="reais">Valor fixo (R$)</option>
                     <option value="percentual">Percentual (%)</option>
                 </select>
-                <label for="desconto-valor">Valor (R$ ou % conforme tipo acima)</label>
+                <label for="desconto-valor">Desconto geral — valor (R$ ou % conforme o tipo)</label>
                 <input type="text" id="desconto-valor" placeholder="Ex: 50 ou 10" inputmode="decimal">
-
-                <p><strong>Desconto em reais (efeito):</strong> <span id="preview-desconto-reais"></span></p>
                 <label for="desconto-degustacao">Desconto degustação (R$)</label>
                 <input type="text" id="desconto-degustacao" placeholder="0,00" inputmode="decimal" autocomplete="off">
-                <label for="desconto-cerimonialista">Desconto cerimonialista (R$)</label>
-                <input type="text" id="desconto-cerimonialista" placeholder="0,00" inputmode="decimal" autocomplete="off">
-                <label for="taxa-entrega">Taxa de entrega (R$) <span style="font-weight:normal;opacity:0.85">— somada ao total após os descontos</span></label>
-                <input type="text" id="taxa-entrega" placeholder="0,00" inputmode="decimal" autocomplete="off">
-                <p style="font-size:0.9rem;opacity:0.88;margin-top:0.75rem"><strong>Desconto degustação (efeito):</strong> <span id="preview-desconto-deg"></span></p>
-                <p><strong>Desconto cerimonialista (efeito):</strong> <span id="preview-desconto-cer"></span></p>
-                <p><strong>Taxa de entrega (soma ao total):</strong> <span id="preview-taxa-entrega"></span></p>
-                <p><strong>Valor final:</strong> <span id="preview-valor-final"></span></p>
+
+                <p style="font-size:0.9rem;opacity:0.88;margin-top:1rem;border-top:1px solid rgba(255,255,255,0.12);padding-top:0.75rem"><strong>Resumo</strong></p>
+                <p><strong>Desconto cerimonialista (R$):</strong> <span id="preview-desconto-cer"></span></p>
+                <p><strong>Desconto geral (R$):</strong> <span id="preview-desconto-reais"></span></p>
+                <p><strong>Desconto degustação (R$):</strong> <span id="preview-desconto-deg"></span></p>
+                <p><strong>Total de descontos (somados):</strong> <span id="preview-soma-descontos"></span></p>
+                <p><strong>Valor final (total com entrega − descontos):</strong> <span id="preview-valor-final"></span></p>
 
                 <h3 class="admin-secao-titulo">Degustação</h3>
                 <label for="degustacao-data">Data da degustação</label>

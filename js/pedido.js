@@ -55,6 +55,8 @@ function montarMensagemOrcamento(orcId) {
     var nome = campoTrimOrcamento("nome");
     var telefone = campoTrimOrcamento("telefone");
     var email = campoTrimOrcamento("email-cliente");
+    var cpf = campoTrimOrcamento("cpf-cliente");
+    var rg = campoTrimOrcamento("rg-cliente");
     var dataEvento = campoTrimOrcamento("data-evento");
     var tipoEvento = campoTrimOrcamento("tipo-evento");
     var convidados = campoTrimOrcamento("convidados");
@@ -95,6 +97,8 @@ function montarMensagemOrcamento(orcId) {
     msg += "Nome: " + (nome || "-") + "\n";
     msg += "Telefone: " + (telefone || "-") + "\n";
     msg += "E-mail: " + (email || "-") + "\n";
+    if (cpf) msg += "CPF: " + cpf + "\n";
+    if (rg) msg += "RG: " + rg + "\n";
     msg += "-------------";
     return msg;
 }
@@ -145,6 +149,8 @@ function gerarOrcamento() {
     var nome = campoTrimOrcamento("nome");
     var telefone = campoTrimOrcamento("telefone");
     var email = campoTrimOrcamento("email-cliente");
+    var cpf = campoTrimOrcamento("cpf-cliente");
+    var rg = campoTrimOrcamento("rg-cliente");
     var dataEvento = campoTrimOrcamento("data-evento");
     var tipoEvento = campoTrimOrcamento("tipo-evento");
     var convidados = campoTrimOrcamento("convidados");
@@ -203,6 +209,10 @@ function gerarOrcamento() {
         forma_pagamento_ref: pagamento || null,
         pagamento: pagamento || "",
         total: valorOriginal,
+        cliente_cpf: cpf ? cpf : null,
+        cliente_rg: rg ? rg : null,
+        rg: rg ? rg : null,
+        cpf: cpf ? cpf : null,
         data: agora,
         contrato: null
     };
