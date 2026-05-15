@@ -1,5 +1,5 @@
 /**
- * pedido-personalizado.js — Bolos: abas Monte seu bolo / Bolos de corte, resumo e WhatsApp
+ * pedido-personalizado.js — Bolos c/ Chantilly: abas Monte seu bolo / Bolos de corte, resumo e WhatsApp
  */
 
 (function() {
@@ -227,7 +227,7 @@
     }
 
     function enviarWhatsApp() {
-        var tel = (typeof CONFIG !== 'undefined' && CONFIG.telefoneWhatsApp) ? CONFIG.telefoneWhatsApp : '5519981178167';
+        var tel = (typeof CONFIG !== 'undefined' && CONFIG.telefoneWhatsApp) ? CONFIG.telefoneWhatsApp : '5516991280505';
         var msg;
         var valorStr;
 

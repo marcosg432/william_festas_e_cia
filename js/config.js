@@ -3,22 +3,22 @@
  * Alterar apenas este arquivo para configurar em novos cardápios/clientes
  */
 const CONFIG = {
-    /** Número do WhatsApp com DDD (ex: 5519981178167) */
-    telefoneWhatsApp: "5519981178167",
+    /** WhatsApp: Brasil + DDD + celular, só dígitos (ex.: (16) 99128-0505 → 5516991280505) */
+    telefoneWhatsApp: "5516991280505",
     /**
      * Slug estável para chaves de localStorage/sessão (carrinho, orçamentos legado, admin).
      * Não altere após deploy se quiser manter dados já gravados no navegador.
      */
     storageId: "senna_doce",
     /** Nome da confeitaria exibido no site, PDFs, WhatsApp e admin */
-    nomeEmpresa: "Candy Li Doces Finos",
+    nomeEmpresa: "Willian Festas e Cia",
     /**
      * Pedido mínimo em unidades por produto e por sabor (orçamento / cardápio).
-     * Usado como padrão para todos os itens; `data-produto-qtd-min` no card só pode aumentar esse mínimo.
+     * Padrão quando o card não define `data-produto-qtd-min`; se o card define (ex.: kits), vale o valor do card (mínimo 1).
      */
     pedidoMinimoUnidades: 50,
     /** Senha da área administrativa (troque em produção) */
-    senhaAdmin: "Candyli280426",
+    senhaAdmin: "Willianfestas280426",
     /** Chaves de status (espelho do banco / fluxo) */
     STATUS_ORCAMENTO: {
         NOVO: "novo_orcamento",
@@ -50,14 +50,14 @@ const CONFIG = {
     },
     /** Texto exibido na cláusula de pagamento (PIX / comprovante) */
     contratoPixCnpj: "41.919.042/0001-08",
-    contratoEmailsComprovante: "candylidoces@hotmail.com",
+    contratoEmailsComprovante: "contato@willianfestasecia.com.br",
     /** Dias de validade exibidos no PDF do orçamento */
     validadeOrcamentoDias: 15,
     /**
      * Logo para PDF (opcional): caminho a partir da raiz do site, ex: "assets/logo.png"
      * Deixe vazio para não carregar imagem (usa só o nome da empresa).
      */
-    logoOrcamentoRelPath: ""
+    logoOrcamentoRelPath: "assets/logo-willian-festas-e-cia.png"
 };
 
 /**

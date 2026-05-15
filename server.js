@@ -1,13 +1,13 @@
 /**
- * Servidor estático + API SQLite local - Candy Li Doces Finos
+ * Servidor estático + API SQLite local - Willian Festas e Cia
  * Requer Node.js ≥ 22.13 (módulo nativo node:sqlite; sem MySQL e sem dependência npm do BD).
  *
  * Use sempre esta origem para site + /admin (mesmo localStorage):
  *   http://localhost:3003/
  *   http://localhost:3003/admin/
  *
- * Inicie com: npm start  (porta: PORT=8080 npm start se quiser outra)
- * Abrir site + admin no navegador: npm run open:all
+ * Produção (Hostinger / PM2): ver ecosystem.config.cjs (PORT 3018).
+ * Local: npm start  (porta padrão 3003; ou PORT=8080 npm start)
  */
 const http = require('http');
 const fs = require('fs');
@@ -116,7 +116,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Candy Li Doces Finos — use esta origem para site e admin (mesmo localStorage):`);
+  console.log(`Willian Festas e Cia — use esta origem para site e admin (mesmo localStorage):`);
   console.log(`  http://localhost:${PORT}/`);
   console.log(`  http://localhost:${PORT}/admin/`);
   if (apiDbReady) {

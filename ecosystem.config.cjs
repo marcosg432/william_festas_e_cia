@@ -1,25 +1,28 @@
 /**
- * PM2 - Candy Li Doces Finos
- * Usa porta 3003 (evita conflito com 22, 80, 3000, 3001, 3002, 53)
- * Funciona sem domínio - acesse via IP:3003
+ * PM2 — Willian Festas e Cia
+ *
+ * Na VPS (pasta do projeto):
+ *   pm2 start ecosystem.config.cjs
+ *   pm2 save
+ *   pm2 startup   # seguir a instrução que o comando imprimir
+ *
+ * Logs: pm2 logs willian-festas-e-cia
+ * Nginx: proxy_pass http://127.0.0.1:3018;
  */
 module.exports = {
-  apps: [
-    {
-      name: 'cardapio-senna',
-      script: 'server.js',
-      cwd: __dirname,
-      instances: 1,
-      /* fork evita modo cluster no PM2 (um só processo; menos surpresa com SQLite / listen) */
-      exec_mode: 'fork',
-      autorestart: true,
-      watch: false,
-      /* 150M era agressivo demais com Node 22 + SQLite; sobe o teto para evitar loop errored no PM2 */
-      max_memory_restart: '400M',
-      env: {
-        NODE_ENV: 'production',
-        PORT: '3003'
-      }
-    }
-  ]
+    apps: [
+        {
+            name: 'willian-festas-e-cia',
+            script: './server.js',
+            cwd: __dirname,
+            instances: 1,
+            exec_mode: 'fork',
+            watch: false,
+            max_memory_restart: '300M',
+            env: {
+                NODE_ENV: 'production',
+                PORT: 3018
+            }
+        }
+    ]
 };

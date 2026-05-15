@@ -1,15 +1,14 @@
 {
-  "name": "cardapio-senna",
-  "version": "1.0.0",
-  "description": "Candy Li Doces Finos - Cardápio Digital",
-  "main": "index.html",
-  "scripts": {
-    "start": "node server.js",
-    "open": "node -e \"var p=String(Number(process.env.PORT)||3003);require('child_process').execSync(process.platform==='win32'?'cmd /c start \\\"\\\" \\\"http://localhost:'+p+'/\\\"':'open http://localhost:'+p+'/',{stdio:'inherit'})\"",
-    "open:all": "node open-both.js",
-    "build": "echo 'Projeto estático - sem build'"
-  },
-  "engines": {
-    "node": ">=22.13.0"
-  }
+    "name": "willian-festas-e-cia",
+    "private": true,
+    "description": "Site + admin + API SQLite — Willian Festas e Cia",
+    "engines": {
+        "node": ">=22.13.0"
+    },
+    "scripts": {
+        "start": "node server.js",
+        "pm2:start": "pm2 start ecosystem.config.cjs",
+        "pm2:reload": "pm2 reload ecosystem.config.cjs",
+        "pm2:stop": "pm2 stop willian-festas-e-cia"
+    }
 }

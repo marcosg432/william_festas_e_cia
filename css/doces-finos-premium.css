@@ -1,0 +1,387 @@
+/**
+ * Doces Finos — vitrine premium (somente pages/doces-finos.html)
+ * Escopo: body.pagina-doces-finos
+ */
+
+body.pagina-doces-finos {
+    --df-hero-min-h: clamp(22rem, 58vw, 34rem);
+    --df-card-radius: clamp(18px, 2.2vw, 26px);
+    --df-img-h: clamp(200px, 52vw, 320px);
+    --df-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ——— Hero ——— */
+.df-hero {
+    position: relative;
+    min-height: var(--df-hero-min-h);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: clamp(5.5rem, 14vw, 7.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+    margin-top: 0;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.df-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 120% 80% at 50% 120%, rgba(250, 232, 240, 0.55) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 12% 20%, rgba(255, 248, 252, 0.35) 0%, transparent 45%),
+        radial-gradient(ellipse 55% 45% at 88% 15%, rgba(184, 120, 150, 0.2) 0%, transparent 50%),
+        linear-gradient(165deg, #2a151f 0%, #3d2230 22%, #5c3545 48%, #7a4a5c 72%, #9a6280 100%);
+    animation: df-hero-bg 14s df-ease infinite alternate;
+}
+
+@keyframes df-hero-bg {
+    0% {
+        filter: saturate(1) brightness(1);
+        transform: scale(1);
+    }
+    100% {
+        filter: saturate(1.06) brightness(1.03);
+        transform: scale(1.02);
+    }
+}
+
+.df-hero__grain {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.07;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+.df-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(1.25rem, 4vw, 2rem);
+    text-align: center;
+}
+
+.df-hero__eyebrow {
+    font-family: var(--fonte-texto);
+    font-size: clamp(0.68rem, 1.5vw, 0.78rem);
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(255, 245, 248, 0.72);
+    margin: 0 0 1rem;
+    animation: df-fade-up 1s var(--df-ease) 0.1s both;
+}
+
+.df-hero__icon {
+    display: inline-block;
+    margin-right: 0.35em;
+    letter-spacing: 0;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+}
+
+.df-hero__title {
+    font-family: var(--fonte-titulo);
+    font-weight: 400;
+    font-size: clamp(2.35rem, 7vw, 3.65rem);
+    line-height: 1.08;
+    letter-spacing: 0.04em;
+    color: #fff9fb;
+    text-shadow: 0 4px 40px rgba(0, 0, 0, 0.35);
+    margin: 0 0 1.1rem;
+    animation: df-fade-up 1s var(--df-ease) 0.22s both;
+}
+
+.df-hero__lead {
+    font-family: var(--fonte-texto);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 2.1vw, 1.08rem);
+    line-height: 1.75;
+    letter-spacing: 0.04em;
+    color: rgba(255, 240, 246, 0.88);
+    max-width: 34em;
+    margin: 0 auto 1.75rem;
+    animation: df-fade-up 1s var(--df-ease) 0.34s both;
+}
+
+.df-hero__line {
+    width: min(120px, 28vw);
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 220, 232, 0.5) 35%,
+        rgba(255, 236, 244, 0.85) 50%,
+        rgba(255, 220, 232, 0.5) 65%,
+        transparent
+    );
+    animation: df-fade-up 1s var(--df-ease) 0.46s both;
+}
+
+@keyframes df-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ——— Vitrine main ——— */
+.df-vitrine {
+    background: linear-gradient(180deg, var(--primary-bg) 0%, #e5cfda 48%, var(--secondary-bg) 100%);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+.df-colecao {
+    padding-top: clamp(2.75rem, 7vw, 4.25rem);
+}
+
+.df-colecao:first-of-type {
+    padding-top: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.df-colecao__head {
+    text-align: center;
+    max-width: 38rem;
+    margin: 0 auto clamp(1.75rem, 4vw, 2.75rem);
+    padding: 0 clamp(1rem, 3vw, 1.5rem);
+}
+
+.df-colecao__label {
+    display: inline-block;
+    font-family: var(--fonte-texto);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-rose-deep);
+    opacity: 0.85;
+    margin-bottom: 0.65rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 249, 251, 0.55);
+    border: 1px solid rgba(150, 85, 110, 0.15);
+}
+
+.df-colecao__head h2 {
+    font-family: var(--fonte-titulo);
+    font-weight: 400;
+    font-size: clamp(1.65rem, 4.2vw, 2.35rem);
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+    line-height: 1.15;
+}
+
+.df-colecao__head p {
+    font-family: var(--fonte-texto);
+    font-weight: 300;
+    font-size: clamp(0.88rem, 1.8vw, 0.98rem);
+    line-height: 1.72;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ——— Cards premium ——— */
+body.pagina-doces-finos .df-card.produto-card {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(165deg, rgba(255, 252, 254, 0.98) 0%, rgba(249, 236, 244, 0.96) 100%);
+    border-radius: var(--df-card-radius);
+    border: 1px solid rgba(150, 85, 110, 0.14);
+    box-shadow:
+        0 4px 0 rgba(255, 255, 255, 0.65) inset,
+        0 22px 48px -20px rgba(62, 28, 42, 0.14),
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    overflow: hidden;
+    transition:
+        transform 0.55s var(--df-ease),
+        box-shadow 0.55s var(--df-ease),
+        border-color 0.45s ease;
+}
+
+body.pagina-doces-finos .df-card.produto-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(150, 85, 110, 0.28);
+    box-shadow:
+        0 4px 0 rgba(255, 255, 255, 0.75) inset,
+        0 32px 56px -18px rgba(70, 32, 48, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.55) inset,
+        0 0 48px rgba(200, 130, 155, 0.18);
+}
+
+body.pagina-doces-finos .df-card .produto-img {
+    height: var(--df-img-h);
+    min-height: var(--df-img-h);
+    max-height: var(--df-img-h);
+    border-radius: 0;
+    transition: transform 0.65s var(--df-ease);
+}
+
+body.pagina-doces-finos .df-card.produto-card:hover .produto-img {
+    transform: scale(1.04);
+}
+
+body.pagina-doces-finos .df-card .produto-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.1rem, 2.5vw, 1.45rem) clamp(1.1rem, 2.5vw, 1.35rem) clamp(1.2rem, 2.8vw, 1.5rem);
+    text-align: left;
+    gap: 0.5rem;
+}
+
+body.pagina-doces-finos .df-card .produto-content h3 {
+    font-family: var(--fonte-titulo);
+    font-weight: 500;
+    font-size: clamp(1.05rem, 2.2vw, 1.22rem);
+    letter-spacing: 0.03em;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.28;
+}
+
+body.pagina-doces-finos .df-card__excerpt {
+    font-family: var(--fonte-texto);
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.62;
+    color: var(--text-muted);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+body.pagina-doces-finos .df-card__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(150, 85, 110, 0.1);
+}
+
+body.pagina-doces-finos .df-card__preco {
+    font-family: var(--fonte-titulo);
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--accent-gold-deep);
+    margin: 0;
+}
+
+body.pagina-doces-finos .df-card .produto-buttons {
+    margin-top: 0.85rem;
+}
+
+body.pagina-doces-finos .df-card .btn-adicionar-carrinho {
+    width: 100%;
+    font-family: var(--fonte-texto);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.88rem 1rem;
+    border-radius: var(--radius-pill);
+    border: none;
+    cursor: pointer;
+    color: var(--text-on-rose);
+    background: var(--gradient-cta);
+    box-shadow: 0 6px 20px rgba(120, 60, 80, 0.22);
+    transition:
+        transform 0.35s var(--df-ease),
+        box-shadow 0.35s ease,
+        filter 0.35s ease;
+}
+
+body.pagina-doces-finos .df-card .btn-adicionar-carrinho:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(120, 60, 80, 0.28);
+    filter: brightness(1.03);
+}
+
+body.pagina-doces-finos .df-card .btn-adicionar-carrinho:active {
+    transform: translateY(0);
+}
+
+body.pagina-doces-finos .df-card .btn-saiba-mais {
+    flex-shrink: 0;
+    font-family: var(--fonte-texto);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--accent-rose-deep);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    text-decoration-color: rgba(143, 95, 117, 0.35);
+    transition: color 0.25s ease;
+}
+
+body.pagina-doces-finos .df-card .btn-saiba-mais:hover {
+    color: var(--accent-gold-deep);
+}
+
+/* Modal: manter harmonia */
+body.pagina-doces-finos .modal-produto-img {
+    min-height: 200px;
+}
+
+/* Sobrescreve grid global (4 colunas) — vitrine com no máx. 3 colunas e respiro maior */
+body.pagina-doces-finos .df-grid.doces-grid.produtos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.35rem, 3.2vw, 2rem);
+}
+
+@media (min-width: 520px) {
+    body.pagina-doces-finos .df-grid.doces-grid.produtos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    body.pagina-doces-finos .df-grid.doces-grid.produtos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1201px) {
+    body.pagina-doces-finos .df-grid.doces-grid.produtos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Placeholder “foto em breve” mais refinado dentro dos cards premium */
+body.pagina-doces-finos .df-card.produto-card--foto-pendente .produto-img.produto-img--pendente {
+    background: linear-gradient(145deg, #efe0e8 0%, #e4ccd8 38%, #dcc4d2 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .df-hero__bg {
+        animation: none;
+    }
+
+    body.pagina-doces-finos .df-card.produto-card,
+    body.pagina-doces-finos .df-card .produto-img,
+    body.pagina-doces-finos .df-card .btn-adicionar-carrinho {
+        transition-duration: 0.01ms;
+    }
+}

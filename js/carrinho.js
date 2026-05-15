@@ -21,7 +21,7 @@ function getPedidoMinimoPadrao() {
 }
 
 /**
- * Quantidade mínima por item: padrão do CONFIG; valor explícito no card não pode ser menor que o padrão.
+ * Quantidade mínima por item: sem valor explícito usa o CONFIG; com `data-produto-qtd-min` no card usa esse número (mínimo 1), ex.: kits = 1.
  * @param {*} v
  * @returns {number}
  */
@@ -30,7 +30,7 @@ function resolverQtdMin(v) {
     if (v == null || v === '') return padrao;
     const n = parseInt(String(v), 10);
     if (!Number.isFinite(n) || n < 1) return padrao;
-    return Math.max(padrao, n);
+    return Math.max(1, n);
 }
 
 /**

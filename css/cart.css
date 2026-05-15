@@ -1,5 +1,5 @@
 /* ============================================
-   Carrinho de Compras - Candy Li Doces Finos
+   Carrinho de Compras - Willian Festas e Cia
    ============================================ */
 
 /* Botão flutuante para abrir carrinho */
@@ -42,7 +42,7 @@
     background: #e74c3c;
     border-radius: 50%;
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,7 +52,7 @@
 .carrinho-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(62, 32, 44, 0.32);
     z-index: 999;
     opacity: 0;
     visibility: hidden;
@@ -76,7 +76,7 @@
     max-height: 100dvh;
     background: var(--surface-card);
     color: var(--text-primary);
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.45);
+    box-shadow: -8px 0 40px rgba(70, 32, 48, 0.18);
     border-left: 1px solid var(--accent-rose-line);
     z-index: 1001;
     display: flex;
@@ -103,6 +103,8 @@
 .carrinho-header h2 {
     font-family: var(--fonte-titulo);
     font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: var(--tipo-tracking-display);
     color: var(--text-primary);
     margin: 0;
 }
@@ -303,7 +305,7 @@
 }
 
 .carrinho-item-subtotal {
-    font-weight: 600;
+    font-weight: 500;
     color: var(--dourado);
     font-size: 0.95rem;
     white-space: nowrap;
@@ -324,7 +326,7 @@
 
 #total {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 500;
     color: var(--accent-rose-bright);
 }
 
@@ -332,6 +334,8 @@
 .carrinho-form-section-title {
     font-family: var(--fonte-titulo);
     font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: var(--tipo-tracking-display);
     color: var(--marrom);
     margin: 0.5rem 0 0.75rem 0;
     padding-top: 0.5rem;
@@ -395,8 +399,8 @@
     border: 1px solid var(--accent-rose-muted);
     border-radius: 999px;
     font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
     box-shadow: var(--sombra-dourada), 0 8px 28px var(--sombra);

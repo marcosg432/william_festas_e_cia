@@ -1,5 +1,5 @@
 /**
- * Candy Li Doces Finos — vitrine de doces finos artesanais
+ * Willian Festas e Cia — vitrine de doces finos artesanais
  * Script principal - animações e funcionalidades
  */
 
@@ -101,16 +101,26 @@ function initOneHeroCarousel(hero) {
 function initMobileMenu() {
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    const dropdownTrigger = document.querySelector('.nav-dropdown-trigger');
-    const navDropdown = document.querySelector('.nav-dropdown');
+    const navDropdowns = document.querySelectorAll('.nav-dropdown');
 
     if (!navToggle || !navMenu) return;
+
+    function setDropdownExpanded(dropdown, expanded) {
+        if (!dropdown) return;
+        dropdown.classList.toggle('expanded', expanded);
+        const trig = dropdown.querySelector('.nav-dropdown-trigger');
+        if (trig) trig.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+
+    function closeAllDropdowns() {
+        navDropdowns.forEach(d => setDropdownExpanded(d, false));
+    }
 
     function closeMenu() {
         navToggle.classList.remove('ativo');
         navMenu.classList.remove('ativo');
         document.body.style.overflow = '';
-        if (navDropdown) navDropdown.classList.remove('expanded');
+        closeAllDropdowns();
         const overlay = document.querySelector('.nav-overlay');
         if (overlay) overlay.remove();
     }
@@ -120,7 +130,7 @@ function initMobileMenu() {
         navToggle.classList.toggle('ativo');
         navMenu.classList.toggle('ativo');
         document.body.style.overflow = navMenu.classList.contains('ativo') ? 'hidden' : '';
-        if (navDropdown) navDropdown.classList.remove('expanded');
+        closeAllDropdowns();
 
         if (isOpening && window.innerWidth <= 992) {
             const overlay = document.createElement('div');
@@ -134,21 +144,25 @@ function initMobileMenu() {
         }
     });
 
-    // Fechar ao clicar em um link (inclui links do dropdown)
     navMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', closeMenu);
     });
 
-    // Dropdown: clique para expandir no mobile
-    if (dropdownTrigger && navDropdown) {
-        dropdownTrigger.addEventListener('click', function(e) {
+    navDropdowns.forEach(navDropdown => {
+        const trigger = navDropdown.querySelector('.nav-dropdown-trigger');
+        if (!trigger) return;
+        trigger.addEventListener('click', function(e) {
             if (window.innerWidth <= 992) {
                 e.preventDefault();
                 e.stopPropagation();
-                navDropdown.classList.toggle('expanded');
+                const willOpen = !navDropdown.classList.contains('expanded');
+                navDropdowns.forEach(other => {
+                    if (other !== navDropdown) setDropdownExpanded(other, false);
+                });
+                setDropdownExpanded(navDropdown, willOpen);
             }
         });
-    }
+    });
 }
 
 /**
@@ -177,7 +191,7 @@ function initSmoothScroll() {
  */
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll(
-        '.section-head, .categoria-card, .galeria-item, .avaliacao-card, .produto-card, .produto-card-home'
+        '.section-head, .df-colecao__head, .categoria-card, .galeria-item, .avaliacao-card, .produto-card, .produto-card-home'
     );
 
     const observerOptions = {
@@ -206,6 +220,7 @@ function initScrollAnimations() {
     const style = document.createElement('style');
     style.textContent = `
         .section-head.visible,
+        .df-colecao__head.visible,
         .categoria-card.visible,
         .galeria-item.visible,
         .avaliacao-card.visible,

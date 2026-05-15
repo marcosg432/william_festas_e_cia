@@ -366,11 +366,11 @@ function gerarContratoPDF(orcamento) {
 }
 
 /**
- * Cláusulas fixas (modelo Candy Li / lead). Atualize aqui se o texto jurídico mudar.
+ * Cláusulas fixas (modelo Willian Festas e Cia / lead). Atualize aqui se o texto jurídico mudar.
  */
 function obterTextoClausulasContrato(cfg) {
     var pix = (cfg && cfg.contratoPixCnpj) || "";
-    var em = (cfg && cfg.contratoEmailsComprovante) || "candylidoces@hotmail.com";
+    var em = (cfg && cfg.contratoEmailsComprovante) || "contato@willianfestasecia.com.br";
     var out = [];
     function add(t, titulo) {
         out.push(titulo ? { titulo: t } : { texto: t });
