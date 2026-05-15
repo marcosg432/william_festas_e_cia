@@ -3,7 +3,7 @@
  * Sistema de pedidos reutilizável para cardápios digitais
  */
 
-/** Array do carrinho: { nome, preco, quantidade, qtdMin } */
+/** Array do carrinho: { nome, preco (unitário), quantidade, qtdMin } */
 let carrinho = [];
 
 const QTD_LISTA_DELEGATED = 'data-carrinho-qty-delegated';
@@ -44,6 +44,29 @@ function lerQtdMinDoCard(card) {
         ? card.dataset.produtoQtdMin
         : card.getAttribute('data-produto-qtd-min');
     return resolverQtdMin(raw != null && raw !== '' ? raw : null);
+}
+
+/**
+ * Preço em `data-produto-preco` pode ser por unidade (padrão) ou por lote (ex.: cento).
+ * `data-produto-preco-por="100"` = o valor do atributo é o preço de 100 unidades (cardápio doces finos).
+ * @param {HTMLElement} card
+ * @returns {number} preço unitário (para cálculo no carrinho)
+ */
+function lerPrecoUnitarioDoCard(card) {
+    if (!card) return 0;
+    const rawLista = card.dataset.produtoPreco != null
+        ? card.dataset.produtoPreco
+        : card.getAttribute('data-produto-preco');
+    const lista = parseFloat(String(rawLista || '').replace(',', '.')) || 0;
+    let por = parseInt(
+        String(card.dataset.produtoPrecoPor != null
+            ? card.dataset.produtoPrecoPor
+            : card.getAttribute('data-produto-preco-por') || '1'),
+        10
+    );
+    if (!Number.isFinite(por) || por < 1) por = 1;
+    if (por === 1) return lista;
+    return Math.round((lista / por) * 100) / 100;
 }
 
 /**
@@ -320,8 +343,11 @@ function initCarrinho() {
             const card = this.closest('[data-produto-nome]');
             if (!card) return;
             const nome = card.dataset.produtoNome || card.getAttribute('data-produto-nome');
-            const preco = parseFloat(card.dataset.produtoPreco || card.getAttribute('data-produto-preco')) ||
-                extrairPreco(card.querySelector('.produto-preco')?.textContent || '');
+            let preco = lerPrecoUnitarioDoCard(card);
+            if (!Number.isFinite(preco) || preco <= 0) {
+                preco = parseFloat(card.dataset.produtoPreco || card.getAttribute('data-produto-preco')) ||
+                    extrairPreco(card.querySelector('.produto-preco')?.textContent || '');
+            }
             const qtdMin = lerQtdMinDoCard(card);
             adicionarCarrinho(nome, preco, qtdMin);
         });
