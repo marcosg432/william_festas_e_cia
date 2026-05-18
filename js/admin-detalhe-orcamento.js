@@ -230,6 +230,13 @@
             spanTxt.className = "admin-lista-item-texto";
             spanTxt.textContent = linha;
             li.appendChild(spanTxt);
+            if (it.detalhes) {
+                var det = document.createElement("span");
+                det.className = "admin-lista-item-detalhes";
+                det.style.cssText = "display:block;font-size:0.82rem;opacity:0.88;margin-top:0.25rem;line-height:1.4;";
+                det.textContent = it.detalhes;
+                li.appendChild(det);
+            }
             if (it.extra_pedido_admin === true) {
                 var acoes = document.createElement("span");
                 acoes.className = "admin-lista-item-acoes";

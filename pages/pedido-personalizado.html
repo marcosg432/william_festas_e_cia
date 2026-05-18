@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Willian Festas e Cia — bolos com chantilly: sabores por kg, monte seu bolo e bolos de corte para eventos.">
+    <meta name="description" content="Willian Festas e Cia — Bolos com chantilly: escolha o sabor, a massa e monte seu bolo de forma simples e personalizada.">
     <link rel="icon" href="../assets/logo-willian-festas-e-cia.png" type="image/png">
     <title>Bolos c/ Chantilly | Willian Festas e Cia</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="../css/bolos-chantilly-page.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Mulish:ital,wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet">
@@ -20,8 +21,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         <span class="carrinho-badge" style="display: none;">0</span>
     </button>
-    <a href="https://wa.me/5516991280505?text=Ol%C3%A1%2C%20vim%20pelo%20card%C3%A1pio%20(Bolos%20c%2F%20Chantilly)%20e%20gostaria%20de%20encomendar%20um%20bolo."
-       class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Pedir bolo no WhatsApp">
+    <a href="https://wa.me/5516991280505?text=Ol%C3%A1%2C%20vim%20pelo%20card%C3%A1pio%20(Bolos%20c%2F%20Chantilly)%20e%20gostaria%20de%20encomendar%20um%20bolo." class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Pedir bolo no WhatsApp">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         <span>Pedir</span>
     </a>
@@ -29,9 +29,7 @@
     <header class="header">
         <nav class="nav container">
             <a href="../index.html" class="logo" aria-label="Willian Festas e Cia — página inicial"><img src="../assets/logo-willian-festas-e-cia.png" alt="Willian Festas e Cia — logotipo" class="logo-img" width="400" height="120" decoding="async"></a>
-            <button class="nav-toggle" aria-label="Abrir menu">
-                <span></span><span></span><span></span>
-            </button>
+            <button class="nav-toggle" aria-label="Abrir menu"><span></span><span></span><span></span></button>
             <ul class="nav-menu">
                 <li><a href="../index.html">Home</a></li>
                 <li class="nav-dropdown">
@@ -55,253 +53,133 @@
         </nav>
     </header>
 
-    <!-- Carrossel de banner: assets/carrossel-bolos/ (fotos reais, exclusivo desta página) -->
-    <section class="hero hero-carousel page-hero--bolos" aria-label="Destaques de bolos">
-        <div class="hero-slides">
-            <div class="hero-slide active">
-                <div class="hero-slide-bg" style="background-image: url('../assets/carrossel-bolos/bolos-banner-01.webp');"></div>
+    <section class="bc-hero" aria-labelledby="bc-hero-heading">
+        <div class="bc-hero__bg" aria-hidden="true"></div>
+        <div class="bc-hero__inner container">
+            <div>
+                <p class="bc-hero__eyebrow">Willian Festas e Cia</p>
+                <h1 id="bc-hero-heading" class="bc-hero__title">Bolos c/ Chantilly</h1>
+                <p class="bc-hero__lead">Escolha o sabor, selecione a massa e monte seu bolo de forma simples e personalizada.</p>
             </div>
-            <div class="hero-slide">
-                <div class="hero-slide-bg" style="background-image: url('../assets/carrossel-bolos/bolos-banner-02.webp');"></div>
-            </div>
-            <div class="hero-slide">
-                <div class="hero-slide-bg" style="background-image: url('../assets/carrossel-bolos/bolos-banner-03.jpg');"></div>
-            </div>
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="page-hero-inner hero-content page-hero--bolos-content">
-            <h1 id="conteudo-principal-heading">Bolos c/ Chantilly</h1>
-            <p>Sabores exclusivos preparados com ingredientes selecionados.</p>
+            <figure class="bc-hero__media">
+                <img src="../assets/carrossel-bolos/bolos-banner-01.webp" alt="Bolo com chantilly em apresentação premium" width="900" height="675" loading="eager" decoding="async">
+            </figure>
         </div>
     </section>
 
-    <main id="conteudo-principal" class="container bolos-page" aria-labelledby="conteudo-principal-heading">
+    <main id="conteudo-principal" class="container bc-main" aria-labelledby="bc-hero-heading">
         <nav class="cardapio-breadcrumb" aria-label="Você está em">
             <a href="../index.html">Home</a>
             <span class="cardapio-breadcrumb-sep" aria-hidden="true">/</span>
             <span class="cardapio-breadcrumb-atual">Bolos c/ Chantilly</span>
         </nav>
-        <div class="cardapio-intro">
-            <p><strong>Dois jeitos de pedir.</strong> Monte seu bolo escolhendo um sabor pronto e o peso — ou escolha um modelo de <strong>bolo de corte</strong> para eventos. Toque nas opções e finalize no WhatsApp.</p>
-        </div>
 
-        <header class="section-head bolos-tabs-head">
-            <h2 class="section-title">Escolha o tipo de bolo</h2>
-            <div class="bolos-tabs" role="tablist" aria-label="Tipo de pedido de bolo">
-                <button type="button" class="bolos-tab bolos-tab--ativa" id="bolos-tab-monte" role="tab" aria-selected="true" aria-controls="bolos-painel-monte" data-fluxo="monte">🎂 Monte seu bolo</button>
-                <button type="button" class="bolos-tab" id="bolos-tab-corte" role="tab" aria-selected="false" aria-controls="bolos-painel-corte" data-fluxo="corte">🎉 Bolos de corte</button>
-            </div>
-        </header>
+        <p class="bc-intro">Cada sabor vira um card com preços por massa. Ao montar, o resumo atualiza na hora e o pedido vai organizado para o carrinho. Finalize com <strong>orçamento</strong> ou fale conosco no WhatsApp.</p>
 
-        <div class="bolos-layout">
-            <div class="bolos-flow-main">
-                <section id="bolos-painel-monte" class="bolos-painel bolos-painel--monte" role="tabpanel" aria-labelledby="bolos-tab-monte">
-                    <header class="section-head section-head--flush">
-                        <h2 class="section-title">Monte seu bolo</h2>
-                        <p class="section-subtitle bolos-pick-hint">Cada sabor é um produto completo (sem montar massa ou recheio separados). Toque no sabor e no tamanho.</p>
-                    </header>
+        <section class="bc-grupo" aria-labelledby="bc-titulo-trad">
+            <header class="bc-grupo__head">
+                <span class="bc-grupo__label">Coleção</span>
+                <h2 id="bc-titulo-trad" class="bc-grupo__title">Tradicionais</h2>
+                <p class="bc-grupo__subtitle">Sabores de festa que todo mundo reconhece — brigadeiro, ninho, prestígio e doce de leite.</p>
+            </header>
+            <div id="bc-grid-tradicionais" class="bc-grid"></div>
+        </section>
 
-                    <header class="section-head bolos-section-head-inner">
-                        <h3 class="bolos-subtitulo-fluxo">Especialidades da Casa — R$ 90/kg</h3>
-                        <p class="section-subtitle bolos-pick-hint">Toque para selecionar.</p>
-                    </header>
-                    <div class="bolos-especialidades-list bolos-especialidades-list--pick" role="group" aria-label="Sabores Especialidades da Casa">
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Cheesecake" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Cheesecake</span>
-                <span class="bolos-pick-sabor-desc">Brigadeiro cremoso de cream cheese com geleia caseira de frutas vermelhas</span>
-            </button>
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Pistache com frutas vermelhas" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Pistache com frutas vermelhas</span>
-                <span class="bolos-pick-sabor-desc">Brigadeiro cremoso de pistache com geleia caseira de frutas vermelhas</span>
-            </button>
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Galak com Suflair" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Galak com Suflair</span>
-                <span class="bolos-pick-sabor-desc">Ganache branca aerada com pedaços de chocolate e segunda camada de ganache ao leite aerado</span>
-            </button>
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Maracujá com Suflair" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Maracujá com Suflair</span>
-                <span class="bolos-pick-sabor-desc">Ganache de maracujá com segunda camada de ganache Suflair</span>
-            </button>
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Floresta Negra" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Floresta Negra</span>
-                <span class="bolos-pick-sabor-desc">Ganache de chocolate meio amargo com cereja e lascas de chocolate, com segunda camada de nata batida</span>
-            </button>
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Abacaxi com coco" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Abacaxi com coco</span>
-                <span class="bolos-pick-sabor-desc">Brigadeiro cremoso de coco com compota de abacaxi</span>
-            </button>
-            <button type="button" class="bolos-pick-sabor bolos-pick-sabor--linha" data-categoria="especialidades" data-sabor="Sensação com Suflair" aria-pressed="false">
-                <span class="bolos-pick-sabor-titulo">Sensação com Suflair</span>
-                <span class="bolos-pick-sabor-desc">Ganache branca com pedaços de chocolate e geleia de morango com segunda camada de Suflair</span>
-            </button>
-        </div>
+        <section class="bc-grupo" aria-labelledby="bc-titulo-frut">
+            <header class="bc-grupo__head">
+                <span class="bc-grupo__label">Coleção</span>
+                <h2 id="bc-titulo-frut" class="bc-grupo__title">Frutados</h2>
+                <p class="bc-grupo__subtitle">Morango, abacaxi, maracujá, ameixa e combinações com fruta fresca ou em compota.</p>
+            </header>
+            <div id="bc-grid-frutados" class="bc-grid"></div>
+        </section>
 
-                    <header class="section-head bolos-section-head-inner">
-                        <h3 class="bolos-subtitulo-fluxo">Queridinhos — R$ 70/kg</h3>
-                        <p class="section-subtitle bolos-pick-hint">Toque no sabor.</p>
-                    </header>
-                    <nav class="sabores-lista bolos-queridinhos-lista bolos-queridinhos-lista--pick" aria-label="Sabores queridinhos">
-                        <ul>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Ninho com Suflair" aria-pressed="false">Ninho com Suflair</button></li>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Ninho com brigadeiro de Nutella" aria-pressed="false">Ninho com brigadeiro de Nutella</button></li>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Ninho com Ferrero" aria-pressed="false">Ninho com Ferrero</button></li>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Doce de leite com nozes" aria-pressed="false">Doce de leite com nozes</button></li>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Ninho com geleia e Suflair" aria-pressed="false">Ninho com geleia e Suflair</button></li>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Prestígio" aria-pressed="false">Prestígio</button></li>
-                            <li><button type="button" class="bolos-pick-sabor bolos-pick-sabor--pill" data-categoria="queridinhos" data-sabor="Chocolatíssimo" aria-pressed="false">Chocolatíssimo</button></li>
-                        </ul>
-                    </nav>
+        <section class="bc-grupo" aria-labelledby="bc-titulo-prem">
+            <header class="bc-grupo__head">
+                <span class="bc-grupo__label">Coleção</span>
+                <h2 id="bc-titulo-prem" class="bc-grupo__title">Premium</h2>
+                <p class="bc-grupo__subtitle">Toques gourmet: Nutella, ganache amargo, mousse com morango e duplas de chocolate.</p>
+            </header>
+            <div id="bc-grid-premium" class="bc-grid"></div>
+        </section>
 
-                    <header class="section-head bolos-section-head-inner">
-                        <h3 class="bolos-subtitulo-fluxo">Escolha o tamanho</h3>
-                        <p class="section-subtitle bolos-pick-hint">Toque no peso — valor calculado no resumo.</p>
-                    </header>
-                    <nav class="sabores-lista bolos-tamanhos-lista bolos-tamanhos-lista--pick" aria-label="Tamanhos disponíveis">
-                        <ul>
-                            <li><button type="button" class="bolos-pick-tamanho" data-kg="3" data-label="3 kg" aria-pressed="false">3 kg</button></li>
-                            <li><button type="button" class="bolos-pick-tamanho" data-kg="4" data-label="4 kg" aria-pressed="false">4 kg</button></li>
-                        </ul>
-                    </nav>
-
-                    <header class="section-head bolos-section-head-inner">
-                        <h3 class="bolos-subtitulo-fluxo">Adicionais (opcional)</h3>
-                        <p class="section-subtitle bolos-pick-hint">Adicione um toque especial ao seu bolo</p>
-                    </header>
-                    <nav class="sabores-lista bolos-adicionais-lista bolos-queridinhos-lista--pick" aria-label="Adicionais opcionais">
-                        <ul>
-                            <li><button type="button" class="bolos-pick-adicional bolos-pick-tamanho" data-adicional-id="morango" data-adicional-nome="Morango fresco" data-adicional-preco="15" aria-pressed="false">Morango fresco <span class="bolos-pick-adicional-preco">(+R$15)</span></button></li>
-                            <li><button type="button" class="bolos-pick-adicional bolos-pick-tamanho" data-adicional-id="abacaxi" data-adicional-nome="Abacaxi" data-adicional-preco="15" aria-pressed="false">Abacaxi <span class="bolos-pick-adicional-preco">(+R$15)</span></button></li>
-                            <li><button type="button" class="bolos-pick-adicional bolos-pick-tamanho" data-adicional-id="geleia" data-adicional-nome="Geleia" data-adicional-preco="15" aria-pressed="false">Geleia <span class="bolos-pick-adicional-preco">(+R$15)</span></button></li>
-                        </ul>
-                    </nav>
-                </section>
-
-                <section id="bolos-painel-corte" class="bolos-painel bolos-painel--corte" role="tabpanel" aria-labelledby="bolos-tab-corte" hidden>
-                    <header class="section-head section-head--flush">
-                        <h2 class="section-title">Bolos de Corte</h2>
-                        <p class="section-subtitle">Modelos ideais para eventos, com rendimento aproximado por fatias.</p>
-                    </header>
-                    <p class="bolos-pick-hint bolos-pick-hint--block">Toque no card do modelo desejado.</p>
-                    <div class="bolos-corte-grid bolos-corte-grid--tres doces-grid produtos-grid" role="list">
-                        <article class="produto-card bolos-corte-card bolos-pick-corte" role="listitem" tabindex="0" data-modelo="Bolo de corte 4" data-peso="4 kg" data-fatias="40 a 50 fatias" data-valor="270" data-acabamento="Chantilly" data-recheio="2 camadas" aria-pressed="false">
-                <div class="produto-img bolos-corte-card-accent" aria-hidden="true"></div>
-                <div class="produto-content">
-                    <h3>Bolo de corte 4</h3>
-                    <p class="produto-desc"><strong>Peso:</strong> 4 kg</p>
-                    <p class="produto-desc"><strong>Serve:</strong> 40 a 50 fatias</p>
-                    <p class="produto-preco">R$ 270,00</p>
-                    <p class="produto-desc"><strong>Acabamento:</strong> Chantilly</p>
-                    <p class="produto-desc"><strong>Recheio:</strong> 2 camadas</p>
-                </div>
-            </article>
-            <article class="produto-card bolos-corte-card bolos-pick-corte" role="listitem" tabindex="0" data-modelo="Bolo de corte 5" data-peso="5 kg" data-fatias="50 a 60 fatias" data-valor="340" data-acabamento="Chantilly" data-recheio="2 camadas" aria-pressed="false">
-                <div class="produto-img bolos-corte-card-accent" aria-hidden="true"></div>
-                <div class="produto-content">
-                    <h3>Bolo de corte 5</h3>
-                    <p class="produto-desc"><strong>Peso:</strong> 5 kg</p>
-                    <p class="produto-desc"><strong>Serve:</strong> 50 a 60 fatias</p>
-                    <p class="produto-preco">R$ 340,00</p>
-                    <p class="produto-desc"><strong>Acabamento:</strong> Chantilly</p>
-                    <p class="produto-desc"><strong>Recheio:</strong> 2 camadas</p>
-                </div>
-            </article>
-            <article class="produto-card bolos-corte-card bolos-pick-corte" role="listitem" tabindex="0" data-modelo="Bolo de corte 7" data-peso="7 kg" data-fatias="80 a 100 fatias" data-valor="470" data-acabamento="Chantilly" data-recheio="2 camadas" aria-pressed="false">
-                <div class="produto-img bolos-corte-card-accent" aria-hidden="true"></div>
-                <div class="produto-content">
-                    <h3>Bolo de corte 7</h3>
-                    <p class="produto-desc"><strong>Peso:</strong> 7 kg</p>
-                    <p class="produto-desc"><strong>Serve:</strong> 80 a 100 fatias</p>
-                    <p class="produto-preco">R$ 470,00</p>
-                    <p class="produto-desc"><strong>Acabamento:</strong> Chantilly</p>
-                    <p class="produto-desc"><strong>Recheio:</strong> 2 camadas</p>
-                </div>
-            </article>
-        </div>
-
-                    <h3 class="bolos-corte-especiais-titulo">Especiais</h3>
-                    <div class="bolos-corte-grid bolos-corte-grid--dois doces-grid produtos-grid" role="list">
-                        <article class="produto-card bolos-corte-card bolos-corte-card--especial bolos-pick-corte" role="listitem" tabindex="0" data-modelo="Especial 1" data-peso="6 kg" data-fatias="80 a 100 fatias" data-valor="395" data-acabamento="Brigadeiro" data-recheio="1 camada" aria-pressed="false">
-                <div class="produto-img bolos-corte-card-accent bolos-corte-card-accent--especial" aria-hidden="true"></div>
-                <div class="produto-content">
-                    <h3>Especial 1</h3>
-                    <p class="produto-desc"><strong>Peso:</strong> 6 kg</p>
-                    <p class="produto-desc"><strong>Serve:</strong> 80 a 100 fatias</p>
-                    <p class="produto-preco">R$ 395,00</p>
-                    <p class="produto-desc"><strong>Acabamento:</strong> Brigadeiro</p>
-                    <p class="produto-desc"><strong>Recheio:</strong> 1 camada</p>
-                </div>
-            </article>
-            <article class="produto-card bolos-corte-card bolos-corte-card--especial bolos-pick-corte" role="listitem" tabindex="0" data-modelo="Especial 2" data-peso="4 kg" data-fatias="50 a 60 fatias" data-valor="265" data-acabamento="Brigadeiro" data-recheio="1 camada" aria-pressed="false">
-                <div class="produto-img bolos-corte-card-accent bolos-corte-card-accent--especial" aria-hidden="true"></div>
-                <div class="produto-content">
-                    <h3>Especial 2</h3>
-                    <p class="produto-desc"><strong>Peso:</strong> 4 kg</p>
-                    <p class="produto-desc"><strong>Serve:</strong> 50 a 60 fatias</p>
-                    <p class="produto-preco">R$ 265,00</p>
-                    <p class="produto-desc"><strong>Acabamento:</strong> Brigadeiro</p>
-                    <p class="produto-desc"><strong>Recheio:</strong> 1 camada</p>
-                </div>
-            </article>
-                    </div>
-
-                    <div class="bolos-corte-notas">
-                        <p><em>Peso aproximado.</em></p>
-                        <p><em>Os bolos especiais são maiores, porém mais baixos que os tradicionais de corte.</em></p>
-                    </div>
-                </section>
-            </div>
-
-            <aside class="bolos-flow-aside" aria-label="Resumo e finalização">
-                <div class="bolos-pedido-wrap bolos-pedido-wrap--resumo">
-                    <div class="bolos-resumo-pedido" id="bolos-resumo-pedido" aria-live="polite">
-                        <p class="bolos-resumo-titulo">Resumo do pedido</p>
-                        <ul class="bolos-resumo-lista" id="bolos-resumo-lista">
-                            <li><span class="bolos-resumo-label">Tipo</span> <span class="bolos-resumo-valor-texto" id="bolos-resumo-tipo">—</span></li>
-                            <li id="bolos-resumo-li-a"><span class="bolos-resumo-label" id="bolos-resumo-lbl-a">Sabor</span> <span class="bolos-resumo-valor-texto" id="bolos-resumo-val-a">—</span></li>
-                            <li id="bolos-resumo-li-b"><span class="bolos-resumo-label" id="bolos-resumo-lbl-b">Linha</span> <span class="bolos-resumo-valor-texto" id="bolos-resumo-val-b">—</span></li>
-                            <li id="bolos-resumo-li-c" hidden><span class="bolos-resumo-label" id="bolos-resumo-lbl-c">Tamanho</span> <span class="bolos-resumo-valor-texto" id="bolos-resumo-val-c">—</span></li>
-                            <li id="bolos-resumo-li-adicionais" hidden><span class="bolos-resumo-label">Adicionais</span> <span class="bolos-resumo-valor-texto" id="bolos-resumo-adicionais">—</span></li>
-                        </ul>
-                        <p class="bolos-resumo-preco-destaque">
-                            <span class="bolos-resumo-preco-label">Valor</span>
-                            <span class="bolos-resumo-preco-numero" id="bolos-resumo-preco">—</span>
-                        </p>
-                    </div>
-                    <button type="button" class="btn-finalizar-pedido bolos-btn-pedir-whatsapp" id="bolos-btn-pedir-whatsapp">Pedir no WhatsApp</button>
-                </div>
-            </aside>
-        </div>
+        <section class="bc-grupo bc-grupo--especiais" aria-labelledby="bc-titulo-esp">
+            <header class="bc-grupo__head">
+                <span class="bc-grupo__label">Coleção</span>
+                <h2 id="bc-titulo-esp" class="bc-grupo__title">Combinações especiais</h2>
+                <p class="bc-grupo__subtitle">Mousses, recheios mesclados e pedaços de chocolate — assinatura da linha chantilly.</p>
+            </header>
+            <div id="bc-grid-especiais" class="bc-grid"></div>
+        </section>
     </main>
 
-    <div class="bolos-barra-pedido" id="bolos-barra-pedido" hidden>
-        <div class="bolos-barra-pedido-inner">
-            <div class="bolos-barra-info">
-                <span class="bolos-barra-resumo" id="bolos-barra-resumo">Selecione sabor e tamanho</span>
-                <span class="bolos-barra-preco" id="bolos-barra-preco"></span>
+    <div id="bc-modal" class="bc-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="bc-modal-titulo">
+        <div class="bc-modal__backdrop" aria-hidden="true"></div>
+        <div class="bc-modal__dialog">
+            <button type="button" class="bc-modal__close" id="bc-modal-close" aria-label="Fechar">&times;</button>
+            <div class="bc-modal__inner">
+                <p id="bc-modal-titulo" class="bc-modal__label">Montar bolo</p>
+                <div class="bc-modal__section">
+                    <p class="bc-modal__label">Sabor</p>
+                    <p class="bc-modal__sabor" id="bc-modal-sabor"></p>
+                </div>
+                <div class="bc-modal__section">
+                    <p class="bc-modal__label">Escolher massa</p>
+                    <div class="bc-modal__massas" role="radiogroup" aria-label="Tipo de massa">
+                        <label class="bc-massa-opt is-selected" id="bc-label-massa-branca">
+                            <input type="radio" name="bc-massa" id="bc-massa-branca" value="branca" checked>
+                            <span class="bc-massa-opt__text">Massa branca</span>
+                            <span class="bc-massa-opt__preco">—</span>
+                        </label>
+                        <label class="bc-massa-opt" id="bc-label-massa-preta">
+                            <input type="radio" name="bc-massa" id="bc-massa-preta" value="preta">
+                            <span class="bc-massa-opt__text">Massa preta</span>
+                            <span class="bc-massa-opt__preco">—</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="bc-modal__section">
+                    <p class="bc-modal__label">Resumo</p>
+                    <div class="bc-modal__resumo" id="bc-modal-resumo">
+                        <div><strong>Sabor:</strong> <span id="bc-modal-resumo-sabor">—</span></div>
+                        <div><strong>Massa:</strong> <span id="bc-modal-resumo-massa">—</span></div>
+                        <div class="bc-modal__resumo-preco-row"><strong>Preço:</strong> <span class="bc-modal__resumo-preco" id="bc-modal-resumo-preco">—</span></div>
+                    </div>
+                </div>
+                <button type="button" class="bc-modal__cta" id="bc-modal-add">Adicionar ao carrinho</button>
             </div>
-            <button type="button" class="bolos-barra-btn-fazer-pedido" id="bolos-barra-btn-fazer-pedido">Pedir no WhatsApp</button>
         </div>
     </div>
 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>Willian Festas e Cia</h3>
-                    <p>Confeitaria artesanal dedicada a doces finos de alto padrão.</p>
-                </div>
+                <div class="footer-brand"><h3>Willian Festas e Cia</h3><p>Confeitaria artesanal dedicada a doces finos de alto padrão.</p></div>
                 <div class="footer-links">
-                    <a href="https://www.instagram.com/willianchefcozinha?igsh=MWFvaG55M3ZyOHN0bg==" target="_blank" rel="noopener noreferrer" aria-label="Willian Festas e Cia no Instagram"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>Instagram</a>
+                    <a href="https://www.instagram.com/willianchefcozinha?igsh=MWFvaG55M3ZyOHN0bg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>Instagram</a>
                     <a href="https://wa.me/5516991280505?text=Ol%C3%A1%2C%20vim%20pelo%20card%C3%A1pio%20e%20gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Willian Festas e Cia. Todos os direitos reservados.</p>
-            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Willian Festas e Cia. Todos os direitos reservados.</p></div>
         </div>
     </footer>
 
-    <!-- Carrinho de Compras -->
+    <div id="produtoModal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-produto" role="dialog" aria-modal="true" aria-labelledby="modalProdutoTitulo">
+            <button type="button" class="modal-close" aria-label="Fechar">&times;</button>
+            <div class="modal-produto-img"></div>
+            <div class="modal-produto-body">
+                <h2 id="modalProdutoTitulo" class="modal-produto-nome"></h2>
+                <p class="modal-produto-descricao"></p>
+                <div class="modal-produto-ingredientes-wrap">
+                    <h4>Ingredientes principais</h4>
+                    <ul class="modal-produto-ingredientes"></ul>
+                </div>
+                <p class="modal-produto-pedido"></p>
+            </div>
+        </div>
+    </div>
+
     <div class="carrinho-overlay" aria-hidden="true"></div>
     <aside class="carrinho-sidebar">
         <div class="carrinho-header">
@@ -367,8 +245,8 @@
     <script src="../js/orcamentos-logic.js"></script>
     <script src="../js/orcamentos-storage.js"></script>
     <script src="../js/carrinho.js"></script>
-    <script src="../js/pedido.js"></script>
     <script src="../js/pedido-personalizado.js"></script>
+    <script src="../js/pedido.js"></script>
     <script src="../js/script.js"></script>
 </body>
 </html>

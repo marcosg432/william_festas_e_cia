@@ -1,0 +1,579 @@
+/**
+ * Bolos Especiais + Bolos na Taça — vitrine gourmet (bolos-personalizados.html)
+ * Paleta rosa claro, tipografia alinhada ao site.
+ */
+
+/* ——— Hero (navbar-safe) ——— */
+.bes-hero {
+    position: relative;
+    padding-top: var(--header-offset-page);
+    padding-bottom: clamp(2.75rem, 7vw, 4.5rem);
+    scroll-margin-top: var(--header-offset-page);
+    overflow: hidden;
+}
+
+.bes-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 85% 65% at 12% 18%, rgba(255, 236, 244, 0.95) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 88% 10%, rgba(245, 210, 225, 0.45) 0%, transparent 50%),
+        linear-gradient(168deg, rgba(255, 252, 254, 1) 0%, rgba(255, 246, 250, 0.96) 45%, rgba(252, 235, 242, 0.92) 100%);
+}
+
+.bes-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 3vw, 2rem) 1.25rem 0;
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+    align-items: center;
+}
+
+@media (min-width: 900px) {
+    .bes-hero__inner {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+.bes-hero__eyebrow {
+    font-family: var(--fonte-texto);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    opacity: 0.88;
+    margin-bottom: 0.65rem;
+}
+
+.bes-hero__title {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(2.15rem, 5.2vw, 3.15rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.bes-hero__subtitle {
+    margin: 1rem 0 0;
+    font-size: clamp(1.02rem, 2.2vw, 1.18rem);
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 36rem;
+}
+
+.bes-hero__note {
+    margin: 1.35rem 0 0;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(120, 72, 88, 0.88);
+}
+
+.bes-hero__figure {
+    margin: 0;
+    border-radius: 1.35rem;
+    overflow: hidden;
+    box-shadow:
+        0 24px 56px rgba(90, 40, 58, 0.12),
+        0 0 0 1px rgba(200, 130, 155, 0.22);
+    aspect-ratio: 4 / 3;
+    max-height: min(380px, 52vw);
+    width: 100%;
+    max-width: 480px;
+    margin-inline: auto;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+@media (min-width: 900px) {
+    .bes-hero__figure {
+        max-height: 360px;
+        margin-inline: 0;
+    }
+}
+
+.bes-hero__figure:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 60px rgba(90, 40, 58, 0.16);
+}
+
+.bes-media--em-breve {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    text-align: center;
+    padding: 1.25rem 1rem;
+    box-sizing: border-box;
+    background: linear-gradient(150deg, rgba(255, 248, 252, 0.98) 0%, rgba(252, 228, 238, 0.72) 52%, rgba(238, 200, 216, 0.55) 100%);
+    color: rgba(95, 48, 65, 0.92);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bes-hero__figure:hover .bes-media--em-breve {
+    transform: scale(1.02);
+}
+
+.bes-em-breve {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1rem, 2.4vw, 1.22rem);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.bes-em-breve-sub {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.72;
+}
+
+.bes-media--em-breve--hero .bes-em-breve {
+    font-size: clamp(1.12rem, 2.8vw, 1.42rem);
+}
+
+.bes-media--em-breve--modal .bes-em-breve {
+    font-size: clamp(0.95rem, 3.5vw, 1.12rem);
+}
+
+/* ——— Main ——— */
+.bes-main {
+    padding-bottom: clamp(3rem, 8vw, 4.5rem);
+}
+
+.bes-main .cardapio-breadcrumb {
+    justify-content: center;
+    padding-top: 1.25rem;
+    margin-bottom: 0.35rem;
+}
+
+.bes-intro {
+    text-align: center;
+    max-width: 38rem;
+    margin: 0 auto 2.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+}
+
+.bes-section {
+    margin-bottom: clamp(2.75rem, 7vw, 4rem);
+}
+
+.bes-section__head {
+    text-align: center;
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.bes-section__label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    opacity: 0.85;
+    margin-bottom: 0.45rem;
+}
+
+.bes-section__title {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.55rem, 3.5vw, 2rem);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.bes-section__lead {
+    margin: 0.55rem auto 0;
+    max-width: 34rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* Grid cards */
+.bes-grid {
+    display: grid;
+    gap: clamp(1.35rem, 3vw, 1.85rem);
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 600px) {
+    .bes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .bes-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.bes-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.2rem;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(190, 130, 150, 0.2);
+    box-shadow: 0 14px 40px rgba(70, 32, 48, 0.07);
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease,
+        border-color 0.25s ease;
+}
+
+.bes-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 52px rgba(70, 32, 48, 0.12);
+    border-color: rgba(200, 140, 165, 0.38);
+}
+
+.bes-card__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: rgba(245, 228, 236, 0.55);
+}
+
+.bes-card:hover .bes-card__media .bes-media--em-breve {
+    transform: scale(1.04);
+}
+
+.bes-card__body {
+    padding: 1.2rem 1.25rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+}
+
+.bes-card__title {
+    font-family: var(--fonte-titulo);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--marrom);
+    margin: 0;
+    line-height: 1.25;
+}
+
+.bes-card__preco {
+    font-family: var(--fonte-titulo);
+    font-size: 1.05rem;
+    color: rgba(100, 58, 72, 0.95);
+    margin: 0;
+}
+
+.bes-card__desc {
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    flex: 1;
+    margin: 0;
+}
+
+.bes-card__precos-duo {
+    list-style: none;
+    margin: 0.15rem 0 0;
+    padding: 0;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.bes-card__precos-duo li {
+    padding: 0.2rem 0;
+    border-bottom: 1px solid rgba(190, 130, 150, 0.12);
+}
+
+.bes-card__precos-duo li:last-child {
+    border-bottom: none;
+}
+
+.bes-btn {
+    margin-top: 0.65rem;
+    width: 100%;
+    min-height: 2.85rem;
+    padding: 0.85rem 1.1rem;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--fonte-texto);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--text-on-rose);
+    background: linear-gradient(135deg, #c87892 0%, #9a5a72 100%);
+    box-shadow: 0 6px 22px rgba(140, 70, 95, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.bes-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 10px 28px rgba(140, 70, 95, 0.35);
+}
+
+/* Bolos na taça — bloco mais delicado */
+.bes-taca-wrap {
+    margin-top: clamp(2.5rem, 6vw, 3.5rem);
+    padding: clamp(2rem, 5vw, 2.75rem) clamp(1.25rem, 4vw, 2rem);
+    border-radius: 1.5rem;
+    background: linear-gradient(165deg, rgba(255, 252, 254, 0.98) 0%, rgba(255, 240, 246, 0.55) 48%, rgba(248, 228, 238, 0.42) 100%);
+    border: 1px solid rgba(200, 150, 170, 0.22);
+    box-shadow: 0 18px 48px rgba(80, 36, 52, 0.06);
+}
+
+.bes-taca-wrap .bes-section__head {
+    margin-bottom: clamp(1.35rem, 3vw, 1.85rem);
+}
+
+.bes-taca-wrap .bes-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(210, 165, 185, 0.25);
+}
+
+/* Modais */
+.bes-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1250;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom))
+        max(1rem, env(safe-area-inset-left));
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.bes-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bes-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 10, 16, 0.56);
+    backdrop-filter: blur(6px);
+}
+
+.bes-modal__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    max-height: min(90vh, 680px);
+    overflow-y: auto;
+    margin: auto;
+    border-radius: 1.35rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.998) 0%, rgba(255, 250, 252, 0.98) 100%);
+    border: 1px solid rgba(200, 140, 160, 0.28);
+    box-shadow: 0 28px 64px rgba(40, 18, 28, 0.26);
+    opacity: 0;
+    transform: translateY(14px) scale(0.95);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.32s ease;
+}
+
+.bes-modal.is-open .bes-modal__dialog {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.bes-modal__close {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--marrom);
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 4px 14px rgba(70, 32, 48, 0.1);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.bes-modal__close:hover {
+    background: rgba(255, 245, 249, 1);
+    transform: scale(1.05);
+}
+
+.bes-modal__inner {
+    padding: 2.65rem 1.2rem 1.45rem;
+}
+
+.bes-modal__media {
+    border-radius: 1rem;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    margin-bottom: 1rem;
+    background: rgba(245, 228, 236, 0.5);
+}
+
+.bes-modal__media .bes-media--em-breve {
+    min-height: 100%;
+}
+
+.bes-modal__titulo {
+    font-family: var(--fonte-titulo);
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--marrom);
+    margin: 0 0 0.5rem;
+}
+
+.bes-modal__desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+}
+
+.bes-modal__label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.bes-modal__preco-ref {
+    font-family: var(--fonte-titulo);
+    font-size: 1.05rem;
+    color: rgba(100, 58, 72, 0.95);
+    margin-bottom: 1rem;
+}
+
+.bes-opt-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+}
+
+.bes-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(190, 130, 150, 0.28);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bes-opt:hover {
+    border-color: rgba(170, 100, 125, 0.42);
+    background: rgba(255, 248, 252, 0.9);
+}
+
+.bes-opt.is-selected {
+    border-color: rgba(150, 80, 105, 0.52);
+    background: linear-gradient(135deg, rgba(255, 236, 244, 0.95) 0%, rgba(252, 228, 238, 0.75) 100%);
+    box-shadow: 0 6px 18px rgba(120, 60, 80, 0.1);
+}
+
+.bes-opt input {
+    margin-top: 0.2rem;
+    accent-color: #a85d78;
+}
+
+.bes-opt__text {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--text-primary);
+}
+
+.bes-field {
+    margin-bottom: 1rem;
+}
+
+.bes-field textarea,
+.bes-field input[type='number'] {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(190, 130, 150, 0.28);
+    font-family: var(--fonte-texto);
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.bes-field textarea {
+    min-height: 4.5rem;
+    resize: vertical;
+}
+
+.bes-resumo {
+    padding: 1rem 1.05rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(200, 140, 160, 0.22);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.bes-resumo strong {
+    color: var(--marrom);
+}
+
+.bes-resumo__total {
+    margin-top: 0.55rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgba(190, 130, 150, 0.14);
+    font-family: var(--fonte-titulo);
+    font-size: 1.2rem;
+    color: var(--marrom);
+}
+
+.bes-modal__cta {
+    width: 100%;
+    min-height: 3rem;
+    padding: 1rem 1.2rem;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--fonte-texto);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--text-on-rose);
+    background: linear-gradient(135deg, #b86a82 0%, #8e4a62 100%);
+    box-shadow: 0 10px 32px rgba(110, 50, 72, 0.28);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.bes-modal__cta:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+}

@@ -74,6 +74,7 @@ function gerarOrcamentoPropostaPDF(orcamento) {
             var pu = it.preco_unitario != null ? it.preco_unitario : it.preco;
             var sub = it.subtotal != null ? it.subtotal : (Number(pu) || 0) * (Number(it.quantidade) || 0);
             linha((it.quantidade || 0) + " x " + (it.nome || "") + " — " + formatarMoedaOrcPdf(sub), 6);
+            if (it.detalhes) linha("   " + String(it.detalhes), 6);
         });
     } else {
         linha("(sem itens)", 6);

@@ -79,12 +79,34 @@ function normalizarItemCarrinho(item) {
     let q = parseInt(String(item.quantidade), 10);
     if (!Number.isFinite(q) || q < 1) q = min;
     if (q < min) q = min;
+    const detalhes = item != null && item.detalhes != null ? String(item.detalhes) : '';
+    const precoPorCentena = item != null && !!item.precoPorCentena;
+    const unidadePreco = item != null && item.unidadePreco != null ? String(item.unidadePreco) : '';
+    const hintQuantidade = item != null && item.hintQuantidade != null ? String(item.hintQuantidade) : '';
     return {
         nome: item.nome,
         preco: typeof item.preco === 'number' ? item.preco : parseFloat(String(item.preco).replace(',', '.')) || 0,
         quantidade: q,
-        qtdMin: min
+        qtdMin: min,
+        detalhes,
+        precoPorCentena,
+        unidadePreco,
+        hintQuantidade
     };
+}
+
+/**
+ * Mesma linha de carrinho = mesmo nome, preço e texto de detalhes (ex.: combinação de sabores do cento).
+ * @param {object} a
+ * @param {object} b
+ * @returns {boolean}
+ */
+function itensCarrinhoSaoMesmoProduto(a, b) {
+    if (!a || !b) return false;
+    if (a.nome !== b.nome || a.preco !== b.preco) return false;
+    const da = (a.detalhes || '').trim();
+    const db = (b.detalhes || '').trim();
+    return da === db;
 }
 
 /**
@@ -137,20 +159,48 @@ function vincularDelegacaoQuantidadeLista(listaEl) {
  * @param {string} nome - Nome do produto
  * @param {number} preco - Preço unitário
  * @param {number} [qtdMinProduto] - Pedido mínimo (padrão CONFIG); na 1ª inclusão a quantidade inicia neste valor
+ * @param {object} [extras] - Opcional: { detalhes?, precoPorCentena?, unidadePreco?, hintQuantidade?, quantidadeInicial? } (quantidadeInicial = unidades/kg na 1ª linha e incremento em merge)
  */
-function adicionarCarrinho(nome, preco, qtdMinProduto) {
+function adicionarCarrinho(nome, preco, qtdMinProduto, extras) {
+    extras = extras || {};
+    const detalhes = extras.detalhes != null ? String(extras.detalhes) : '';
+    const precoPorCentena = !!extras.precoPorCentena;
+    const unidadePreco = extras.unidadePreco != null ? String(extras.unidadePreco) : '';
+    const hintQuantidade = extras.hintQuantidade != null ? String(extras.hintQuantidade) : '';
     const precoNum = typeof preco === 'number' ? preco : parseFloat(String(preco).replace(',', '.')) || 0;
     const qtdMin = resolverQtdMin(qtdMinProduto);
-    const itemExistente = carrinho.find(item => item.nome === nome && item.preco === precoNum);
+    let qtdInc = 1;
+    if (extras.quantidadeInicial != null) {
+        const qi = parseInt(String(extras.quantidadeInicial), 10);
+        if (Number.isFinite(qi) && qi >= 1) qtdInc = qi;
+    }
+    const candidato = { nome, preco: precoNum, detalhes, unidadePreco, hintQuantidade };
+    const itemExistente = carrinho.find(item => itensCarrinhoSaoMesmoProduto(item, candidato));
 
     if (itemExistente) {
-        itemExistente.quantidade += 1;
+        itemExistente.quantidade += qtdInc;
         itemExistente.qtdMin = resolverQtdMin(itemExistente.qtdMin || qtdMin);
         if (itemExistente.quantidade < itemExistente.qtdMin) {
             itemExistente.quantidade = itemExistente.qtdMin;
         }
+        if (unidadePreco) itemExistente.unidadePreco = unidadePreco;
+        if (hintQuantidade) itemExistente.hintQuantidade = hintQuantidade;
     } else {
-        carrinho.push({ nome, preco: precoNum, quantidade: qtdMin, qtdMin });
+        let q0 = qtdMin;
+        if (extras.quantidadeInicial != null) {
+            const qi = parseInt(String(extras.quantidadeInicial), 10);
+            if (Number.isFinite(qi) && qi >= qtdMin) q0 = qi;
+        }
+        carrinho.push({
+            nome,
+            preco: precoNum,
+            quantidade: q0,
+            qtdMin,
+            detalhes,
+            precoPorCentena,
+            unidadePreco,
+            hintQuantidade
+        });
     }
 
     salvarCarrinho(carrinho);
@@ -225,10 +275,26 @@ function atualizarCarrinho() {
         const noLimiteMin = q <= min;
         const li = document.createElement('li');
         li.className = 'carrinho-item';
+        const detHtml = item.detalhes
+            ? `<div class="carrinho-item-detalhes">${escapeHtml(item.detalhes)}</div>`
+            : '';
+        const rotuloPreco = item.precoPorCentena
+            ? `R$ ${formatarPreco(item.preco)} / cento`
+            : item.unidadePreco
+                ? `R$ ${formatarPreco(item.preco)} ${item.unidadePreco}`
+                : `R$ ${formatarPreco(item.preco)} un.`;
+        const hintQtd = item.hintQuantidade
+            ? item.hintQuantidade
+            : item.precoPorCentena
+              ? (min === 1
+                  ? 'Quantidade = número de centos (mín. 1)'
+                  : `Mínimo de ${min} cento(s)`)
+              : `Pedido mínimo: ${min} ${min === 1 ? 'unidade' : 'unidades'}`;
         li.innerHTML = `
             <div class="carrinho-item-info">
                 <div class="carrinho-item-nome">${escapeHtml(item.nome)}</div>
-                <div class="carrinho-item-preco-unit">R$ ${formatarPreco(item.preco)} un.</div>
+                ${detHtml}
+                <div class="carrinho-item-preco-unit">${rotuloPreco}</div>
             </div>
             <div class="carrinho-item-controles carrinho-item-controles--com-qty">
                 <div class="carrinho-item-qty-wrap">
@@ -240,7 +306,7 @@ function atualizarCarrinho() {
                             value="${q}" />
                         <button type="button" aria-label="Aumentar quantidade" onclick="alterarQuantidade(${index}, 'aumentar')">+</button>
                     </div>
-                    <p class="carrinho-item-qty-hint">Pedido mínimo: ${min} ${min === 1 ? 'unidade' : 'unidades'}</p>
+                    <p class="carrinho-item-qty-hint">${hintQtd}</p>
                 </div>
                 <button type="button" class="carrinho-item-remove" onclick="removerItem(${index})">Remover</button>
             </div>
@@ -377,3 +443,5 @@ function garantirAvisoPedidoMinimoGlobal() {
 }
 
 document.addEventListener('DOMContentLoaded', initCarrinho);
+
+window.adicionarCarrinho = adicionarCarrinho;

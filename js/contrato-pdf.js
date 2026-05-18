@@ -203,6 +203,15 @@ function desenharAnexoContratualModeloPlanilha(ctx) {
             var linhasItem = doc.splitTextToSize(linhaItem, maxW - 4);
             doc.text(linhasItem, margem + 2, y);
             y += linhasItem.length * 5;
+            if (it.detalhes) {
+                garantirEspaco(10);
+                var detTxt = "   " + String(it.detalhes);
+                var linhasDet = doc.splitTextToSize(detTxt, maxW - 6);
+                doc.setTextColor(75, 68, 64);
+                doc.text(linhasDet, margem + 2, y);
+                y += linhasDet.length * 4.5;
+                doc.setTextColor(30, 25, 22);
+            }
         });
     } else {
         garantirEspaco(8);

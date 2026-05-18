@@ -34,7 +34,7 @@ function montarItensOrcamentoDoCarrinho() {
     return carrinho.map(function (item) {
         var subtotal = Math.round(item.preco * item.quantidade * 100) / 100;
         var min = qtdMinDoItemCarrinho(item);
-        return {
+        var o = {
             nome: item.nome,
             quantidade: item.quantidade,
             preco: item.preco,
@@ -42,6 +42,8 @@ function montarItensOrcamentoDoCarrinho() {
             subtotal: subtotal,
             qtd_min: min
         };
+        if (item.detalhes) o.detalhes = item.detalhes;
+        return o;
     });
 }
 
@@ -81,7 +83,9 @@ function montarMensagemOrcamento(orcId) {
     msg += "ITENS (pré-orçamento):\n";
     carrinho.forEach(function (item) {
         var subtotal = item.preco * item.quantidade;
-        msg += item.quantidade + "x " + item.nome + " - R$ " + formatarPreco(subtotal) + "\n";
+        msg += item.quantidade + "x " + item.nome;
+        if (item.detalhes) msg += "\n   " + item.detalhes;
+        msg += " - R$ " + formatarPreco(subtotal) + "\n";
     });
     msg += "\nTotal estimado: R$ " + formatarPreco(valorOriginal) + "\n\n";
     msg += "EVENTO\n";

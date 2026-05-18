@@ -187,6 +187,16 @@
     color: var(--marrom);
     font-size: 0.95rem;
 }
+
+.carrinho-item-detalhes {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    margin-top: 0.35rem;
+    max-width: 100%;
+    word-break: break-word;
+}
+
 .carrinho-item-preco-unit {
     font-size: 0.75rem;
     color: var(--marrom);

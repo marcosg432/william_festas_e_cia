@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Willian Festas e Cia — docinhos de festa: brigadeiros, doces à unidade e lembrancinhas com padrão boutique.">
+    <meta name="description" content="Willian Festas e Cia — Docinhos 2026: monte seu cento com até 4 sabores por faixa de preço. Doces à unidade e docinhos de mesa.">
     <link rel="icon" href="../assets/logo-willian-festas-e-cia.png" type="image/png">
-    <title>Docinhos | Willian Festas e Cia</title>
+    <title>Docinhos 2026 | Willian Festas e Cia</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="../css/docinhos-page.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Mulish:ital,wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet">
@@ -52,232 +53,150 @@
         </nav>
     </header>
 
-    <section class="page-hero page-hero--linha-afetiva" aria-labelledby="titulo-docinhos">
-        <div class="page-hero-inner">
-            <h1 id="titulo-docinhos">🍬 Docinhos</h1>
-            <p>Doces de festa à unidade e docinhos de mesa — tradição e capricho Willian Festas e Cia.</p>
-            <p>Bem-casados, brownies, brigadeiros e clássicos para compor celebrações com afeto e sabor.</p>
+    <section class="dh-hero" aria-labelledby="titulo-docinhos">
+        <div class="dh-hero__bg" aria-hidden="true"></div>
+        <div class="dh-hero__inner container">
+            <div>
+                <p class="dh-hero__eyebrow">Willian Festas e Cia</p>
+                <h1 id="titulo-docinhos" class="dh-hero__title">Docinhos 2026</h1>
+                <p class="dh-hero__lead">Monte seu cento escolhendo até 4 sabores da categoria desejada.</p>
+            </div>
+            <figure class="dh-hero__media">
+                <div class="dh-media-placeholder dh-media-placeholder--hero" role="img" aria-label="Fotos em breve">
+                    <span class="dh-media-placeholder__title">Em breve</span>
+                    <span class="dh-media-placeholder__sub">Fotos da linha Docinhos 2026</span>
+                </div>
+            </figure>
         </div>
     </section>
-    <main class="container">
+
+    <main class="container dh-main">
         <nav class="cardapio-breadcrumb" aria-label="Você está em">
             <a href="../index.html">Home</a>
             <span class="cardapio-breadcrumb-sep" aria-hidden="true">/</span>
-            <span class="cardapio-breadcrumb-atual">Docinhos</span>
+            <span class="cardapio-breadcrumb-atual">Docinhos 2026</span>
         </nav>
-        <div class="cardapio-intro">
-            <p>Esta categoria reúne doces à unidade e a curadoria de docinhos de mesa — incluindo sabores que antes apareciam em outras vitrines do site, agora organizados no cardápio oficial.</p>
+
+        <div class="dh-regra" role="region" aria-label="Regra do cento">
+            <div class="dh-regra__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <p class="dh-regra__text"><strong>Você pode escolher até 4 sabores por cento</strong> dentro da categoria selecionada. Sabores de faixas diferentes não podem ser misturados no mesmo cento.</p>
         </div>
 
-        <header class="section-head" id="docinhos-unitarios">
-            <h2 class="section-title">Doces à unidade</h2>
-            <p class="section-subtitle">Bem-casados, brownies e clássicos para lembrancinha ou degustação.</p>
-        </header>
-        <div class="doces-grid produtos-grid">
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Bem-casado" data-produto-preco="5.5" data-produto-descricao="Bem-casado artesanal, casca delicada e recheio cremoso — clássico de celebrações." data-produto-ingredientes="Massa de bem-casado | Recheio tradicional | Açúcar de confeiteiro" data-produto-pedido="R$ 5,50">
-                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Bem-casado</h3>
-                    <p class="produto-desc">R$ 5,50 · unidade</p>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
+        <section id="docinhos-centos-monte" class="dh-sec dh-sec--categorias" aria-labelledby="dh-cat-title">
+            <header class="dh-sec__head">
+                <span class="dh-sec__label">Passo 1</span>
+                <h2 id="dh-cat-title" class="dh-sec__title">Escolha a categoria do cento</h2>
+                <p class="dh-sec__subtitle">Cada valor corresponde a uma lista exclusiva de sabores. Toque em “Selecionar categoria” para ver apenas os docinhos daquela faixa.</p>
+            </header>
+            <div class="dh-cat-grid">
+                <article class="dh-cat-card" data-cat-id="c149">
+                    <div class="dh-cat-media">
+                        <div class="dh-media-placeholder" role="img" aria-label="Foto em breve">
+                            <span class="dh-media-placeholder__title">Em breve</span>
+                            <span class="dh-media-placeholder__sub">Imagem em atualização</span>
+                        </div>
                     </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Palha italiana" data-produto-preco="6" data-produto-descricao="Palha italiana em porção individual, textura cremosa e cacau de qualidade." data-produto-ingredientes="Biscoito | Chocolate | Manteiga | Leite condensado" data-produto-pedido="R$ 6,00">
-                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Palha italiana</h3>
-                    <p class="produto-desc">R$ 6,00 · unidade</p>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
+                    <div class="dh-cat-body">
+                        <p class="dh-cat-preco">R$ 149 <span>o cento</span></p>
+                        <p class="dh-cat-resumo">Clássicos</p>
+                        <ul class="dh-cat-sabores">
+                            <li>Brigadeiro tradicional</li>
+                            <li>Brigadeiro branco</li>
+                            <li>Beijinho de coco (sem cravo)</li>
+                            <li>Beijinho coco queimado</li>
+                            <li>Cajuzinho de amendoim</li>
+                            <li>Bicho de pé</li>
+                            <li>Brigadeiro de ninho</li>
+                            <li>Brigadeiro de ninho queimado</li>
+                            <li>Brigadeiro com castanhas</li>
+                        </ul>
+                        <button type="button" class="dh-cat-select">Selecionar categoria</button>
                     </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brownie" data-produto-preco="7" data-produto-descricao="Brownie individual, intenso em chocolate e textura macia." data-produto-ingredientes="Chocolate | Farinha | Ovos | Manteiga" data-produto-pedido="R$ 7,00">
-                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brownie</h3>
-                    <p class="produto-desc">R$ 7,00 · unidade</p>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
+                </article>
+                <article class="dh-cat-card" data-cat-id="c159">
+                    <div class="dh-cat-media">
+                        <div class="dh-media-placeholder" role="img" aria-label="Foto em breve">
+                            <span class="dh-media-placeholder__title">Em breve</span>
+                            <span class="dh-media-placeholder__sub">Imagem em atualização</span>
+                        </div>
                     </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Mini pão de mel" data-produto-preco="4.5" data-produto-descricao="Mini pão de mel macio com cobertura de chocolate — formato ideal para lembrancinha." data-produto-ingredientes="Mel | Especiarias | Chocolate | Farinha" data-produto-pedido="R$ 4,50">
-                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Mini pão de mel</h3>
-                    <p class="produto-desc">R$ 4,50 · unidade</p>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
+                    <div class="dh-cat-body">
+                        <p class="dh-cat-preco">R$ 159 <span>o cento</span></p>
+                        <p class="dh-cat-resumo">Especiais</p>
+                        <ul class="dh-cat-sabores">
+                            <li>Leite ninho</li>
+                            <li>Brigadeiro bool</li>
+                            <li>Brigadeiro de churros</li>
+                            <li>Brigadeiro trad. com coco</li>
+                            <li>Brigadeiro farinha láctea</li>
+                            <li>Brigadeiro de café</li>
+                            <li>Brigadeiro milho verde</li>
+                        </ul>
+                        <button type="button" class="dh-cat-select">Selecionar categoria</button>
                     </div>
-                </div>
-            </article>
+                </article>
+                <article class="dh-cat-card" data-cat-id="c169">
+                    <div class="dh-cat-media">
+                        <div class="dh-media-placeholder" role="img" aria-label="Foto em breve">
+                            <span class="dh-media-placeholder__title">Em breve</span>
+                            <span class="dh-media-placeholder__sub">Imagem em atualização</span>
+                        </div>
+                    </div>
+                    <div class="dh-cat-body">
+                        <p class="dh-cat-preco">R$ 169 <span>o cento</span></p>
+                        <p class="dh-cat-resumo">Gourmet</p>
+                        <ul class="dh-cat-sabores">
+                            <li>Casadinho</li>
+                            <li>Napolitano</li>
+                            <li>Stikadinho</li>
+                            <li>Oreo</li>
+                            <li>Perolados</li>
+                        </ul>
+                        <button type="button" class="dh-cat-select">Selecionar categoria</button>
+                    </div>
+                </article>
+                <article class="dh-cat-card" data-cat-id="c179">
+                    <div class="dh-cat-media">
+                        <div class="dh-media-placeholder" role="img" aria-label="Foto em breve">
+                            <span class="dh-media-placeholder__title">Em breve</span>
+                            <span class="dh-media-placeholder__sub">Imagem em atualização</span>
+                        </div>
+                    </div>
+                    <div class="dh-cat-body">
+                        <p class="dh-cat-preco">R$ 179 <span>o cento</span></p>
+                        <p class="dh-cat-resumo">Premium</p>
+                        <ul class="dh-cat-sabores">
+                            <li>Ninho c/ nutella</li>
+                            <li>Brigadeiro confeti</li>
+                            <li>Brigadeiro 70%</li>
+                            <li>Surpresa de uva</li>
+                        </ul>
+                        <button type="button" class="dh-cat-select">Selecionar categoria</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="dh-monte-panel" class="dh-sec dh-sec--monte" hidden aria-labelledby="dh-monte-title">
+            <div class="dh-monte-head">
+                <p class="dh-monte-step">Passo 2 — apenas sabores desta categoria</p>
+                <h2 id="dh-monte-title" class="dh-sec__title">Escolha até quatro sabores</h2>
+                <p class="dh-monte-cat" id="dh-monte-cat-titulo"></p>
+            </div>
+            <p id="dh-contador" class="dh-contador" aria-live="polite">0 de 4 sabores selecionados</p>
+            <p id="dh-sabor-limite" class="dh-sabor-limite" role="status" aria-live="polite" hidden></p>
+            <div id="dh-sabores-chips" class="dh-sabores-chips"></div>
+        </section>
+
+        <div id="dh-resumo-wrap" class="dh-resumo-outer" hidden>
+            <div class="dh-resumo-card">
+                <div id="dh-resumo-body"></div>
+                <button type="button" id="dh-btn-carrinho" class="dh-btn-carrinho" disabled>Adicionar ao carrinho</button>
+            </div>
         </div>
 
-        <header class="section-head" id="docinhos-mesa">
-            <h2 class="section-title">Docinhos de mesa</h2>
-            <p class="section-subtitle">Brigadeiros e doces tradicionais — R$ 2,50 a unidade (consulte quantidade mínima no carrinho).</p>
-        </header>
-        <div class="doces-grid produtos-grid">
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro Tradicional" data-produto-preco="2.5" data-produto-descricao="O clássico brasileiro com chocolate e leite condensado, na linha afetiva da casa: textura cremosa, sabor de infância e acabamento cuidadoso para mesas cheias de memória." data-produto-ingredientes="Leite condensado | Chocolate em pó | Manteiga | Chocolate granulado" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro Tradicional</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de ninho com Nutella" data-produto-preco="2.5" data-produto-descricao="Brigadeiro de leite em pó tipo ninho com recheio ou centro de Nutella — combinação cremosa na linha afetiva." data-produto-ingredientes="Leite condensado | Leite em pó | Chocolate Nutella | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de ninho com Nutella</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de Leite Ninho com Nutella" data-produto-preco="2.5" data-produto-descricao="Brigadeiro de Leite Ninho com recheio de Nutella na linha afetiva — textura cremosa e sabor marcante." data-produto-ingredientes="Leite condensado | Leite Ninho | Nutella | Chocolate branco | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de Leite Ninho com Nutella</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de Doce de Leite com Nozes" data-produto-preco="2.5" data-produto-descricao="Brigadeiro com doce de leite caseiro e nozes — textura cremosa e sabor reconfortante na linha afetiva." data-produto-ingredientes="Doce de leite | Nozes | Leite condensado | Manteiga | Chocolate" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de Doce de Leite com Nozes</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Dois amores" data-produto-preco="2.5" data-produto-descricao="O encontro do chocolate e do creme branco em um doce caseiro — textura cremosa e sabor marcante na linha afetiva." data-produto-ingredientes="Leite condensado | Chocolate | Leite em pó | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Dois amores</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de Nutella" data-produto-preco="2.5" data-produto-descricao="Brigadeiro cremoso com chocolate de avelã e Nutella na linha afetiva — sabor intenso e textura de festa em casa." data-produto-ingredientes="Leite condensado | Chocolate Nutella | Chocolate em pó | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de Nutella</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-alta-brulee produto-card--foto-pendente" data-produto-nome="Brigadeiro de creme Brûlée" data-produto-preco="2.5" data-produto-descricao="Brigadeiro cremoso com inspiração em crème brûlée — notas de baunilha e caramelo na linha afetiva." data-produto-ingredientes="Leite condensado | Creme de leite | Baunilha | Açúcar | Chocolate branco" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de creme Brûlée</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de limão siciliano" data-produto-preco="2.5" data-produto-descricao="Brigadeiro com limão siciliano na linha afetiva — frescor cítrico e textura cremosa." data-produto-ingredientes="Leite condensado | Limão siciliano | Chocolate branco | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de limão siciliano</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de churros" data-produto-preco="2.5" data-produto-descricao="Brigadeiro com inspiração em churros na linha afetiva — notas de canela, doce de leite e toque caramelado que lembram a barraca da festa." data-produto-ingredientes="Leite condensado | Chocolate | Canela | Doce de leite | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de churros</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Beijinho" data-produto-preco="2.5" data-produto-descricao="Clássico de festa na linha afetiva: leite condensado, coco e leve toque de manteiga — macio, branco e cheio de memória." data-produto-ingredientes="Leite condensado | Coco ralado | Leite em pó | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Beijinho</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Cajuzinho" data-produto-preco="2.5" data-produto-descricao="Doce clássico à base de amendoim na linha afetiva — textura cremosa lembrando paçoca, coberto com açúcar cristal e metade de amendoim torrado." data-produto-ingredientes="Leite condensado | Amendoim | Açúcar | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Cajuzinho</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-            <article class="produto-card produto-card--foto-pendente" data-produto-nome="Brigadeiro de paçoca" data-produto-preco="2.5" data-produto-descricao="Na linha afetiva: brigadeiro cremoso coberto com flocos crocantes de paçoca — crocância de amendoim e chocolate em cada mordida." data-produto-ingredientes="Leite condensado | Chocolate | Paçoca | Amendoim | Manteiga" data-produto-pedido="R$ 2,50">
-                                <div class="produto-img produto-img--pendente" aria-hidden="true">
-                    <span class="produto-img-pendente-texto">Foto em breve</span>
-                    <span class="produto-img-pendente-sub">Imagem em atualização</span>
-                </div>
-                <div class="produto-content">
-                    <h3>Brigadeiro de paçoca</h3>
-                    <div class="produto-buttons">
-                        <button type="button" class="btn-adicionar-carrinho">Adicionar ao carrinho</button>
-                    </div>
-                </div>
-            </article>
-        </div>
     </main>
 
     <footer class="footer">
@@ -374,6 +293,7 @@
     <script src="../js/orcamentos-logic.js"></script>
     <script src="../js/orcamentos-storage.js"></script>
     <script src="../js/carrinho.js"></script>
+    <script src="../js/docinhos-builder.js"></script>
     <script src="../js/pedido.js"></script>
     <script src="../js/script.js"></script>
 </body>

@@ -1,380 +1,249 @@
 /**
- * pedido-personalizado.js — Bolos c/ Chantilly: abas Monte seu bolo / Bolos de corte, resumo e WhatsApp
+ * pedido-personalizado.js — Bolos c/ Chantilly: cards por coleção, modal de massa e carrinho.
  */
-
-(function() {
+(function () {
     'use strict';
 
-    var PRECO_ESPECIALIDADES_KG = 90;
-    var PRECO_QUERIDINHOS_KG = 70;
+    var modalAberto = false;
 
-    /** 'monte' | 'corte' */
-    var fluxoAtivo = 'monte';
+    /**
+     * Ordem: Tradicionais → Frutados → Premium → Combinações especiais (catálogo sec. 6 e 7).
+     * @type {{ id: string, nome: string, desc: string, branca: number, preta: number, grupo: 'tradicionais'|'frutados'|'premium'|'especiais' }[]}
+     */
+    var BOLOS = [
+        { id: 'brigadeiro', nome: 'Brigadeiro', desc: 'O clássico de festa, cremoso e marcante.', branca: 68, preta: 70, grupo: 'tradicionais' },
+        { id: 'brigadeiro-ninho', nome: 'Brigadeiro de ninho', desc: 'Brigadeiro com perfil de leite em pó tipo ninho.', branca: 68, preta: 70, grupo: 'tradicionais' },
+        { id: 'prestigio', nome: 'Prestígio', desc: 'Coco e chocolate no estilo amado das festas.', branca: 68, preta: 70, grupo: 'tradicionais' },
+        { id: 'doce-leite', nome: 'Doce de leite', desc: 'Cremoso e reconfortante, sabor tradicional.', branca: 66, preta: 68, grupo: 'tradicionais' },
+        { id: 'mousse-ninho-morango', nome: 'Mousse de ninho c/ morango', desc: 'Clássica combinação festiva com morango.', branca: 68, preta: 70, grupo: 'frutados' },
+        { id: 'mousse-ninho-abacaxi', nome: 'Mousse de ninho c/ abacaxi', desc: 'Frescor da fruta equilibrando a cremosidade do ninho.', branca: 66, preta: 68, grupo: 'frutados' },
+        { id: 'brigadeiro-morango', nome: 'Brigadeiro c/ morango', desc: 'Brigadeiro cremoso com notas de morango.', branca: 72, preta: 75, grupo: 'frutados' },
+        { id: 'brigadeiro-maracuja', nome: 'Brigadeiro e maracujá', desc: 'Brigadeiro com frescor marcante do maracujá.', branca: 75, preta: 78, grupo: 'frutados' },
+        { id: 'prestigio-morango', nome: 'Prestígio c/ morango', desc: 'Prestígio com toque frutado de morango.', branca: 72, preta: 75, grupo: 'frutados' },
+        { id: 'doce-leite-abacaxi', nome: 'Doce de leite c/ abacaxi', desc: 'Doce de leite com compota de abacaxi.', branca: 70, preta: 72, grupo: 'frutados' },
+        { id: 'doce-leite-ameixa', nome: 'Doce de leite c/ ameixa', desc: 'Clássico casamento de sabores.', branca: 68, preta: 72, grupo: 'frutados' },
+        { id: 'mousse-ninho-nutella', nome: 'Mousse de ninho e Nutella', desc: 'Encontro irresistível entre ninho e avelã.', branca: 88, preta: 90, grupo: 'premium' },
+        {
+            id: 'mousse-ninho-ganache',
+            nome: 'Mousse de ninho mesclado c/ ganache amargo',
+            desc: 'Mescla sofisticada com ganache de chocolate amargo.',
+            branca: 70,
+            preta: 73,
+            grupo: 'premium'
+        },
+        { id: 'mousse-chocolate-brigadeiro', nome: 'Mousse de chocolate e brigadeiro', desc: 'Para quem ama chocolate em dobro.', branca: 74, preta: 77, grupo: 'premium' },
+        { id: 'mousse-chocolate-morango', nome: 'Mousse de chocolate c/ morango', desc: 'Contraste entre o amargo do chocolate e o morango.', branca: 72, preta: 75, grupo: 'premium' },
+        { id: 'brigadeiro-prestigio', nome: 'Brigadeiro e prestígio', desc: 'Chocolate e coco em equilíbrio.', branca: 70, preta: 73, grupo: 'premium' },
+        { id: 'mousse-ninho', nome: 'Mousse de ninho', desc: 'Recheio leve e cremoso com sabor marcante de leite ninho.', branca: 62, preta: 65, grupo: 'especiais' },
+        {
+            id: 'mousse-ninho-choc-preto',
+            nome: 'Mousse de ninho c/ chocolate preto picado',
+            desc: 'Ninho cremoso com crocância de chocolate meio amargo.',
+            branca: 64,
+            preta: 66,
+            grupo: 'especiais'
+        },
+        {
+            id: 'mousse-ninho-choc-branco',
+            nome: 'Mousse de ninho c/ chocolate branco picado',
+            desc: 'Contraste suave entre ninho e chocolate branco em pedaços.',
+            branca: 66,
+            preta: 69,
+            grupo: 'especiais'
+        },
+        { id: 'mousse-ninho-brigadeiro', nome: 'Mousse de ninho e brigadeiro', desc: 'Dupla de sabores brasileiros em camadas harmoniosas.', branca: 70, preta: 72, grupo: 'especiais' },
+        { id: 'mousse-ninho-mousse-choco', nome: 'Mousse de ninho e mousse de chocolate', desc: 'Duas mousses clássicas em equilíbrio.', branca: 72, preta: 75, grupo: 'especiais' },
+        { id: 'mousse-chocolate', nome: 'Mousse de chocolate', desc: 'Intenso em cacau, textura aerada e elegante.', branca: 70, preta: 73, grupo: 'especiais' },
+        { id: 'brigadeiro-ninho-morango', nome: 'Brigadeiro de ninho c/ morango', desc: 'Ninho cremoso com morango.', branca: 72, preta: 75, grupo: 'especiais' }
+    ];
 
-    var saborSelecionado = '';
-    var categoriaSelecionada = '';
-    var tamanhoSelecionado = 0;
-    var tamanhoLabel = '';
-    var precoFinal = 0;
+    var boloModal = null;
 
-    var corteModelo = '';
-    var cortePeso = '';
-    var corteFatias = '';
-    var corteValorNum = 0;
-    var corteAcabamento = '';
-    var corteRecheio = '';
-
-    function formatBRL(num) {
-        return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function $(sel, root) {
+        return (root || document).querySelector(sel);
     }
 
-    function nomeLinhaAmigavel(cat) {
-        if (cat === 'especialidades') return 'Especialidades da Casa';
-        if (cat === 'queridinhos') return 'Queridinhos';
-        return '—';
+    function formatPreco(n) {
+        return 'R$ ' + n + ',00';
     }
 
-    function somaAdicionaisMonte() {
-        var t = 0;
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-adicional[aria-pressed="true"]').forEach(function(btn) {
-            var p = parseFloat(String(btn.getAttribute('data-adicional-preco') || '0'));
-            if (!isNaN(p)) t += p;
-        });
-        return t;
+    function escapeHtml(s) {
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
     }
 
-    function textosAdicionaisMonte() {
-        var nomes = [];
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-adicional[aria-pressed="true"]').forEach(function(btn) {
-            var n = (btn.getAttribute('data-adicional-nome') || '').trim();
-            if (n) nomes.push(n);
-        });
-        return nomes;
+    function precoAtual(b, massa) {
+        return massa === 'preta' ? b.preta : b.branca;
     }
 
-    function calcularPrecoMonte() {
-        var precoPorKg;
-        if (categoriaSelecionada === 'especialidades') {
-            precoPorKg = PRECO_ESPECIALIDADES_KG;
-        } else if (categoriaSelecionada === 'queridinhos') {
-            precoPorKg = PRECO_QUERIDINHOS_KG;
-        } else {
-            precoFinal = 0;
-            return;
+    function renderCatalogo() {
+        var roots = {
+            tradicionais: document.getElementById('bc-grid-tradicionais'),
+            frutados: document.getElementById('bc-grid-frutados'),
+            premium: document.getElementById('bc-grid-premium'),
+            especiais: document.getElementById('bc-grid-especiais')
+        };
+        for (var g in roots) {
+            if (!roots[g]) continue;
+            roots[g].innerHTML = '';
         }
-        if (!tamanhoSelecionado || tamanhoSelecionado <= 0) {
-            precoFinal = 0;
-            return;
-        }
-        var base = precoPorKg * tamanhoSelecionado;
-        precoFinal = base + somaAdicionaisMonte();
-    }
-
-    function resetMonte() {
-        saborSelecionado = '';
-        categoriaSelecionada = '';
-        tamanhoSelecionado = 0;
-        tamanhoLabel = '';
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-sabor[aria-pressed="true"]').forEach(function(b) {
-            b.setAttribute('aria-pressed', 'false');
-        });
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-tamanho[aria-pressed="true"]').forEach(function(b) {
-            b.setAttribute('aria-pressed', 'false');
-        });
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-adicional[aria-pressed="true"]').forEach(function(b) {
-            b.setAttribute('aria-pressed', 'false');
-        });
-    }
-
-    function resetCorte() {
-        corteModelo = '';
-        cortePeso = '';
-        corteFatias = '';
-        corteValorNum = 0;
-        corteAcabamento = '';
-        corteRecheio = '';
-        document.querySelectorAll('.bolos-pick-corte[aria-pressed="true"]').forEach(function(el) {
-           el.setAttribute('aria-pressed', 'false');
-        });
-    }
-
-    function resetAllSelections() {
-        resetMonte();
-        resetCorte();
-        precoFinal = 0;
-    }
-
-    function setFluxo(f) {
-        fluxoAtivo = f;
-        resetAllSelections();
-
-        var tabMonte = document.getElementById('bolos-tab-monte');
-        var tabCorte = document.getElementById('bolos-tab-corte');
-        var panelMonte = document.getElementById('bolos-painel-monte');
-        var panelCorte = document.getElementById('bolos-painel-corte');
-
-        if (tabMonte) {
-            tabMonte.classList.toggle('bolos-tab--ativa', f === 'monte');
-            tabMonte.setAttribute('aria-selected', f === 'monte' ? 'true' : 'false');
-        }
-        if (tabCorte) {
-            tabCorte.classList.toggle('bolos-tab--ativa', f === 'corte');
-            tabCorte.setAttribute('aria-selected', f === 'corte' ? 'true' : 'false');
-        }
-        if (panelMonte) panelMonte.hidden = f !== 'monte';
-        if (panelCorte) panelCorte.hidden = f !== 'corte';
-
-        atualizarResumoDOM();
-    }
-
-    function atualizarResumoDOM() {
-        var elTipo = document.getElementById('bolos-resumo-tipo');
-        var elLblA = document.getElementById('bolos-resumo-lbl-a');
-        var elValA = document.getElementById('bolos-resumo-val-a');
-        var elLblB = document.getElementById('bolos-resumo-lbl-b');
-        var elValB = document.getElementById('bolos-resumo-val-b');
-        var elLiC = document.getElementById('bolos-resumo-li-c');
-        var elLblC = document.getElementById('bolos-resumo-lbl-c');
-        var elValC = document.getElementById('bolos-resumo-val-c');
-        var elPreco = document.getElementById('bolos-resumo-preco');
-        var elLiAdicionais = document.getElementById('bolos-resumo-li-adicionais');
-        var elValAdicionais = document.getElementById('bolos-resumo-adicionais');
-        var elBarraResumo = document.getElementById('bolos-barra-resumo');
-        var elBarraPreco = document.getElementById('bolos-barra-preco');
-
-        var precoTexto = '—';
-
-        if (fluxoAtivo === 'monte') {
-            if (elTipo) elTipo.textContent = 'Monte seu bolo';
-            if (elLblA) elLblA.textContent = 'Sabor';
-            if (elValA) elValA.textContent = saborSelecionado || '—';
-            if (elLblB) elLblB.textContent = 'Linha';
-            if (elValB) elValB.textContent = categoriaSelecionada ? nomeLinhaAmigavel(categoriaSelecionada) : '—';
-            if (elLiC) elLiC.hidden = false;
-            if (elLblC) elLblC.textContent = 'Tamanho';
-            if (elValC) elValC.textContent = tamanhoLabel || '—';
-            var adicionaisList = textosAdicionaisMonte();
-            if (elLiAdicionais && elValAdicionais) {
-                if (adicionaisList.length > 0) {
-                    elLiAdicionais.hidden = false;
-                    elValAdicionais.textContent = adicionaisList.join(' · ');
-                } else {
-                    elLiAdicionais.hidden = true;
-                    elValAdicionais.textContent = '—';
-                }
-            }
-            calcularPrecoMonte();
-            if (saborSelecionado && tamanhoLabel && categoriaSelecionada && precoFinal > 0) {
-                precoTexto = 'R$ ' + formatBRL(precoFinal);
-            }
-            if (elBarraResumo && elBarraPreco) {
-                if (!saborSelecionado || !tamanhoLabel) {
-                    elBarraResumo.textContent = 'Selecione sabor e tamanho';
-                    elBarraPreco.textContent = '';
-                } else if (precoFinal > 0) {
-                    var barraLinha = (saborSelecionado.length > 20 ? saborSelecionado.slice(0, 18) + '…' : saborSelecionado) + ' · ' + tamanhoLabel;
-                    if (adicionaisList.length > 0) {
-                        barraLinha += ' · +' + adicionaisList.length + ' ' + (adicionaisList.length > 1 ? 'adicionais' : 'adicional');
-                    }
-                    elBarraResumo.textContent = barraLinha;
-                    elBarraPreco.textContent = 'R$ ' + formatBRL(precoFinal);
-                } else {
-                    elBarraResumo.textContent = 'Monte seu bolo';
-                    elBarraPreco.textContent = '';
-                }
-            }
-        } else {
-            if (elTipo) elTipo.textContent = 'Bolo de corte';
-            if (elLblA) elLblA.textContent = 'Modelo';
-            if (elValA) elValA.textContent = corteModelo || '—';
-            if (elLblB) elLblB.textContent = 'Peso';
-            if (elValB) elValB.textContent = cortePeso || '—';
-            if (elLiC) elLiC.hidden = true;
-            if (elLiAdicionais) elLiAdicionais.hidden = true;
-            if (elValAdicionais) elValAdicionais.textContent = '—';
-            precoFinal = corteValorNum;
-            if (corteModelo && corteValorNum > 0) {
-                precoTexto = 'R$ ' + formatBRL(corteValorNum);
-            }
-            if (elBarraResumo && elBarraPreco) {
-                if (!corteModelo) {
-                    elBarraResumo.textContent = 'Toque em um modelo de bolo de corte';
-                    elBarraPreco.textContent = '';
-                } else {
-                    elBarraResumo.textContent = corteModelo.length > 22 ? corteModelo.slice(0, 20) + '…' : corteModelo;
-                    elBarraPreco.textContent = corteValorNum > 0 ? 'R$ ' + formatBRL(corteValorNum) : '';
-                }
-            }
-        }
-
-        if (elPreco) elPreco.textContent = precoTexto;
-    }
-
-    function selecionarCorteCard(el) {
-        document.querySelectorAll('.bolos-pick-corte[aria-pressed="true"]').forEach(function(c) {
-            c.setAttribute('aria-pressed', 'false');
-        });
-        el.setAttribute('aria-pressed', 'true');
-        corteModelo = el.getAttribute('data-modelo') || '';
-        cortePeso = el.getAttribute('data-peso') || '';
-        corteFatias = el.getAttribute('data-fatias') || '';
-        corteAcabamento = el.getAttribute('data-acabamento') || '';
-        corteRecheio = el.getAttribute('data-recheio') || '';
-        var v = parseFloat(String(el.getAttribute('data-valor') || '0'));
-        if (isNaN(v)) v = 0;
-        corteValorNum = v;
-        atualizarResumoDOM();
-    }
-
-    function enviarWhatsApp() {
-        var tel = (typeof CONFIG !== 'undefined' && CONFIG.telefoneWhatsApp) ? CONFIG.telefoneWhatsApp : '5516991280505';
-        var msg;
-        var valorStr;
-
-        if (fluxoAtivo === 'monte') {
-            if (!saborSelecionado) {
-                alert('Selecione um sabor nas opções acima.');
-                return;
-            }
-            if (!tamanhoLabel || !tamanhoSelecionado) {
-                alert('Selecione o tamanho do bolo (3 kg ou 4 kg).');
-                return;
-            }
-            if (!categoriaSelecionada) {
-                alert('Selecione um sabor válido.');
-                return;
-            }
-            calcularPrecoMonte();
-            if (precoFinal <= 0) {
-                alert('Não foi possível calcular o valor.');
-                return;
-            }
-            valorStr = formatBRL(precoFinal);
-            var adicionaisNomes = textosAdicionaisMonte();
-            msg = 'Olá! Gostaria de fazer um pedido:\n\n'
-                + '📋 Tipo: Monte seu bolo\n'
-                + '🍰 Sabor: ' + saborSelecionado + '\n'
-                + '🏷️ Linha: ' + nomeLinhaAmigavel(categoriaSelecionada) + '\n'
-                + '📏 Tamanho: ' + tamanhoLabel + ' (' + tamanhoSelecionado + ' kg)\n';
-            if (adicionaisNomes.length > 0) {
-                msg += '🍓 Adicionais: ' + adicionaisNomes.join(', ') + ' (+' + formatBRL(somaAdicionaisMonte()) + ')\n';
-            }
-            msg += '💰 Valor total estimado: R$ ' + valorStr;
-        } else {
-            if (!corteModelo || corteValorNum <= 0) {
-                alert('Selecione um modelo de bolo de corte tocando em um dos cards.');
-                return;
-            }
-            valorStr = formatBRL(corteValorNum);
-            msg = 'Olá! Gostaria de fazer um pedido:\n\n'
-                + '📋 Tipo: Bolo de corte\n'
-                + '🎂 Modelo: ' + corteModelo + '\n'
-                + '⚖️ Peso: ' + cortePeso + '\n'
-                + '🍽️ Rendimento (fatias): ' + corteFatias + '\n'
-                + '✨ Acabamento: ' + corteAcabamento + '\n'
-                + '🔶 Recheio: ' + corteRecheio + '\n'
-                + '💰 Valor: R$ ' + valorStr;
-        }
-
-        window.open('https://wa.me/' + tel + '?text=' + encodeURIComponent(msg), '_blank');
-    }
-
-    function setupBarraMobile() {
-        var barra = document.getElementById('bolos-barra-pedido');
-        if (!barra) return;
-
-        function syncBarra() {
-            if (window.matchMedia('(max-width: 768px)').matches) {
-                barra.removeAttribute('hidden');
-            } else {
-                barra.setAttribute('hidden', '');
-            }
-        }
-
-        syncBarra();
-        window.addEventListener('resize', syncBarra);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        setupBarraMobile();
-
-        document.getElementById('bolos-tab-monte')?.addEventListener('click', function() {
-            setFluxo('monte');
-        });
-        document.getElementById('bolos-tab-corte')?.addEventListener('click', function() {
-            setFluxo('corte');
-        });
-
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-sabor').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                if (fluxoAtivo !== 'monte') return;
-                var eraAtivo = btn.getAttribute('aria-pressed') === 'true';
-                document.querySelectorAll('#bolos-painel-monte .bolos-pick-sabor').forEach(function(b) {
-                    b.setAttribute('aria-pressed', 'false');
-                });
-                if (eraAtivo) {
-                    saborSelecionado = '';
-                    categoriaSelecionada = '';
-                } else {
-                    btn.setAttribute('aria-pressed', 'true');
-                    saborSelecionado = btn.getAttribute('data-sabor') || '';
-                    categoriaSelecionada = btn.getAttribute('data-categoria') || '';
-                }
-                atualizarResumoDOM();
+        for (var i = 0; i < BOLOS.length; i++) {
+            var b = BOLOS[i];
+            var root = roots[b.grupo];
+            if (!root) continue;
+            var art = document.createElement('article');
+            art.className = 'bc-card';
+            art.setAttribute('data-bc-id', b.id);
+            art.innerHTML =
+                '<div class="bc-card__media bc-card__media--em-breve" aria-hidden="true">' +
+                '<span class="bc-card__em-breve">Em breve</span>' +
+                '<span class="bc-card__em-breve-sub">Foto do sabor</span>' +
+                '</div>' +
+                '<div class="bc-card__body">' +
+                '<h3 class="bc-card__title">' +
+                escapeHtml(b.nome) +
+                '</h3>' +
+                '<p class="bc-card__desc">' +
+                escapeHtml(b.desc) +
+                '</p>' +
+                '<ul class="bc-card__precos">' +
+                '<li>Massa branca — ' +
+                formatPreco(b.branca) +
+                '</li>' +
+                '<li>Massa preta — ' +
+                formatPreco(b.preta) +
+                '</li>' +
+                '</ul>' +
+                '<button type="button" class="bc-card__btn">Montar bolo</button>' +
+                '</div>';
+            art.querySelector('.bc-card__btn').addEventListener('click', function (ev) {
+                var card = ev.target.closest('.bc-card');
+                if (!card) return;
+                var id = card.getAttribute('data-bc-id');
+                abrirModalPorId(id);
             });
+            root.appendChild(art);
+        }
+    }
+
+    function acharBolo(id) {
+        for (var j = 0; j < BOLOS.length; j++) {
+            if (BOLOS[j].id === id) return BOLOS[j];
+        }
+        return null;
+    }
+
+    function syncMassaClasses() {
+        document.querySelectorAll('.bc-massa-opt').forEach(function (lab) {
+            var inp = lab.querySelector('input[type="radio"]');
+            lab.classList.toggle('is-selected', inp && inp.checked);
         });
+    }
 
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-tamanho').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                if (fluxoAtivo !== 'monte') return;
-                if (btn.classList.contains('bolos-pick-adicional')) return;
-                var eraAtivo = btn.getAttribute('aria-pressed') === 'true';
-                document.querySelectorAll('#bolos-painel-monte .bolos-pick-tamanho:not(.bolos-pick-adicional)').forEach(function(b) {
-                    b.setAttribute('aria-pressed', 'false');
-                });
-                if (eraAtivo) {
-                    tamanhoSelecionado = 0;
-                    tamanhoLabel = '';
-                } else {
-                    btn.setAttribute('aria-pressed', 'true');
-                    var kg = parseFloat(String(btn.getAttribute('data-kg') || '0').replace(',', '.'));
-                    if (isNaN(kg)) kg = 0;
-                    tamanhoSelecionado = kg;
-                    tamanhoLabel = btn.getAttribute('data-label') || btn.textContent.trim();
-                }
-                atualizarResumoDOM();
-            });
+    function atualizarResumoModal() {
+        if (!boloModal) return;
+        var massa = $('input[name="bc-massa"]:checked');
+        var m = massa ? massa.value : 'branca';
+        var preco = precoAtual(boloModal, m);
+        var massaLabel = m === 'preta' ? 'Preta' : 'Branca';
+        var elSabor = document.getElementById('bc-modal-resumo-sabor');
+        var elMassa = document.getElementById('bc-modal-resumo-massa');
+        var elPreco = document.getElementById('bc-modal-resumo-preco');
+        if (elSabor) elSabor.textContent = boloModal.nome;
+        if (elMassa) elMassa.textContent = massaLabel;
+        if (elPreco) elPreco.textContent = formatPreco(preco);
+        syncMassaClasses();
+    }
+
+    function abrirModalPorId(id) {
+        var b = acharBolo(id);
+        if (!b) return;
+        boloModal = b;
+        var modal = document.getElementById('bc-modal');
+        var titulo = document.getElementById('bc-modal-sabor');
+        if (titulo) titulo.textContent = b.nome;
+        var rBranca = document.getElementById('bc-massa-branca');
+        var rPreta = document.getElementById('bc-massa-preta');
+        if (rBranca) {
+            rBranca.checked = true;
+            rBranca.value = 'branca';
+        }
+        if (rPreta) rPreta.value = 'preta';
+        var lBranca = document.getElementById('bc-label-massa-branca');
+        var lPreta = document.getElementById('bc-label-massa-preta');
+        if (lBranca) {
+            var spB = lBranca.querySelector('.bc-massa-opt__preco');
+            if (spB) spB.textContent = formatPreco(b.branca);
+        }
+        if (lPreta) {
+            var spP = lPreta.querySelector('.bc-massa-opt__preco');
+            if (spP) spP.textContent = formatPreco(b.preta);
+        }
+        atualizarResumoModal();
+        if (modal) {
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+        modalAberto = true;
+        var closeBtn = document.getElementById('bc-modal-close');
+        if (closeBtn) closeBtn.focus();
+    }
+
+    function fecharModal() {
+        var modal = document.getElementById('bc-modal');
+        if (modal) {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+        document.body.style.overflow = '';
+        modalAberto = false;
+        boloModal = null;
+    }
+
+    function addAoCarrinho() {
+        if (!boloModal || typeof window.adicionarCarrinho !== 'function') return;
+        var massaEl = $('input[name="bc-massa"]:checked');
+        var massa = massaEl ? massaEl.value : 'branca';
+        var massaLabel = massa === 'preta' ? 'Preta' : 'Branca';
+        var preco = precoAtual(boloModal, massa);
+        var nome = 'Bolo c/ Chantilly — ' + boloModal.nome;
+        var detalhes =
+            'Sabor: ' +
+            boloModal.nome +
+            '\nMassa: ' +
+            massaLabel +
+            '\nPreço: ' +
+            formatPreco(preco);
+        window.adicionarCarrinho(nome, preco, 1, { detalhes: detalhes });
+        fecharModal();
+    }
+
+    function initModal() {
+        var modal = document.getElementById('bc-modal');
+        if (!modal) return;
+        document.getElementById('bc-modal-close').addEventListener('click', fecharModal);
+        modal.querySelector('.bc-modal__backdrop').addEventListener('click', fecharModal);
+        document.getElementById('bc-modal-add').addEventListener('click', addAoCarrinho);
+        modal.querySelectorAll('input[name="bc-massa"]').forEach(function (inp) {
+            inp.addEventListener('change', atualizarResumoModal);
         });
-
-        document.querySelectorAll('#bolos-painel-monte .bolos-pick-adicional').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                if (fluxoAtivo !== 'monte') return;
-                var on = btn.getAttribute('aria-pressed') === 'true';
-                btn.setAttribute('aria-pressed', on ? 'false' : 'true');
-                atualizarResumoDOM();
-            });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modalAberto) fecharModal();
         });
+    }
 
-        document.querySelectorAll('.bolos-pick-corte').forEach(function(card) {
-            card.addEventListener('click', function() {
-                if (fluxoAtivo !== 'corte') return;
-                selecionarCorteCard(card);
-            });
-            card.addEventListener('keydown', function(e) {
-                if (fluxoAtivo !== 'corte') return;
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    selecionarCorteCard(card);
-                }
-            });
-        });
+    function init() {
+        if (!document.body.classList.contains('pagina-bolos')) return;
+        if (!document.getElementById('bc-grid-especiais')) return;
+        renderCatalogo();
+        initModal();
+    }
 
-        var btnPedir = document.getElementById('bolos-btn-pedir-whatsapp');
-        if (btnPedir) btnPedir.addEventListener('click', enviarWhatsApp);
-
-        var btnBarra = document.getElementById('bolos-barra-btn-fazer-pedido');
-        if (btnBarra) btnBarra.addEventListener('click', enviarWhatsApp);
-
-        atualizarResumoDOM();
-    });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();

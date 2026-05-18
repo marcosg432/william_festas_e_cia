@@ -132,6 +132,10 @@ body.pagina-docinhos {
     --produto-img-position: center 22%;
 }
 
+body.pagina-salgadinhos {
+    --produto-img-position: center 22%;
+}
+
 /* Breadcrumb — páginas de cardápio */
 .cardapio-breadcrumb {
     display: flex;
