@@ -470,6 +470,25 @@
 }
 
 .sg-sabores-chips {
+    display: grid;
+    gap: 1rem;
+}
+
+.sg-sabor-group {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.sg-sabor-group__title {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.sg-sabor-group__chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.55rem;
