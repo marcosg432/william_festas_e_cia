@@ -96,25 +96,29 @@
             art.className = 'bc-card';
             art.setAttribute('data-bc-id', b.id);
             art.innerHTML =
-                '<div class="bc-card__media bc-card__media--em-breve" aria-hidden="true">' +
-                '<span class="bc-card__em-breve">Em breve</span>' +
-                '<span class="bc-card__em-breve-sub">Foto do sabor</span>' +
-                '</div>' +
                 '<div class="bc-card__body">' +
+                '<header class="bc-card__head">' +
+                '<span class="bc-card__badge">Sabor</span>' +
                 '<h3 class="bc-card__title">' +
                 escapeHtml(b.nome) +
                 '</h3>' +
+                '</header>' +
+                '<div class="bc-card__divider" aria-hidden="true"></div>' +
                 '<p class="bc-card__desc">' +
                 escapeHtml(b.desc) +
                 '</p>' +
-                '<ul class="bc-card__precos">' +
-                '<li>Massa branca — ' +
+                '<div class="bc-card__massas">' +
+                '<div class="bc-card__massa">' +
+                '<span class="bc-card__massa-label">Massa branca</span>' +
+                '<span class="bc-card__massa-preco">' +
                 formatPreco(b.branca) +
-                '</li>' +
-                '<li>Massa preta — ' +
+                '</span></div>' +
+                '<div class="bc-card__massa">' +
+                '<span class="bc-card__massa-label">Massa preta</span>' +
+                '<span class="bc-card__massa-preco">' +
                 formatPreco(b.preta) +
-                '</li>' +
-                '</ul>' +
+                '</span></div>' +
+                '</div>' +
                 '<button type="button" class="bc-card__btn">Montar bolo</button>' +
                 '</div>';
             art.querySelector('.bc-card__btn').addEventListener('click', function (ev) {

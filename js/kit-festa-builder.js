@@ -173,24 +173,27 @@
                 '<article class="kf-kit-card" role="button" tabindex="0" data-kit-index="' +
                 i +
                 '" aria-pressed="false">' +
+                '<header class="kf-kit-card__head">' +
                 '<span class="kf-kit-card__badge">' +
                 k.p +
                 ' pessoas</span>' +
                 '<h3 class="kf-kit-card__title">Kit ' +
                 k.p +
                 ' pessoas</h3>' +
+                '</header>' +
+                '<div class="kf-kit-card__divider" aria-hidden="true"></div>' +
                 '<ul class="kf-kit-card__list">' +
-                '<li><span class="kf-kit-card__ico" aria-hidden="true">🎂</span><span>Bolo ' +
+                '<li><span class="kf-kit-card__ico" aria-hidden="true">🎂</span><span class="kf-kit-card__item-label">Bolo</span><span class="kf-kit-card__item-val">' +
                 k.bolo +
                 '</span></li>' +
-                '<li><span class="kf-kit-card__ico" aria-hidden="true">🍬</span><span>' +
+                '<li><span class="kf-kit-card__ico" aria-hidden="true">🍬</span><span class="kf-kit-card__item-label">Doces</span><span class="kf-kit-card__item-val">' +
                 k.doces +
-                ' doces <strong>(' +
+                ' <strong>(' +
                 k.docesSabores +
                 ' sabores)</strong></span></li>' +
-                '<li><span class="kf-kit-card__ico" aria-hidden="true">🥟</span><span>' +
+                '<li><span class="kf-kit-card__ico" aria-hidden="true">🥟</span><span class="kf-kit-card__item-label">Salgados</span><span class="kf-kit-card__item-val">' +
                 k.salgados +
-                ' salgados <strong>(' +
+                ' <strong>(' +
                 k.salgadosSabores +
                 ' sabores)</strong></span></li>' +
                 '</ul>' +

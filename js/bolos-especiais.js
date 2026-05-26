@@ -7,12 +7,6 @@
     var modalKgAberto = false;
     var modalTacaAberto = false;
 
-    var PLACEHOLDER_MEDIA =
-        '<div class="bes-media--em-breve" aria-hidden="true">' +
-        '<span class="bes-em-breve">Em breve</span>' +
-        '<span class="bes-em-breve-sub">Foto do produto</span>' +
-        '</div>';
-
     var BOLOS_ESPECIAIS = [
         {
             id: 'floresta-negra',
@@ -119,16 +113,17 @@
                 art.className = 'bes-card';
                 art.setAttribute('data-bes-id', b.id);
                 art.innerHTML =
-                    '<div class="bes-card__media">' +
-                    PLACEHOLDER_MEDIA +
-                    '</div>' +
                     '<div class="bes-card__body">' +
+                    '<header class="bes-card__head">' +
+                    '<span class="bes-card__badge">Exclusivo</span>' +
                     '<h3 class="bes-card__title">' +
                     escapeHtml(b.nome) +
                     '</h3>' +
+                    '</header>' +
+                    '<div class="bes-card__divider" aria-hidden="true"></div>' +
                     '<p class="bes-card__preco">' +
                     formatPreco(b.precoKg) +
-                    ' / kg</p>' +
+                    ' <span>/ kg</span></p>' +
                     '<p class="bes-card__desc">' +
                     escapeHtml(b.desc) +
                     '</p>' +
@@ -150,20 +145,21 @@
                 artT.className = 'bes-card';
                 artT.setAttribute('data-bes-taca-id', t.id);
                 artT.innerHTML =
-                    '<div class="bes-card__media">' +
-                    PLACEHOLDER_MEDIA +
-                    '</div>' +
                     '<div class="bes-card__body">' +
+                    '<header class="bes-card__head">' +
+                    '<span class="bes-card__badge">Na taça</span>' +
                     '<h3 class="bes-card__title">' +
                     escapeHtml(t.nome) +
                     '</h3>' +
+                    '</header>' +
+                    '<div class="bes-card__divider" aria-hidden="true"></div>' +
                     '<p class="bes-card__desc">' +
                     escapeHtml(t.desc) +
                     '</p>' +
-                    '<ul class="bes-card__precos-duo">' +
-                    '<li>Cliente traz taça 1250 ml — R$ 99,00</li>' +
-                    '<li>Taça fornecida pela loja — R$ 120,00</li>' +
-                    '</ul>' +
+                    '<div class="bes-card__precos-duo">' +
+                    '<div class="bes-card__preco-item"><span class="bes-card__preco-label">Taça própria 1250 ml</span><span class="bes-card__preco-val">R$ 99,00</span></div>' +
+                    '<div class="bes-card__preco-item"><span class="bes-card__preco-label">Taça fornecida</span><span class="bes-card__preco-val">R$ 120,00</span></div>' +
+                    '</div>' +
                     '<button type="button" class="bes-btn bes-btn--taca">Adicionar ao carrinho</button>' +
                     '</div>';
                 artT.querySelector('.bes-btn--taca').addEventListener('click', function (ev) {
