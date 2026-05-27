@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Willian Festas e Cia — Salgadinhos 2026: monte seu cento com até 4 sabores por categoria. Fritos, assados e linhas especiais.">
+    <meta name="description" content="Willian Festas e Cia — Salgadinhos 2026: escolha sabores, quantidades em múltiplos de 25 e acompanhe o total automaticamente.">
     <link rel="icon" href="../assets/logo-willian-festas-e-cia.png" type="image/png">
     <title>Salgadinhos 2026 | Willian Festas e Cia</title>
     <link rel="stylesheet" href="../css/style.css">
@@ -59,7 +59,7 @@
         <div class="sg-hero__inner container sg-hero__inner--center">
             <p class="sg-hero__eyebrow">Willian Festas e Cia</p>
             <h1 id="titulo-salgadinhos" class="sg-hero__title">Salgadinhos 2026</h1>
-            <p class="sg-hero__lead">Monte seu cento escolhendo até 4 sabores, misturando opções de qualquer faixa.</p>
+                <p class="sg-hero__lead">Escolha os sabores, defina quantidades em múltiplos de 25 e acompanhe o total em tempo real.</p>
         </div>
     </section>
 
@@ -70,132 +70,23 @@
             <span class="cardapio-breadcrumb-atual">Salgadinhos 2026</span>
         </nav>
 
-        <div class="sg-regra" role="region" aria-label="Regra do cento">
+        <div class="sg-regra" role="region" aria-label="Regra de quantidade">
             <div class="sg-regra__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
             </div>
-            <p class="sg-regra__text"><strong>O cento pode ser dividido em até 4 sabores</strong>, misturando salgadinhos de qualquer faixa. O valor do cento fica conforme a opção escolhida no primeiro passo.</p>
+            <p class="sg-regra__text"><strong>Cada sabor possui preço unitário próprio</strong>. Escolha a quantidade em múltiplos de 25 unidades; o total é calculado automaticamente conforme os sabores selecionados.</p>
         </div>
 
-        <section id="salgados-centos-monte" class="sg-sec sg-sec--categorias" aria-labelledby="sg-cat-title">
-            <header class="sg-sec__head">
-                <span class="sg-sec__label">Passo 1</span>
-                <h2 id="sg-cat-title" class="sg-sec__title">Escolha o valor do cento</h2>
-                <p class="sg-sec__subtitle">Escolha a faixa do cento e, no próximo passo, misture sabores de qualquer categoria.</p>
-            </header>
-            <div class="sg-cat-grid">
-                <article class="sg-cat-card" data-cat-id="s65">
-                    <header class="sg-cat-head">
-                        <span class="sg-cat-badge">Tradicional</span>
-                        <p class="sg-cat-preco">R$ 65 <span>o cento</span></p>
-                    </header>
-                    <div class="sg-cat-divider" aria-hidden="true"></div>
-                    <p class="sg-cat-rule">Até 4 sabores · 9 opções</p>
-                    <div class="sg-cat-sabores-wrap">
-                        <p class="sg-cat-sabores-label">Sabores disponíveis</p>
-                        <ul class="sg-cat-tags">
-                            <li class="sg-cat-tag">Coxinha de frango</li>
-                            <li class="sg-cat-tag">Kibe</li>
-                            <li class="sg-cat-tag">Travesseirinho de milho</li>
-                            <li class="sg-cat-tag">Empanado salsicha</li>
-                            <li class="sg-cat-tag">Risole de ricota e milho</li>
-                            <li class="sg-cat-tag">Risole de carne</li>
-                            <li class="sg-cat-tag">Pastel de carne</li>
-                            <li class="sg-cat-tag">Pastel de pizza</li>
-                            <li class="sg-cat-tag">Pastel frango</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="sg-cat-select">Selecionar valor</button>
-                </article>
-                <article class="sg-cat-card" data-cat-id="s68mix">
-                    <header class="sg-cat-head">
-                        <span class="sg-cat-badge">Cremosos &amp; queijos</span>
-                        <p class="sg-cat-preco">R$ 68 <span>o cento</span></p>
-                    </header>
-                    <div class="sg-cat-divider" aria-hidden="true"></div>
-                    <p class="sg-cat-rule">Até 4 sabores · 4 opções</p>
-                    <div class="sg-cat-sabores-wrap">
-                        <p class="sg-cat-sabores-label">Sabores disponíveis</p>
-                        <ul class="sg-cat-tags">
-                            <li class="sg-cat-tag">Maravilha de milho</li>
-                            <li class="sg-cat-tag">Bolinha de queijo</li>
-                            <li class="sg-cat-tag">Pastel queijo</li>
-                            <li class="sg-cat-tag">Travesseirinho presunto e mussarela</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="sg-cat-select">Selecionar valor</button>
-                </article>
-                <article class="sg-cat-card" data-cat-id="s68assados">
-                    <header class="sg-cat-head">
-                        <span class="sg-cat-badge">Assados</span>
-                        <p class="sg-cat-preco">R$ 68 <span>o cento</span></p>
-                    </header>
-                    <div class="sg-cat-divider" aria-hidden="true"></div>
-                    <p class="sg-cat-rule">Até 4 sabores · 6 opções</p>
-                    <div class="sg-cat-sabores-wrap">
-                        <p class="sg-cat-sabores-label">Sabores disponíveis</p>
-                        <ul class="sg-cat-tags">
-                            <li class="sg-cat-tag">Enroladinho de salsicha</li>
-                            <li class="sg-cat-tag">Pãozinho de Ricota</li>
-                            <li class="sg-cat-tag">Esfirra de carne</li>
-                            <li class="sg-cat-tag">Esfirra calabresa</li>
-                            <li class="sg-cat-tag">Pizza presunto e queijo</li>
-                            <li class="sg-cat-tag">Pizza calabresa e queijo</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="sg-cat-select">Selecionar valor</button>
-                </article>
-                <article class="sg-cat-card" data-cat-id="s70esp">
-                    <header class="sg-cat-head">
-                        <span class="sg-cat-badge">Especiais</span>
-                        <p class="sg-cat-preco">R$ 70 <span>o cento</span></p>
-                    </header>
-                    <div class="sg-cat-divider" aria-hidden="true"></div>
-                    <p class="sg-cat-rule">Até 4 sabores · 7 opções</p>
-                    <div class="sg-cat-sabores-wrap">
-                        <p class="sg-cat-sabores-label">Sabores disponíveis</p>
-                        <ul class="sg-cat-tags">
-                            <li class="sg-cat-tag">Coxinha de frango cremosa</li>
-                            <li class="sg-cat-tag">Coxinha cremosa cheddar</li>
-                            <li class="sg-cat-tag">Kibe c/ requeijão</li>
-                            <li class="sg-cat-tag">Espetinho de frango</li>
-                            <li class="sg-cat-tag">Empada de frango</li>
-                            <li class="sg-cat-tag">Empada de palmito</li>
-                            <li class="sg-cat-tag">Pizza mussarela</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="sg-cat-select">Selecionar valor</button>
-                </article>
-                <article class="sg-cat-card" data-cat-id="s75prem">
-                    <header class="sg-cat-head">
-                        <span class="sg-cat-badge">Premium</span>
-                        <p class="sg-cat-preco">R$ 75 <span>o cento</span></p>
-                    </header>
-                    <div class="sg-cat-divider" aria-hidden="true"></div>
-                    <p class="sg-cat-rule">Até 4 sabores · 1 opção</p>
-                    <div class="sg-cat-sabores-wrap">
-                        <p class="sg-cat-sabores-label">Sabores disponíveis</p>
-                        <ul class="sg-cat-tags">
-                            <li class="sg-cat-tag">Espetinho frango c/ bacon</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="sg-cat-select">Selecionar valor</button>
-                </article>
-            </div>
-        </section>
-
-        <section id="sg-monte-panel" class="sg-sec sg-sec--monte" hidden aria-labelledby="sg-monte-title">
+        <section id="sg-monte-panel" class="sg-sec sg-sec--monte" aria-labelledby="sg-monte-title">
             <div class="sg-monte-head">
-                <p class="sg-monte-step">Passo 2 — sabores de todas as categorias</p>
-                <h2 id="sg-monte-title" class="sg-sec__title">Escolha até quatro sabores</h2>
-                <p class="sg-monte-cat" id="sg-monte-cat-titulo"></p>
+                <p class="sg-monte-step">Monte seu pedido</p>
+                <h2 id="sg-monte-title" class="sg-sec__title">Escolha sabores e quantidades</h2>
+                <p class="sg-monte-cat" id="sg-monte-cat-titulo">Use os botões para adicionar de 25 em 25 unidades.</p>
             </div>
-            <p id="sg-contador" class="sg-contador" aria-live="polite">0 de 4 sabores selecionados</p>
-            <p id="sg-sabor-limite" class="sg-sabor-limite" role="status" aria-live="polite" hidden></p>
             <div id="sg-sabores-chips" class="sg-sabores-chips"></div>
         </section>
 
-        <div id="sg-resumo-wrap" class="sg-resumo-outer" hidden>
+        <div id="sg-resumo-wrap" class="sg-resumo-outer">
             <div class="sg-resumo-card">
                 <div id="sg-resumo-body"></div>
                 <button type="button" id="sg-btn-carrinho" class="sg-btn-carrinho" disabled>Adicionar ao carrinho</button>

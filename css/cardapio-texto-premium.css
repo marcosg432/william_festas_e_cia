@@ -115,6 +115,198 @@
     margin-top: auto;
 }
 
+/* ——— Seleção individual por sabor ——— */
+.dh-sabor-group,
+.sg-sabor-group {
+    padding: clamp(1rem, 2.5vw, 1.35rem);
+    border-radius: 1.15rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(190, 130, 150, 0.2);
+    box-shadow: 0 12px 34px rgba(70, 32, 48, 0.06);
+}
+
+.dh-sabor-group__head,
+.sg-sabor-group__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(190, 130, 150, 0.18);
+}
+
+.dh-sabor-group__title,
+.sg-sabor-group__title {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.dh-sabor-group__price,
+.sg-sabor-group__price {
+    margin: 0;
+    font-family: var(--fonte-titulo);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--marrom);
+    white-space: nowrap;
+}
+
+.dh-sabor-items,
+.sg-sabor-items {
+    display: grid;
+    gap: 0.75rem;
+}
+
+@media (min-width: 760px) {
+    .dh-sabor-items,
+    .sg-sabor-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.dh-sabor-item,
+.sg-sabor-item {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border-radius: 0.95rem;
+    background: linear-gradient(145deg, rgba(255, 252, 254, 0.96) 0%, rgba(255, 247, 250, 0.9) 100%);
+    border: 1px solid rgba(190, 130, 150, 0.18);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dh-sabor-item.is-selected,
+.sg-sabor-item.is-selected {
+    border-color: rgba(180, 100, 130, 0.45);
+    box-shadow: 0 10px 26px rgba(110, 50, 72, 0.09);
+}
+
+.dh-sabor-item__nome,
+.sg-sabor-item__nome {
+    margin: 0;
+    font-family: var(--fonte-titulo);
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--text-primary);
+}
+
+.dh-sabor-item__meta,
+.sg-sabor-item__meta {
+    margin: 0.25rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+}
+
+.dh-sabor-item__controls,
+.sg-sabor-item__controls {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    overflow: hidden;
+    border-radius: 999px;
+    border: 1px solid rgba(190, 130, 150, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.dh-qty-btn,
+.sg-qty-btn {
+    width: 2.65rem;
+    height: 2.45rem;
+    border: none;
+    background: transparent;
+    color: var(--marrom);
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.dh-qty-btn:hover,
+.sg-qty-btn:hover {
+    background: rgba(230, 160, 185, 0.18);
+}
+
+.dh-qty-value,
+.sg-qty-value {
+    min-width: 3.25rem;
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.dh-sabor-item__subtotal,
+.sg-sabor-item__subtotal {
+    margin: 0;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--marrom);
+}
+
+.dh-resumo-pedido,
+.sg-resumo-pedido {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.dh-resumo-title,
+.sg-resumo-title {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.dh-resumo-lista,
+.sg-resumo-lista {
+    display: grid;
+    gap: 0.45rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dh-resumo-lista li,
+.sg-resumo-lista li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(190, 130, 150, 0.14);
+    color: var(--text-secondary);
+}
+
+.dh-resumo-lista strong,
+.sg-resumo-lista strong {
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.dh-resumo-total,
+.sg-resumo-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-top: 0.4rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.dh-resumo-total strong,
+.sg-resumo-total strong {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.35rem, 4vw, 1.7rem);
+    color: var(--marrom);
+}
+
 /* ——— Bolos c/ Chantilly ——— */
 .bc-card__body {
     padding: clamp(1.2rem, 3vw, 1.55rem);

@@ -1,18 +1,16 @@
 /**
- * Salgadinhos 2026 — montador de cento (até 4 sabores de qualquer faixa).
+ * Salgadinhos 2026 — seleção por sabor com preço unitário e múltiplos de 25.
  * Depende de carrinho.js (window.adicionarCarrinho).
  */
 (function () {
     'use strict';
 
-    var MAX_SABORES_GLOBAL = 4;
+    var STEP_QTD = 25;
 
-    var CATEGORIAS = [
+    var GRUPOS = [
         {
-            id: 's65',
-            preco: 65,
-            titulo: 'R$ 65 o cento',
-            etiqueta: 'Tradicional',
+            titulo: 'Tradicional',
+            precoUnit: 0.65,
             sabores: [
                 'Coxinha de frango',
                 'Kibe',
@@ -26,10 +24,8 @@
             ]
         },
         {
-            id: 's68mix',
-            preco: 68,
-            titulo: 'R$ 68 o cento — Cremosos & queijos',
-            etiqueta: 'Cremosos & queijos',
+            titulo: 'Cremosos & queijos',
+            precoUnit: 0.68,
             sabores: [
                 'Maravilha de milho',
                 'Bolinha de queijo',
@@ -38,10 +34,8 @@
             ]
         },
         {
-            id: 's68assados',
-            preco: 68,
-            titulo: 'Assados — R$ 68 o cento',
-            etiqueta: 'Assados',
+            titulo: 'Assados',
+            precoUnit: 0.68,
             sabores: [
                 'Enroladinho de salsicha',
                 'Pãozinho de Ricota',
@@ -52,10 +46,8 @@
             ]
         },
         {
-            id: 's70esp',
-            preco: 70,
-            titulo: 'Especiais — R$ 70 o cento',
-            etiqueta: 'Especiais',
+            titulo: 'Especiais',
+            precoUnit: 0.70,
             sabores: [
                 'Coxinha de frango cremosa',
                 'Coxinha cremosa cheddar',
@@ -67,189 +59,16 @@
             ]
         },
         {
-            id: 's75prem',
-            preco: 75,
-            titulo: 'Especiais premium — R$ 75 o cento',
-            etiqueta: 'Premium',
+            titulo: 'Premium',
+            precoUnit: 0.75,
             sabores: ['Espetinho frango c/ bacon']
         }
     ];
 
-    var state = {
-        catId: null,
-        sabores: []
-    };
+    var state = {};
 
     function el(id) {
         return document.getElementById(id);
-    }
-
-    function getCat() {
-        if (!state.catId) return null;
-        for (var i = 0; i < CATEGORIAS.length; i++) {
-            if (CATEGORIAS[i].id === state.catId) return CATEGORIAS[i];
-        }
-        return null;
-    }
-
-    function getSaborKey(cat, sabor) {
-        return cat.id + '::' + sabor;
-    }
-
-    function getSaborSelecionado(key) {
-        for (var i = 0; i < CATEGORIAS.length; i++) {
-            var cat = CATEGORIAS[i];
-            for (var j = 0; j < cat.sabores.length; j++) {
-                if (getSaborKey(cat, cat.sabores[j]) === key) {
-                    return {
-                        sabor: cat.sabores[j],
-                        categoria: cat.titulo
-                    };
-                }
-            }
-        }
-        return null;
-    }
-
-    function renderChips() {
-        var wrap = el('sg-sabores-chips');
-        if (!wrap) return;
-        wrap.innerHTML = '';
-        if (!getCat()) return;
-        for (var i = 0; i < CATEGORIAS.length; i++) {
-            var cat = CATEGORIAS[i];
-            var group = document.createElement('div');
-            group.className = 'sg-sabor-group';
-
-            var title = document.createElement('p');
-            title.className = 'sg-sabor-group__title';
-            title.textContent = cat.titulo;
-            group.appendChild(title);
-
-            var list = document.createElement('div');
-            list.className = 'sg-sabor-group__chips';
-            for (var j = 0; j < cat.sabores.length; j++) {
-                var s = cat.sabores[j];
-                var btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'sg-chip';
-                btn.setAttribute('data-sabor-key', getSaborKey(cat, s));
-                btn.textContent = s;
-                btn.addEventListener('click', onChipClick);
-                list.appendChild(btn);
-            }
-            group.appendChild(list);
-            wrap.appendChild(group);
-        }
-        syncChipsUI();
-    }
-
-    function onChipClick() {
-        if (!getCat()) return;
-        var key = this.getAttribute('data-sabor-key');
-        if (!key) return;
-        var idx = state.sabores.indexOf(key);
-        if (idx >= 0) {
-            state.sabores.splice(idx, 1);
-        } else {
-            if (state.sabores.length >= MAX_SABORES_GLOBAL) return;
-            state.sabores.push(key);
-        }
-        syncChipsUI();
-        updateResumo();
-    }
-
-    function syncChipsUI() {
-        var cat = getCat();
-        var wrap = el('sg-sabores-chips');
-        if (!wrap || !cat) return;
-        var atMax = state.sabores.length >= MAX_SABORES_GLOBAL;
-        var chips = wrap.querySelectorAll('.sg-chip');
-        for (var i = 0; i < chips.length; i++) {
-            var b = chips[i];
-            var key = b.getAttribute('data-sabor-key');
-            var on = state.sabores.indexOf(key) >= 0;
-            b.classList.toggle('is-on', on);
-            b.classList.toggle('is-disabled', atMax && !on);
-            b.setAttribute('aria-pressed', on ? 'true' : 'false');
-            b.setAttribute('aria-disabled', atMax && !on ? 'true' : 'false');
-        }
-        var hint = el('sg-sabor-limite');
-        if (hint) {
-            if (atMax) {
-                hint.textContent = 'Você atingiu o limite de sabores deste cento.';
-                hint.hidden = false;
-            } else {
-                hint.textContent = '';
-                hint.hidden = true;
-            }
-        }
-        var cnt = el('sg-contador');
-        if (cnt) {
-            cnt.textContent =
-                state.sabores.length + ' de ' + MAX_SABORES_GLOBAL + ' sabores selecionados';
-        }
-    }
-
-    function selectCategoria(id) {
-        state.catId = id;
-        state.sabores = [];
-        var cards = document.querySelectorAll('.sg-cat-card');
-        for (var i = 0; i < cards.length; i++) {
-            cards[i].classList.toggle('is-selected', cards[i].getAttribute('data-cat-id') === id);
-        }
-        var panel = el('sg-monte-panel');
-        if (panel) {
-            panel.hidden = false;
-            panel.classList.add('is-visible');
-        }
-        var titulo = el('sg-monte-cat-titulo');
-        var cat = getCat();
-        if (titulo && cat) titulo.textContent = cat.titulo;
-        renderChips();
-        updateResumo();
-        var resumoW = el('sg-resumo-wrap');
-        if (resumoW) resumoW.hidden = false;
-        requestAnimationFrame(function () {
-            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    }
-
-    function updateResumo() {
-        var cat = getCat();
-        var box = el('sg-resumo-body');
-        var btn = el('sg-btn-carrinho');
-        if (!box) return;
-        if (!cat) {
-            box.innerHTML =
-                '<p class="sg-resumo-placeholder">Escolha o cento e até quatro sabores.</p>';
-            if (btn) btn.disabled = true;
-            return;
-        }
-        var html = '<dl class="sg-resumo-dl">';
-        html += '<div><dt>Cento escolhido</dt><dd>' + escapeHtml(cat.titulo) + '</dd></div>';
-        html += '<div><dt>Sabores</dt><dd>';
-        if (state.sabores.length) {
-            html += '<ul class="sg-resumo-lista">';
-            for (var i = 0; i < state.sabores.length; i++) {
-                var item = getSaborSelecionado(state.sabores[i]);
-                if (item) {
-                    html += '<li>' + escapeHtml(item.sabor) + ' <small>(' + escapeHtml(item.categoria) + ')</small></li>';
-                }
-            }
-            html += '</ul>';
-        } else {
-            html +=
-                '<span class="sg-resumo-pendente">Selecione de 1 a ' +
-                MAX_SABORES_GLOBAL +
-                ' sabore(s).</span>';
-        }
-        html += '</dd></div>';
-        html += '<div><dt>Preço do cento</dt><dd>R$ ' + cat.preco + ',00</dd></div>';
-        html += '</dl>';
-        box.innerHTML = html;
-        var ok = state.sabores.length >= 1 && state.sabores.length <= MAX_SABORES_GLOBAL;
-        if (btn) btn.disabled = !ok;
     }
 
     function escapeHtml(str) {
@@ -258,46 +77,187 @@
         return d.innerHTML;
     }
 
-    function onAddCarrinho() {
-        var cat = getCat();
-        if (!cat || state.sabores.length < 1) return;
-        if (typeof window.adicionarCarrinho !== 'function') return;
-        if (state.sabores.length > MAX_SABORES_GLOBAL) return;
-        var sabores = [];
-        for (var i = 0; i < state.sabores.length; i++) {
-            var item = getSaborSelecionado(state.sabores[i]);
-            if (item) sabores.push(item.sabor + ' (' + item.categoria + ')');
+    function money(n) {
+        return 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
+    }
+
+    function keyFor(grupo, sabor) {
+        return grupo.titulo + '::' + sabor;
+    }
+
+    function findSaborCard(key) {
+        var cards = document.querySelectorAll('.sg-sabor-item');
+        for (var i = 0; i < cards.length; i++) {
+            if (cards[i].getAttribute('data-sabor-key') === key) return cards[i];
         }
-        var detalhes = 'Sabores: ' + sabores.join(', ');
-        var nome = 'Salgadinhos 2026 — ' + cat.titulo;
-        window.adicionarCarrinho(nome, cat.preco, 1, {
-            detalhes: detalhes,
-            precoPorCentena: true
-        });
-        state.sabores = [];
-        syncChipsUI();
+        return null;
+    }
+
+    function getItens() {
+        var itens = [];
+        for (var i = 0; i < GRUPOS.length; i++) {
+            var g = GRUPOS[i];
+            for (var j = 0; j < g.sabores.length; j++) {
+                var sabor = g.sabores[j];
+                var key = keyFor(g, sabor);
+                var quantidade = state[key] || 0;
+                itens.push({
+                    key: key,
+                    sabor: sabor,
+                    grupo: g.titulo,
+                    precoUnit: g.precoUnit,
+                    quantidade: quantidade,
+                    subtotal: quantidade * g.precoUnit
+                });
+            }
+        }
+        return itens;
+    }
+
+    function totais() {
+        var itens = getItens();
+        var selecionados = [];
+        var quantidade = 0;
+        var total = 0;
+        for (var i = 0; i < itens.length; i++) {
+            if (itens[i].quantidade > 0) {
+                selecionados.push(itens[i]);
+                quantidade += itens[i].quantidade;
+                total += itens[i].subtotal;
+            }
+        }
+        return { itens: selecionados, quantidade: quantidade, total: total };
+    }
+
+    function setQuantidade(key, qtd) {
+        var n = parseInt(String(qtd), 10);
+        if (!Number.isFinite(n) || n < 0) n = 0;
+        n = Math.floor(n / STEP_QTD) * STEP_QTD;
+        if (n <= 0) {
+            delete state[key];
+        } else {
+            state[key] = n;
+        }
+        syncUI();
+    }
+
+    function renderSabores() {
+        var wrap = el('sg-sabores-chips');
+        if (!wrap) return;
+        var html = '';
+        for (var i = 0; i < GRUPOS.length; i++) {
+            var g = GRUPOS[i];
+            html += '<section class="sg-sabor-group">';
+            html += '<header class="sg-sabor-group__head">';
+            html += '<p class="sg-sabor-group__title">' + escapeHtml(g.titulo) + '</p>';
+            html += '<p class="sg-sabor-group__price">' + money(g.precoUnit) + ' unidade</p>';
+            html += '</header>';
+            html += '<div class="sg-sabor-items">';
+            for (var j = 0; j < g.sabores.length; j++) {
+                var sabor = g.sabores[j];
+                var key = keyFor(g, sabor);
+                html += '<article class="sg-sabor-item" data-sabor-key="' + escapeHtml(key) + '">';
+                html += '<div class="sg-sabor-item__main">';
+                html += '<h3 class="sg-sabor-item__nome">' + escapeHtml(sabor) + '</h3>';
+                html += '<p class="sg-sabor-item__meta">' + escapeHtml(g.titulo) + ' · ' + money(g.precoUnit) + ' unidade · mínimo 25</p>';
+                html += '</div>';
+                html += '<div class="sg-sabor-item__controls">';
+                html += '<button type="button" class="sg-qty-btn" data-action="minus" aria-label="Diminuir ' + escapeHtml(sabor) + '">-</button>';
+                html += '<span class="sg-qty-value" data-role="qty">0</span>';
+                html += '<button type="button" class="sg-qty-btn" data-action="plus" aria-label="Adicionar ' + escapeHtml(sabor) + '">+</button>';
+                html += '</div>';
+                html += '<p class="sg-sabor-item__subtotal" data-role="subtotal">Subtotal: R$ 0,00</p>';
+                html += '</article>';
+            }
+            html += '</div></section>';
+        }
+        wrap.innerHTML = html;
+    }
+
+    function syncUI() {
+        var itens = getItens();
+        for (var i = 0; i < itens.length; i++) {
+            var item = itens[i];
+            var card = findSaborCard(item.key);
+            if (!card) continue;
+            card.classList.toggle('is-selected', item.quantidade > 0);
+            var qty = card.querySelector('[data-role="qty"]');
+            var subtotal = card.querySelector('[data-role="subtotal"]');
+            if (qty) qty.textContent = String(item.quantidade);
+            if (subtotal) subtotal.textContent = 'Subtotal: ' + money(item.subtotal);
+        }
         updateResumo();
     }
 
-    function bind() {
-        var btns = document.querySelectorAll('.sg-cat-select');
-        for (var i = 0; i < btns.length; i++) {
-            btns[i].addEventListener('click', function () {
-                var card = this.closest('.sg-cat-card');
-                if (!card) return;
-                var id = card.getAttribute('data-cat-id');
-                if (id) selectCategoria(id);
-            });
+    function updateResumo() {
+        var box = el('sg-resumo-body');
+        var btn = el('sg-btn-carrinho');
+        if (!box) return;
+        var resumo = totais();
+        if (!resumo.itens.length) {
+            box.innerHTML = '<p class="sg-resumo-placeholder">Escolha os sabores. Cada sabor começa em 25 unidades e aumenta de 25 em 25.</p>';
+            if (btn) btn.disabled = true;
+            return;
         }
-        var addBtn = el('sg-btn-carrinho');
-        if (addBtn) addBtn.addEventListener('click', onAddCarrinho);
+        var html = '<div class="sg-resumo-pedido">';
+        html += '<p class="sg-resumo-title">Resumo do pedido</p>';
+        html += '<ul class="sg-resumo-lista">';
+        for (var i = 0; i < resumo.itens.length; i++) {
+            var item = resumo.itens[i];
+            html += '<li><span>' + item.quantidade + ' ' + escapeHtml(item.sabor) + '</span><strong>' + money(item.subtotal) + '</strong></li>';
+        }
+        html += '</ul>';
+        html += '<div class="sg-resumo-total"><span>Total</span><strong>' + money(resumo.total) + '</strong></div>';
+        html += '</div>';
+        box.innerHTML = html;
+        if (btn) btn.disabled = false;
+    }
+
+    function onQtyClick(e) {
+        var btn = e.target.closest('.sg-qty-btn');
+        if (!btn) return;
+        var card = btn.closest('.sg-sabor-item');
+        if (!card) return;
+        var key = card.getAttribute('data-sabor-key');
+        var atual = state[key] || 0;
+        var action = btn.getAttribute('data-action');
+        setQuantidade(key, action === 'plus' ? atual + STEP_QTD : atual - STEP_QTD);
+    }
+
+    function onAddCarrinho() {
+        var resumo = totais();
+        if (!resumo.itens.length || typeof window.adicionarCarrinho !== 'function') return;
+        var linhas = [];
+        for (var i = 0; i < resumo.itens.length; i++) {
+            var item = resumo.itens[i];
+            linhas.push(item.quantidade + ' ' + item.sabor + ' (' + money(item.precoUnit) + '/un = ' + money(item.subtotal) + ')');
+        }
+        window.adicionarCarrinho('Salgadinhos 2026 - seleção personalizada', resumo.total, 1, {
+            detalhes: linhas.join(' | '),
+            unidadePreco: 'pedido',
+            hintQuantidade: 'Quantidade = pedido montado',
+            quantidadeInicial: 1
+        });
+        state = {};
+        syncUI();
     }
 
     function init() {
         if (!document.body.classList.contains('pagina-salgadinhos')) return;
         if (!el('sg-monte-panel')) return;
-        bind();
-        updateResumo();
+        var panel = el('sg-monte-panel');
+        var resumoW = el('sg-resumo-wrap');
+        if (panel) {
+            panel.hidden = false;
+            panel.classList.add('is-visible');
+        }
+        if (resumoW) resumoW.hidden = false;
+        renderSabores();
+        syncUI();
+        var wrap = el('sg-sabores-chips');
+        if (wrap) wrap.addEventListener('click', onQtyClick);
+        var addBtn = el('sg-btn-carrinho');
+        if (addBtn) addBtn.addEventListener('click', onAddCarrinho);
     }
 
     if (document.readyState === 'loading') {
