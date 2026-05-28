@@ -188,7 +188,7 @@
                 <input type="number" id="convidados" min="1" step="1" placeholder="Ex: 80" required>
                 <label for="local-evento">Local do evento *</label>
                 <input type="text" id="local-evento" placeholder="Endereço ou nome do espaço" required>
-                <label for="tipo">Entrega ou retirada *</label>
+                <label for="tipo">Tipo do pedido *</label>
                 <select id="tipo" required>
                     <option value="">Selecione</option>
                     <option value="Entrega">Entrega</option>
@@ -197,6 +197,10 @@
                 <div id="endereco-wrap" style="display: none;">
                     <label for="endereco">Endereço de entrega *</label>
                     <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade">
+                </div>
+                <div id="retirada-horario-wrap" class="carrinho-form-conditional" style="display: none;">
+                    <label for="horario-retirada">Hor&aacute;rio de retirada *</label>
+                    <input type="time" id="horario-retirada" step="300">
                 </div>
                 <label for="pagamento">Forma de pagamento (referência)</label>
                 <select id="pagamento">

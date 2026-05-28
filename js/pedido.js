@@ -125,6 +125,7 @@ function montarMensagemOrcamento(orcId) {
     var localEvento = campoTrimOrcamento("local-evento");
     var tipo = campoTrimOrcamento("tipo");
     var endereco = campoTrimOrcamento("endereco");
+    var horarioRetirada = campoTrimOrcamento("horario-retirada");
     var pagamento = campoTrimOrcamento("pagamento");
     var observacao = campoTrimOrcamento("observacao");
 
@@ -146,6 +147,10 @@ function montarMensagemOrcamento(orcId) {
     if (localEvento) msg += "Local: " + limparTextoMensagemOrcamento(localEvento) + "\n";
     msg += "\nTipo do pedido:\n";
     msg += (tipo || "-") + "\n";
+    if (tipo === "Retirada") {
+        msg += "\nHorário da retirada:\n";
+        msg += (horarioRetirada || "-") + "\n";
+    }
     if (tipo === "Entrega") msg += "Endereço: " + (endereco || "-") + "\n";
     if (pagamento) msg += "\nPagamento:\n" + limparTextoMensagemOrcamento(pagamento) + "\n";
     if (observacao) msg += "\nObservações:\n" + limparTextoMensagemOrcamento(observacao) + "\n";
@@ -168,6 +173,7 @@ function validarFormularioOrcamento() {
     var localEvento = campoTrimOrcamento("local-evento");
     var tipo = campoTrimOrcamento("tipo");
     var endereco = campoTrimOrcamento("endereco");
+    var horarioRetirada = campoTrimOrcamento("horario-retirada");
 
     if (!nome) return "Preencha o nome do cliente.";
     if (!telefone) return "Preencha o telefone.";
@@ -177,8 +183,9 @@ function validarFormularioOrcamento() {
     if (!tipoEvento) return "Informe o tipo de evento.";
     if (!convidados || parseInt(convidados, 10) < 1) return "Informe o número de convidados.";
     if (!localEvento) return "Informe o local do evento.";
-    if (!tipo) return "Selecione entrega ou retirada.";
+    if (!tipo) return "Selecione o tipo do pedido.";
     if (tipo === "Entrega" && !endereco) return "Preencha o endereço para entrega.";
+    if (tipo === "Retirada" && !horarioRetirada) return "Informe o horário de retirada.";
 
     return null;
 }
@@ -212,10 +219,13 @@ function gerarOrcamento() {
     var localEvento = campoTrimOrcamento("local-evento");
     var tipo = campoTrimOrcamento("tipo");
     var endereco = campoTrimOrcamento("endereco");
+    var horarioRetirada = campoTrimOrcamento("horario-retirada");
     var pagamento = campoTrimOrcamento("pagamento");
     var observacao = campoTrimOrcamento("observacao");
 
-    var entregaTexto = tipo === "Entrega" ? "Entrega — " + (endereco || "") : (tipo || "");
+    var entregaTexto = tipo === "Entrega"
+        ? "Entrega — " + (endereco || "")
+        : (tipo === "Retirada" && horarioRetirada ? "Retirada — " + horarioRetirada : (tipo || ""));
 
     var valorOriginal = Math.round(calcularTotal() * 100) / 100;
     var id = Date.now();
@@ -261,6 +271,7 @@ function gerarOrcamento() {
         local_evento: localEvento,
         entrega_retirada: tipo,
         endereco: tipo === "Entrega" ? endereco : null,
+        horario_retirada: tipo === "Retirada" ? horarioRetirada : null,
         forma_pagamento_ref: pagamento || null,
         pagamento: pagamento || "",
         total: valorOriginal,
@@ -301,6 +312,8 @@ function toggleCampoEndereco() {
     var tipo = document.getElementById("tipo");
     var enderecoWrap = document.getElementById("endereco-wrap");
     var enderecoInput = document.getElementById("endereco");
+    var horarioWrap = document.getElementById("retirada-horario-wrap");
+    var horarioInput = document.getElementById("horario-retirada");
 
     if (tipo && enderecoWrap) {
         if (tipo.value === "Entrega") {
@@ -311,6 +324,19 @@ function toggleCampoEndereco() {
             if (enderecoInput) {
                 enderecoInput.required = false;
                 enderecoInput.value = "";
+            }
+        }
+    }
+
+    if (tipo && horarioWrap) {
+        if (tipo.value === "Retirada") {
+            horarioWrap.style.display = "block";
+            if (horarioInput) horarioInput.required = true;
+        } else {
+            horarioWrap.style.display = "none";
+            if (horarioInput) {
+                horarioInput.required = false;
+                horarioInput.value = "";
             }
         }
     }

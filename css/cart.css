@@ -390,6 +390,42 @@
     resize: vertical;
 }
 
+.carrinho-form-conditional {
+    margin: -0.25rem 0 1rem;
+    padding: 0.85rem;
+    border-radius: 12px;
+    background: rgba(196, 165, 175, 0.08);
+    border: 1px solid var(--accent-rose-line);
+}
+
+.carrinho-form-conditional label {
+    margin-bottom: 0.45rem;
+}
+
+.carrinho-form-conditional input {
+    margin-bottom: 0;
+}
+
+.carrinho-form-orcamento label[for="data-evento"],
+.carrinho-form-orcamento label[for="tipo"],
+.carrinho-form-orcamento label[for="horario-retirada"] {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+}
+
+.carrinho-form-orcamento label[for="data-evento"]::before,
+.carrinho-form-orcamento label[for="tipo"]::before,
+.carrinho-form-orcamento label[for="horario-retirada"]::before {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--accent-rose-bright);
+    box-shadow: 0 0 0 4px rgba(196, 165, 175, 0.16);
+}
+
 /* Botão finalizar */
 .carrinho-footer {
     flex-shrink: 0;
