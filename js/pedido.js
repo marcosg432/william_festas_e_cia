@@ -53,6 +53,66 @@ function campoTrimOrcamento(id) {
     return String(el.value).trim();
 }
 
+function formatarDataMensagemOrcamento(dataIso) {
+    if (!dataIso) return "-";
+    var partes = String(dataIso).split("-");
+    if (partes.length !== 3) return dataIso;
+    return partes[2] + "/" + partes[1] + "/" + partes[0];
+}
+
+function limparTextoMensagemOrcamento(txt) {
+    return String(txt || "")
+        .replace(/\s+/g, " ")
+        .replace(/\bbem\s*casados?\b/gi, "")
+        .trim();
+}
+
+function parseLinhaDetalheItemOrcamento(texto) {
+    var raw = limparTextoMensagemOrcamento(texto);
+    if (!raw) return null;
+    var match = raw.match(/^(\d+)\s+(.+?)\s+\((?:R\$\s*[\d.,]+\s*\/un\s*=\s*)?R\$\s*([\d.,]+)\)$/i);
+    if (!match) return null;
+    var qtd = parseInt(match[1], 10);
+    var nome = limparTextoMensagemOrcamento(match[2]) || "Item personalizado";
+    var subtotal = parseFloat(String(match[3]).replace(/\./g, "").replace(",", "."));
+    if (!Number.isFinite(qtd) || qtd < 1 || !nome || !Number.isFinite(subtotal)) return null;
+    return {
+        quantidade: qtd,
+        nome: nome,
+        subtotal: Math.round(subtotal * 100) / 100
+    };
+}
+
+function linhasMensagemItensOrcamento() {
+    var linhas = [];
+    var unidades = 0;
+    carrinho.forEach(function (item) {
+        if (!item) return;
+        var detalhes = String(item.detalhes || "");
+        var partes = detalhes ? detalhes.split("|") : [];
+        var encontrouDetalhesEstruturados = false;
+        for (var i = 0; i < partes.length; i++) {
+            var parsed = parseLinhaDetalheItemOrcamento(partes[i]);
+            if (!parsed) continue;
+            encontrouDetalhesEstruturados = true;
+            unidades += parsed.quantidade;
+            linhas.push("• " + parsed.quantidade + " " + parsed.nome + " — R$ " + formatarPreco(parsed.subtotal));
+        }
+        if (encontrouDetalhesEstruturados) return;
+
+        var qtd = parseInt(String(item.quantidade), 10);
+        if (!Number.isFinite(qtd) || qtd < 1) qtd = 1;
+        var nome = limparTextoMensagemOrcamento(item.nome) || "Item personalizado";
+        var subtotal = Math.round((Number(item.preco) || 0) * qtd * 100) / 100;
+        unidades += qtd;
+        linhas.push("• " + qtd + " " + nome + " — R$ " + formatarPreco(subtotal));
+        if (detalhes) {
+            linhas.push("  " + limparTextoMensagemOrcamento(detalhes));
+        }
+    });
+    return { linhas: linhas, unidades: unidades };
+}
+
 function montarMensagemOrcamento(orcId) {
     var nome = campoTrimOrcamento("nome");
     var telefone = campoTrimOrcamento("telefone");
@@ -68,42 +128,33 @@ function montarMensagemOrcamento(orcId) {
     var pagamento = campoTrimOrcamento("pagamento");
     var observacao = campoTrimOrcamento("observacao");
 
-    var valorOriginal = calcularTotal();
-    var minPadrao = 50;
-    if (typeof getPedidoMinimoPadrao === 'function') {
-        minPadrao = getPedidoMinimoPadrao();
-    } else if (typeof CONFIG !== 'undefined' && CONFIG.pedidoMinimoUnidades != null) {
-        var mp = parseInt(String(CONFIG.pedidoMinimoUnidades), 10);
-        if (Number.isFinite(mp) && mp >= 1) minPadrao = mp;
-    }
+    var valorOriginal = Math.round(calcularTotal() * 100) / 100;
+    var resumoItens = linhasMensagemItensOrcamento();
 
-    var msg = "NOVO ORÇAMENTO\n";
+    var msg = "Olá, vim pelo cardápio e gostaria de fazer um pedido.\n\n";
+    msg += "NOVO ORÇAMENTO\n";
     msg += "Ref: " + orcId + "\n\n";
-    msg += "Pedido mínimo (padrão): " + minPadrao + " un. por produto e sabor.\n\n";
-    msg += "ITENS (pré-orçamento):\n";
-    carrinho.forEach(function (item) {
-        var subtotal = item.preco * item.quantidade;
-        msg += item.quantidade + "x " + item.nome;
-        if (item.detalhes) msg += "\n   " + item.detalhes;
-        msg += " - R$ " + formatarPreco(subtotal) + "\n";
-    });
-    msg += "\nTotal estimado: R$ " + formatarPreco(valorOriginal) + "\n\n";
-    msg += "EVENTO\n";
-    msg += "Data: " + (dataEvento || "-") + "\n";
-    msg += "Tipo: " + (tipoEvento || "-") + "\n";
-    msg += "Convidados: " + (convidados || "-") + "\n";
-    msg += "Local: " + (localEvento || "-") + "\n";
-    msg += "Entrega/Retirada: " + (tipo || "-") + "\n";
+    msg += "Pedido mínimo: 25 unidades por sabor.\n\n";
+    msg += "ITENS DO PEDIDO:\n";
+    msg += resumoItens.linhas.length ? resumoItens.linhas.join("\n") + "\n\n" : "• Itens a confirmar\n\n";
+    msg += "Total:\n";
+    msg += resumoItens.unidades + " unidades — R$ " + formatarPreco(valorOriginal) + "\n\n";
+    msg += "EVENTO:\n";
+    msg += "Data: " + formatarDataMensagemOrcamento(dataEvento) + "\n";
+    if (tipoEvento) msg += "Ocasião: " + limparTextoMensagemOrcamento(tipoEvento) + "\n";
+    if (convidados) msg += "Convidados: " + convidados + "\n";
+    if (localEvento) msg += "Local: " + limparTextoMensagemOrcamento(localEvento) + "\n";
+    msg += "\nTipo do pedido:\n";
+    msg += (tipo || "-") + "\n";
     if (tipo === "Entrega") msg += "Endereço: " + (endereco || "-") + "\n";
-    msg += "\nPagamento (ref.): " + (pagamento || "-") + "\n";
-    msg += "Observações: " + (observacao || "-") + "\n\n";
-    msg += "CLIENTE\n";
+    if (pagamento) msg += "\nPagamento:\n" + limparTextoMensagemOrcamento(pagamento) + "\n";
+    if (observacao) msg += "\nObservações:\n" + limparTextoMensagemOrcamento(observacao) + "\n";
+    msg += "\nCLIENTE:\n";
     msg += "Nome: " + (nome || "-") + "\n";
     msg += "Telefone: " + (telefone || "-") + "\n";
-    msg += "E-mail: " + (email || "-") + "\n";
+    if (email) msg += "E-mail: " + email + "\n";
     if (cpf) msg += "CPF: " + cpf + "\n";
     if (rg) msg += "RG: " + rg + "\n";
-    msg += "-------------";
     return msg;
 }
 
